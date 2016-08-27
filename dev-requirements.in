@@ -3,6 +3,7 @@
 
 -r requirements.txt
 
+django-dynamic-fixture
 flake8
 ipython
 pip-tools

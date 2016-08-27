@@ -7,6 +7,7 @@
 astroid==1.4.8            # via pylint
 click==6.6                # via pip-tools
 decorator==4.0.10         # via ipython, traitlets
+django-dynamic-fixture==1.9.0
 Django==1.10
 djangorestframework==3.4.6
 first==2.0.1              # via pip-tools
@@ -28,7 +29,7 @@ pyinotify==0.9.6
 pylint==1.6.4
 pytz==2016.6.1
 simplegeneric==0.8.1      # via ipython
-six==1.10.0               # via astroid, pip-tools, prompt-toolkit, pylint
+six==1.10.0               # via astroid, django-dynamic-fixture, pip-tools, prompt-toolkit, pylint
 traitlets==4.2.2          # via ipython
 wcwidth==0.1.7            # via prompt-toolkit
 wrapt==1.10.8             # via astroid
