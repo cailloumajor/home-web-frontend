@@ -3,6 +3,8 @@
 
 -r requirements.txt
 
+flake8
 ipython
 pip-tools
 pyinotify
+pylint
