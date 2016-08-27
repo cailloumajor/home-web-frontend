@@ -1,0 +1,6 @@
+# Production Python requirements
+# Must be compiled by pip-compile
+
+Django<1.11
+djangorestframework
+pytz
