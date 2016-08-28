@@ -22,11 +22,14 @@ pickleshare==0.7.4        # via ipython
 pip-tools==1.7.0
 prompt-toolkit==1.0.7     # via ipython
 ptyprocess==0.5.1         # via pexpect
+py==1.4.31                # via pytest
 pycodestyle==2.0.0        # via flake8
 pyflakes==1.2.3           # via flake8
 pygments==2.1.3           # via ipython
 pyinotify==0.9.6
 pylint==1.6.4
+pytest-django==3.0.0
+pytest==3.0.1             # via pytest-django
 pytz==2016.6.1
 simplegeneric==0.8.1      # via ipython
 six==1.10.0               # via astroid, django-dynamic-fixture, pip-tools, prompt-toolkit, pylint

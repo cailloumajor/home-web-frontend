@@ -9,3 +9,4 @@ ipython
 pip-tools
 pyinotify
 pylint
+pytest-django
