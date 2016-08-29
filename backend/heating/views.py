@@ -1,3 +1,12 @@
-from django.shortcuts import render
+# -*- coding: utf-8 -*-
 
-# Create your views here.
+from rest_framework import viewsets
+
+from .models import Zone
+from .serializers import ZoneSerializer
+
+
+class ZoneViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = Zone.objects.all()
+    serializer_class = ZoneSerializer
