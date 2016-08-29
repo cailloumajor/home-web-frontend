@@ -27,6 +27,13 @@ def today(now):
 
 
 @pytest.fixture
+def patch_now(monkeypatch):
+    fake_now = datetime.datetime(2016, 8, 27, 14, 9, 43, 0)
+    fake_now = timezone.make_aware(fake_now)
+    monkeypatch.setattr('django.utils.timezone.now', lambda: fake_now)
+
+
+@pytest.fixture
 def derogation_fixture(db):
     class Fixture:
         def __init__(self):
@@ -85,12 +92,10 @@ class TestSlotModel:
         assert str(slot) == expected
 
     @pytest.mark.django_db
-    def test_active_queryset_method(self, now, today):
+    def test_active_queryset_method(self, patch_now, now, today):
         all_but_today = {day: True for day in
                          [wd for wd in WEEKDAYS if wd != today]}
         zone = G(Zone, num=1)
-        if now.time().hour < 1:
-            raise Exception("This test cannot be run between 00:00 and 01:00")
         # Create a past slot
         G(Slot, zone=zone, **{today: True}, mode='E',
           start_time=(now - datetime.timedelta(hours=1)).time(),
@@ -98,12 +103,12 @@ class TestSlotModel:
         # Create an active slot
         active_slot = G(
             Slot, zone=zone, **{today: True}, mode='E',
-            start_time=now.time(),
+            start_time=(now - datetime.timedelta(minutes=2)).time(),
             end_time=(now + datetime.timedelta(minutes=2)).time())
         # Create a future slot
         G(Slot, zone=zone, **{today: True}, mode='E',
           start_time=(now + datetime.timedelta(minutes=2)).time(),
-          end_time=(now - datetime.timedelta(hours=1)).time())
+          end_time=(now + datetime.timedelta(hours=1)).time())
         # Create a slot active `all but today` days of week at the same time
         G(Slot, zone=zone, **all_but_today, mode='E',
           start_time=now.time(),
