@@ -38,17 +38,17 @@ def derogation_fixture(db):
     class Fixture:
         def __init__(self):
             self.past_derog = G(
-                Derogation, mode='E',
+                Derogation,
                 start_dt=timezone.now() - datetime.timedelta(days=1),
                 end_dt=timezone.now() - datetime.timedelta(minutes=2)
             )
             self.active_derog = G(
-                Derogation, mode='E',
+                Derogation,
                 start_dt=timezone.now(),
                 end_dt=timezone.now() + datetime.timedelta(minutes=2)
             )
             self.future_derog = G(
-                Derogation, mode='E',
+                Derogation,
                 start_dt=timezone.now() + datetime.timedelta(minutes=2),
                 end_dt=timezone.now() + datetime.timedelta(days=1)
             )
@@ -97,20 +97,20 @@ class TestSlotModel:
                          [wd for wd in WEEKDAYS if wd != today]}
         zone = G(Zone, num=1)
         # Create a past slot
-        G(Slot, zone=zone, **{today: True}, mode='E',
+        G(Slot, zone=zone, **{today: True},
           start_time=(now - datetime.timedelta(hours=1)).time(),
           end_time=(now - datetime.timedelta(minutes=2)).time())
         # Create an active slot
         active_slot = G(
-            Slot, zone=zone, **{today: True}, mode='E',
+            Slot, zone=zone, **{today: True},
             start_time=(now - datetime.timedelta(minutes=2)).time(),
             end_time=(now + datetime.timedelta(minutes=2)).time())
         # Create a future slot
-        G(Slot, zone=zone, **{today: True}, mode='E',
+        G(Slot, zone=zone, **{today: True},
           start_time=(now + datetime.timedelta(minutes=2)).time(),
           end_time=(now + datetime.timedelta(hours=1)).time())
         # Create a slot active `all but today` days of week at the same time
-        G(Slot, zone=zone, **all_but_today, mode='E',
+        G(Slot, zone=zone, **all_but_today,
           start_time=now.time(),
           end_time=(now + datetime.timedelta(minutes=2)).time())
         queryset = Slot.objects.active()
