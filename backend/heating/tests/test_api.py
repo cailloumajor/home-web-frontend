@@ -15,6 +15,8 @@ from django_dynamic_fixture.fixture_algorithms.random_fixture import \
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from ..models import Zone
+
 
 LIST_SUFFIX = '-list'
 DETAIL_SUFFIX = '-detail'
@@ -34,6 +36,7 @@ Parameters = namedtuple(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('params', [
+    Parameters('zone', Zone, {'num': 2}, True)
 ], ids=lambda p: p.model.__name__)
 class TestModelAPI:
 
