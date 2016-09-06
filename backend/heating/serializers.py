@@ -7,10 +7,19 @@ from rest_framework import serializers
 from .models import Zone, Slot
 
 
+def validate_quarter_hour(value):
+    if value.minute % 15 != 0:
+        raise serializers.ValidationError(
+            "Seules les valeurs 00, 15, 30 et 45 "
+            "sont autorisées pour les minutes"
+        )
+
+
 class OffsetTimeField(serializers.TimeField):
 
     def to_internal_value(self, data):
         super_time = super().to_internal_value(data)
+        validate_quarter_hour(super_time)
         dt = datetime(1, 1, 2, super_time.hour, super_time.minute)
         return (dt - timedelta(minutes=1)).time()
 
@@ -39,3 +48,7 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             'start_time': {'format': '%H:%M', 'input_formats': ['%H:%M']},
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['start_time'].validators += [validate_quarter_hour]
