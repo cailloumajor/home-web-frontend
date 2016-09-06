@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from .models import Zone
+from .models import Zone, Slot
 
 
 class ZoneSerializer(serializers.HyperlinkedModelSerializer):
@@ -10,3 +10,11 @@ class ZoneSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Zone
         fields = ('url', 'num', 'desc')
+
+
+class SlotSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Slot
+        fields = ('url', 'id', 'zone', 'mode', 'start_time', 'end_time',
+                  'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun')

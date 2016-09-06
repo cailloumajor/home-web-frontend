@@ -17,14 +17,16 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from ..models import Zone
-from ..serializers import ZoneSerializer
+from ..models import Zone, Slot
+from ..serializers import ZoneSerializer, SlotSerializer
 
 
 LIST_SUFFIX = '-list'
 DETAIL_SUFFIX = '-detail'
 
 ZONE_CREATE_DATA = {'num': 2}
+SLOT_CREATE_DATA = {
+}
 
 
 class CustomDataFixture(random_fixture.RandomDataFixture):
@@ -62,6 +64,7 @@ Parameters = namedtuple('Parameters', [
 @pytest.mark.django_db
 @pytest.mark.parametrize('params', [
     Parameters('zone', Zone, ZoneSerializer, ZONE_CREATE_DATA, True),
+    Parameters('slot', Slot, SlotSerializer, SLOT_CREATE_DATA, False),
 ], ids=lambda p: p.model.__name__)
 class TestModelAPI:
 
