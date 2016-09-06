@@ -18,3 +18,7 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
         model = Slot
         fields = ('url', 'id', 'zone', 'mode', 'start_time', 'end_time',
                   'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun')
+        extra_kwargs = {
+            'start_time': {'format': '%H:%M', 'input_formats': ['%H:%M']},
+            'end_time': {'format': '%H:%M', 'input_formats': ['%H:%M']},
+        }

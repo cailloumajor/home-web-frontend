@@ -43,6 +43,11 @@ Parameters = namedtuple('Parameters', [
 
 @pytest.mark.parametrize('params', [
     Parameters("All fields OK", {}, None),
+    Parameters(**param_factory(
+        "Bad time format", {'start_time': '10:00:01', 'end_time': '13:45:01'},
+        ("L'heure n'a pas le bon format. "
+         "Utilisez un des formats suivants : hh:mm.")
+    )),
 ], ids=lambda p: p.test_description)
 def test_slot_validation(client, good_data, params):
     data = good_data.copy()

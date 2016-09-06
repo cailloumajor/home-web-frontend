@@ -4,7 +4,7 @@
 
 import random
 from collections import namedtuple
-from datetime import timedelta
+from datetime import time, timedelta
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
@@ -26,6 +26,8 @@ DETAIL_SUFFIX = '-detail'
 
 ZONE_CREATE_DATA = {'num': 2}
 SLOT_CREATE_DATA = {
+    'start_time': time(16, 19),
+    'end_time': time(9, 27),
 }
 
 
