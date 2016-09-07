@@ -52,3 +52,13 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['start_time'].validators += [validate_quarter_hour]
+
+    def validate(self, data):
+        days_on = [d for d in
+                   ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+                   if data.get(d)]
+
+        if not days_on:
+            raise serializers.ValidationError("Aucun jour sélectionné")
+
+        return data

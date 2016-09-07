@@ -23,16 +23,18 @@ def slot_initial_data(db):
     G(Slot, zone=F(num=1), start_time=time(14, 0), end_time=time(15, 59))
     good_data = {
         'zone': reverse('zone-detail', args=[1]), 'mode': 'E',
-        'start_time': '10:00', 'end_time': '14:00',
+        'start_time': '10:00', 'end_time': '14:00', 'mon': True
     }
     return good_data
 
 
-def param_factory(description, bad_data, message):
+def param_factory(description, bad_data, message, error_fields=None):
     param_dict = {}
     param_dict['test_description'] = description
     param_dict['bad_data'] = bad_data
-    param_dict['errors'] = {k: [message] for k in bad_data.keys()}
+    if error_fields is None:
+        error_fields = bad_data.keys()
+    param_dict['errors'] = {k: [message] for k in error_fields}
     return param_dict
 
 
@@ -53,6 +55,10 @@ Parameters = namedtuple('Parameters', [
         "No quarter hour",
         {'start_time': '10:01', 'end_time': '14:59'},
         "Seules les valeurs 00, 15, 30 et 45 sont autorisées pour les minutes"
+    )),
+    Parameters(**param_factory(
+        "No day selected", {'mon': False}, "Aucun jour sélectionné",
+        ['non_field_errors']
     )),
 ], ids=lambda p: p.test_description)
 def test_slot_validation(client, good_data, params):
