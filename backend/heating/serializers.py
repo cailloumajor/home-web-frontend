@@ -57,8 +57,15 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
         days_on = [d for d in
                    ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
                    if data.get(d)]
+        s_time = data.get('start_time')
+        e_time = data.get('end_time')
 
         if not days_on:
             raise serializers.ValidationError("Aucun jour sélectionné")
+
+        if not s_time < e_time:
+            raise serializers.ValidationError(
+                "L'heure de fin doit être supérieure à l'heure de début"
+            )
 
         return data

@@ -60,6 +60,12 @@ Parameters = namedtuple('Parameters', [
         "No day selected", {'mon': False}, "Aucun jour sélectionné",
         ['non_field_errors']
     )),
+    Parameters(**param_factory(
+        "Start time after end time",
+        {'start_time': '13:00', 'end_time': '11:00'},
+        "L'heure de fin doit être supérieure à l'heure de début",
+        ['non_field_errors']
+    )),
 ], ids=lambda p: p.test_description)
 def test_slot_validation(client, good_data, params):
     data = good_data.copy()

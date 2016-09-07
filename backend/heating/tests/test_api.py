@@ -26,8 +26,8 @@ DETAIL_SUFFIX = '-detail'
 
 ZONE_CREATE_DATA = {'num': 2}
 SLOT_CREATE_DATA = {
-    'start_time': time(16, 15),
-    'end_time': time(9, 29),
+    'start_time': time(9, 30),
+    'end_time': time(16, 14),
     'mon': True
 }
 
