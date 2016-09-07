@@ -19,8 +19,10 @@ def client():
 
 @pytest.fixture(name='good_data')
 def slot_initial_data(db):
-    G(Slot, zone=F(num=1), start_time=time(8, 0), end_time=time(9, 59))
-    G(Slot, zone=F(num=1), start_time=time(14, 0), end_time=time(15, 59))
+    G(Slot, zone=F(num=1), mon=True,
+      start_time=time(8, 0), end_time=time(9, 59))
+    G(Slot, zone=F(num=1), mon=True,
+      start_time=time(14, 0), end_time=time(15, 59))
     good_data = {
         'zone': reverse('zone-detail', args=[1]), 'mode': 'E',
         'start_time': '10:00', 'end_time': '14:00', 'mon': True
@@ -64,6 +66,22 @@ Parameters = namedtuple('Parameters', [
         "Start time after end time",
         {'start_time': '13:00', 'end_time': '11:00'},
         "L'heure de fin doit être supérieure à l'heure de début",
+        ['non_field_errors']
+    )),
+    Parameters(**param_factory(
+        "Start time in other slot", {'start_time': '09:45'},
+        "Les horaires sont en conflit avec un créneau existant",
+        ['non_field_errors']
+    )),
+    Parameters(**param_factory(
+        "End time in other slot", {'end_time': '14:15'},
+        "Les horaires sont en conflit avec un créneau existant",
+        ['non_field_errors']
+    )),
+    Parameters(**param_factory(
+        "Start time and end time in other slot",
+        {'start_time': '08:15', 'end_time': '09:45'},
+        "Les horaires sont en conflit avec un créneau existant",
         ['non_field_errors']
     )),
 ], ids=lambda p: p.test_description)

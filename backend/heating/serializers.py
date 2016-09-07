@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import operator
 from datetime import datetime, time, timedelta
+from functools import reduce
 
+from django.db.models import Q
 from rest_framework import serializers
 
 from .models import Zone, Slot
@@ -57,8 +60,10 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
         days_on = [d for d in
                    ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
                    if data.get(d)]
+        q_objects = [Q(t) for t in [(d, True) for d in days_on]]
         s_time = data.get('start_time')
         e_time = data.get('end_time')
+        zone = data.get('zone')
 
         if not days_on:
             raise serializers.ValidationError("Aucun jour sélectionné")
@@ -66,6 +71,18 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
         if not s_time < e_time:
             raise serializers.ValidationError(
                 "L'heure de fin doit être supérieure à l'heure de début"
+            )
+
+        instance_pk = getattr(self.instance, 'pk', None)
+        queryset = Slot.objects.exclude(pk=instance_pk).filter(zone=zone)
+        queryset = queryset.filter(reduce(operator.or_, q_objects))
+        queryset = queryset.filter(
+            (Q(start_time__lte=s_time) & Q(end_time__gte=s_time)) |
+            (Q(start_time__lte=e_time) & Q(end_time__gte=e_time)) |
+            (Q(start_time__gte=s_time) & Q(end_time__lte=e_time)))
+        if queryset.exists():
+            raise serializers.ValidationError(
+                "Les horaires sont en conflit avec un créneau existant"
             )
 
         return data
