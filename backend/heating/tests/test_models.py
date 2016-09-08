@@ -144,11 +144,6 @@ class TestDerogationModel:
         assert derogation_fixture.active_derog.is_active()
         assert not derogation_fixture.future_derog.is_active()
 
-    def test_outdated_queryset_method(self, derogation_fixture):
-        queryset = Derogation.objects.outdated()
-        assert queryset.count() == 1
-        assert queryset[0] == derogation_fixture.past_derog
-
     def test_is_outdated_model_method(self, derogation_fixture):
         assert derogation_fixture.past_derog.is_outdated()
         assert not derogation_fixture.active_derog.is_outdated()

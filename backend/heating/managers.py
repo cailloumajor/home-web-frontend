@@ -48,6 +48,3 @@ class DerogationQuerySet(models.QuerySet):
     def active(self):
         now = timezone.now()
         return self.filter(start_dt__lte=now, end_dt__gte=now)
-
-    def outdated(self):
-        return self.filter(end_dt__lt=timezone.now())
