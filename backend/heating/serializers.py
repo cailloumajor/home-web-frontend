@@ -10,6 +10,10 @@ from rest_framework import serializers
 from .models import Zone, Slot, Derogation
 
 
+TIME_FORMAT = '%H:%M'
+DATETIME_FORMAT = "%d/%m/%Y %H:%M"
+
+
 def validate_quarter_hour(value):
     if value.minute % 15 != 0:
         raise serializers.ValidationError(
@@ -42,14 +46,16 @@ class ZoneSerializer(serializers.HyperlinkedModelSerializer):
 
 class SlotSerializer(serializers.HyperlinkedModelSerializer):
 
-    end_time = OffsetTimeField(format='%H:%M', input_formats=['%H:%M'])
+    end_time = OffsetTimeField(format=TIME_FORMAT, input_formats=[TIME_FORMAT])
 
     class Meta:
         model = Slot
         fields = ('url', 'id', 'zone', 'mode', 'start_time', 'end_time',
                   'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun')
         extra_kwargs = {
-            'start_time': {'format': '%H:%M', 'input_formats': ['%H:%M']},
+            'start_time': {
+                'format': TIME_FORMAT, 'input_formats': [TIME_FORMAT]
+            },
         }
 
     def __init__(self, *args, **kwargs):
@@ -90,7 +96,11 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
 
 class DerogationSerializer(serializers.ModelSerializer):
 
+    start_initial = serializers.DateTimeField(
+        write_only=True, format=DATETIME_FORMAT,
+        input_formats=[DATETIME_FORMAT])
+
     class Meta:
         model = Derogation
         fields = ('url', 'id', 'mode', 'creation_dt', 'start_dt', 'end_dt',
-                  'zones')
+                  'zones', 'start_initial')
