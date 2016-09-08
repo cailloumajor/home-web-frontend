@@ -104,3 +104,7 @@ class DerogationSerializer(serializers.ModelSerializer):
         model = Derogation
         fields = ('url', 'id', 'mode', 'creation_dt', 'start_dt', 'end_dt',
                   'zones', 'start_initial')
+
+    def to_internal_value(self, data):
+        del self.fields['start_initial']
+        return super().to_internal_value(data)
