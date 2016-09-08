@@ -5,13 +5,13 @@
 import random
 from collections import namedtuple
 from datetime import time, timedelta
+from itertools import chain
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.forms.models import model_to_dict
 from django.utils import timezone
 
 import pytest
-from django_dynamic_fixture import G, N
+from django_dynamic_fixture import F, G
 from django_dynamic_fixture.fixture_algorithms import random_fixture
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -38,6 +38,20 @@ class CustomDataFixture(random_fixture.RandomDataFixture):
         return (
             timezone.now() - timedelta(seconds=random.randint(1, 36500))
         ).time()
+
+
+def model_to_dict(instance):
+    """
+    Modified version of django.forms.models.model_to_dict.
+    Same behavior excluding many to many fields.
+    """
+    opts = instance._meta
+    data = {}
+    for f in chain(opts.concrete_fields, opts.private_fields):
+        if not getattr(f, 'editable', False):
+            continue
+        data[f.name] = f.value_from_object(instance)
+    return data
 
 
 @pytest.fixture
@@ -89,11 +103,12 @@ class TestModelAPI:
 
     def test_create_api(self, client, params, pk_fieldname, serialize):
         url = reverse(params.base_name + LIST_SUFFIX)
-        new = N(params.model, data_fixture=CustomDataFixture(),
+        new = G(params.model, data_fixture=CustomDataFixture(),
                 **params.create_data)
         new_dict = model_to_dict(new)
         del new_dict[pk_fieldname]
         new_data = serialize(new)
+        params.model.objects.get(pk=new.pk).delete()
         response = client.post(url, new_data)
         if params.read_only:
             assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
@@ -115,12 +130,13 @@ class TestModelAPI:
     def test_update_api(self, client, params, pk_fieldname, serialize):
         instance = G(params.model, data_fixture=CustomDataFixture())
         url = reverse(params.base_name + DETAIL_SUFFIX, args=[instance.pk])
-        new = N(params.model, data_fixture=CustomDataFixture(),
+        new = G(params.model, data_fixture=CustomDataFixture(),
                 **params.create_data)
         new_dict = model_to_dict(new)
         new_dict[pk_fieldname] = getattr(instance, pk_fieldname)
         new_data = serialize(new)
         new_data[pk_fieldname] = getattr(instance, pk_fieldname)
+        params.model.objects.get(pk=new.pk).delete()
         response = client.patch(url, new_data)
         if params.read_only:
             assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
