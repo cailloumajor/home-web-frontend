@@ -17,8 +17,8 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from ..models import Zone, Slot
-from ..serializers import ZoneSerializer, SlotSerializer
+from ..models import Zone, Slot, Derogation
+from ..serializers import ZoneSerializer, SlotSerializer, DerogationSerializer
 
 
 LIST_SUFFIX = '-list'
@@ -29,6 +29,9 @@ SLOT_CREATE_DATA = {
     'start_time': time(9, 30),
     'end_time': time(16, 14),
     'mon': True
+}
+DEROGATION_CREATE_DATA = {
+    'zones': [F(num=1), F(num=2)],
 }
 
 
@@ -82,6 +85,8 @@ Parameters = namedtuple('Parameters', [
 @pytest.mark.parametrize('params', [
     Parameters('zone', Zone, ZoneSerializer, ZONE_CREATE_DATA, True),
     Parameters('slot', Slot, SlotSerializer, SLOT_CREATE_DATA, False),
+    Parameters('derogation', Derogation, DerogationSerializer,
+               DEROGATION_CREATE_DATA, False),
 ], ids=lambda p: p.model.__name__)
 class TestModelAPI:
 

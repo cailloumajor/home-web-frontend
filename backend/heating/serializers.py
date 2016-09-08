@@ -7,7 +7,7 @@ from functools import reduce
 from django.db.models import Q
 from rest_framework import serializers
 
-from .models import Zone, Slot
+from .models import Zone, Slot, Derogation
 
 
 def validate_quarter_hour(value):
@@ -86,3 +86,11 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
             )
 
         return data
+
+
+class DerogationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Derogation
+        fields = ('url', 'id', 'mode', 'creation_dt', 'start_dt', 'end_dt',
+                  'zones')

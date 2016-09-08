@@ -19,12 +19,13 @@ from django.contrib import admin
 
 from rest_framework import routers
 
-from heating.views import ZoneViewSet, SlotViewSet
+from heating.views import ZoneViewSet, SlotViewSet, DerogationViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'zones', ZoneViewSet)
 router.register(r'slots', SlotViewSet)
+router.register(r'derogations', DerogationViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
