@@ -11,7 +11,6 @@ from .models import Zone, Slot, Derogation
 
 
 TIME_FORMAT = '%H:%M'
-DATETIME_FORMAT = "%d/%m/%Y %H:%M"
 
 
 def validate_quarter_hour(value):
@@ -96,9 +95,7 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
 
 class DerogationSerializer(serializers.ModelSerializer):
 
-    start_initial = serializers.DateTimeField(
-        write_only=True, format=DATETIME_FORMAT,
-        input_formats=[DATETIME_FORMAT])
+    start_initial = serializers.DateTimeField(write_only=True)
 
     class Meta:
         model = Derogation
