@@ -77,16 +77,18 @@ def serialize(params, client):
 
 
 Parameters = namedtuple('Parameters', [
-    'base_name', 'model', 'serializer', 'create_data', 'read_only'
+    'base_name', 'model', 'serializer', 'create_data', 'other_data',
+    'read_only'
 ])
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize('params', [
-    Parameters('zone', Zone, ZoneSerializer, ZONE_CREATE_DATA, True),
-    Parameters('slot', Slot, SlotSerializer, SLOT_CREATE_DATA, False),
+    Parameters('zone', Zone, ZoneSerializer, ZONE_CREATE_DATA, {}, True),
+    Parameters('slot', Slot, SlotSerializer, SLOT_CREATE_DATA, {}, False),
     Parameters('derogation', Derogation, DerogationSerializer,
-               DEROGATION_CREATE_DATA, False),
+               DEROGATION_CREATE_DATA, {'start_initial': "01/01/1900 00:00"},
+               False),
 ], ids=lambda p: p.model.__name__)
 class TestModelAPI:
 
@@ -113,6 +115,7 @@ class TestModelAPI:
         new_dict = model_to_dict(new)
         del new_dict[pk_fieldname]
         new_data = serialize(new)
+        new_data.update(params.other_data)
         params.model.objects.get(pk=new.pk).delete()
         response = client.post(url, new_data)
         if params.read_only:
