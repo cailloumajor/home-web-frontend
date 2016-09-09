@@ -12,12 +12,40 @@ from rest_framework.test import APIClient
 from ..models import Slot
 
 
-@pytest.fixture
-def client():
+Parameters = namedtuple('Parameters', [
+    'initial_fixture', 'viewname', 'bad_data', 'errors'
+])
+
+
+def pytest_generate_tests(metafunc):
+    id_list = []
+    param_list = []
+    for data in metafunc.cls.test_data:
+        id_list.append(data[0])
+        if isinstance(data[2], dict):
+            errors = data[2]
+        else:
+            errors = {field: [data[2]] for field in data[1].keys()}
+        param_list.append(Parameters(
+            metafunc.cls.initial_fixture,
+            metafunc.cls.viewname,
+            data[1],
+            errors
+        ))
+    metafunc.parametrize('params', param_list, ids=id_list)
+
+
+@pytest.fixture(name='client')
+def api_client():
     return APIClient()
 
 
-@pytest.fixture(name='good_data')
+@pytest.fixture
+def initial_data(request, params):
+    return request.getfixturevalue(params.initial_fixture)
+
+
+@pytest.fixture
 def slot_initial_data(db):
     G(Slot, zone=F(num=1), mon=True,
       start_time=time(8, 0), end_time=time(9, 59))
@@ -30,67 +58,62 @@ def slot_initial_data(db):
     return good_data
 
 
-def param_factory(description, bad_data, message, error_fields=None):
-    param_dict = {}
-    param_dict['test_description'] = description
-    param_dict['bad_data'] = bad_data
-    if error_fields is None:
-        error_fields = bad_data.keys()
-    param_dict['errors'] = {k: [message] for k in error_fields}
-    return param_dict
+class BaseValidationTest:
+
+    def test_validation(self, client, params, initial_data):
+        data = initial_data
+        data.update(params.bad_data)
+        response = client.post(reverse(params.viewname), data)
+        if params.bad_data == {}:
+            assert response.status_code == status.HTTP_201_CREATED
+            return
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data == params.errors
 
 
-Parameters = namedtuple('Parameters', [
-    'test_description', 'bad_data', 'errors'
-])
+class TestSlotValidation(BaseValidationTest):
 
-
-@pytest.mark.parametrize('params', [
-    Parameters("All fields OK", {}, None),
-    Parameters(**param_factory(
-        "Bad time format",
-        {'start_time': '10:00:01', 'end_time': '13:45:01'},
-        ("L'heure n'a pas le bon format. "
-         "Utilisez un des formats suivants : hh:mm.")
-    )),
-    Parameters(**param_factory(
-        "No quarter hour",
-        {'start_time': '10:01', 'end_time': '14:59'},
-        "Seules les valeurs 00, 15, 30 et 45 sont autorisées pour les minutes"
-    )),
-    Parameters(**param_factory(
-        "No day selected", {'mon': False}, "Aucun jour sélectionné",
-        ['non_field_errors']
-    )),
-    Parameters(**param_factory(
-        "Start time after end time",
-        {'start_time': '13:00', 'end_time': '11:00'},
-        "L'heure de fin doit être supérieure à l'heure de début",
-        ['non_field_errors']
-    )),
-    Parameters(**param_factory(
-        "Start time in other slot", {'start_time': '09:45'},
-        "Les horaires sont en conflit avec un créneau existant",
-        ['non_field_errors']
-    )),
-    Parameters(**param_factory(
-        "End time in other slot", {'end_time': '14:15'},
-        "Les horaires sont en conflit avec un créneau existant",
-        ['non_field_errors']
-    )),
-    Parameters(**param_factory(
-        "Start time and end time in other slot",
-        {'start_time': '08:15', 'end_time': '09:45'},
-        "Les horaires sont en conflit avec un créneau existant",
-        ['non_field_errors']
-    )),
-], ids=lambda p: p.test_description)
-def test_slot_validation(client, good_data, params):
-    data = good_data.copy()
-    data.update(params.bad_data)
-    response = client.post(reverse('slot-list'), data)
-    if params.bad_data == {}:
-        assert response.status_code == status.HTTP_201_CREATED
-        return
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.data == params.errors
+    initial_fixture = 'slot_initial_data'
+    viewname = 'slot-list'
+    test_data = (
+        [
+            "All fields OK", {}, None
+        ],
+        [
+            "Bad time format",
+            {'start_time': '10:00:01', 'end_time': '13:45:01'},
+            "L'heure n'a pas le bon format. "
+            "Utilisez un des formats suivants : hh:mm."
+        ],
+        [
+            "No quarter hour", {'start_time': '10:01', 'end_time': '14:59'},
+            "Seules les valeurs 00, 15, 30 et 45 "
+            "sont autorisées pour les minutes"
+        ],
+        [
+            "No day selected", {'mon': False},
+            {'non_field_errors': ["Aucun jour sélectionné"]}
+        ],
+        [
+            "Start time after end time",
+            {'start_time': '13:00', 'end_time': '11:00'},
+            {'non_field_errors': ["L'heure de fin doit être supérieure "
+                                  "à l'heure de début"]}
+        ],
+        [
+            "Start time in other slot", {'start_time': '09:45'},
+            {'non_field_errors': ["Les horaires sont en conflit "
+                                  "avec un créneau existant"]}
+        ],
+        [
+            "End time in other slot", {'end_time': '14:15'},
+            {'non_field_errors': ["Les horaires sont en conflit avec "
+                                  "un créneau existant"]}
+        ],
+        [
+            "Start time and end time in other slot",
+            {'start_time': '08:15', 'end_time': '09:45'},
+            {'non_field_errors': ["Les horaires sont en conflit avec "
+                                  "un créneau existant"]}
+        ],
+    )
