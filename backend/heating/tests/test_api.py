@@ -87,7 +87,7 @@ Parameters = namedtuple('Parameters', [
     Parameters('zone', Zone, ZoneSerializer, ZONE_CREATE_DATA, {}, True),
     Parameters('slot', Slot, SlotSerializer, SLOT_CREATE_DATA, {}, False),
     Parameters('derogation', Derogation, DerogationSerializer,
-               DEROGATION_CREATE_DATA, {'start_initial': "01/01/1900 00:00"},
+               DEROGATION_CREATE_DATA, {'start_initial': "2016-09-12T23:01"},
                False),
 ], ids=lambda p: p.model.__name__)
 class TestModelAPI:

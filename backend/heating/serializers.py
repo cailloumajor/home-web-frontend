@@ -102,6 +102,11 @@ class DerogationSerializer(serializers.ModelSerializer):
         fields = ('url', 'id', 'mode', 'creation_dt', 'start_dt', 'end_dt',
                   'zones', 'start_initial')
 
-    def to_internal_value(self, data):
-        del self.fields['start_initial']
-        return super().to_internal_value(data)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if isinstance(self.instance, Derogation):
+            del self.fields['start_initial']
+
+    def create(self, validated_data):
+        del validated_data['start_initial']
+        return super().create(validated_data)
