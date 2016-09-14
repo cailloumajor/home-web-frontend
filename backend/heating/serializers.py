@@ -44,8 +44,7 @@ class CustomDateTimeField(serializers.DateTimeField):
 
     def to_internal_value(self, data):
         super_dt = super().to_internal_value(data)
-        super_dt.second = 0
-        super_dt.microsecond = 0
+        super_dt = super_dt.replace(second=0, microsecond=0)
         validate_quarter_hour(super_dt)
         if self.with_offset:
             super_dt = super_dt - timedelta(minutes=1)
