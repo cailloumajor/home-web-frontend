@@ -93,7 +93,7 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
         return data
 
 
-class DerogationSerializer(serializers.ModelSerializer):
+class DerogationSerializer(serializers.HyperlinkedModelSerializer):
 
     start_initial = serializers.DateTimeField(write_only=True)
 
