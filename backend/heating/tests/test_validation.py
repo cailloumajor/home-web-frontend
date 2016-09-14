@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from collections import namedtuple
-from datetime import time
+from datetime import datetime, time
 
 import pytest
 from django_dynamic_fixture import F, G
@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from ..models import Slot
+from ..models import Slot, Derogation
 
 
 Parameters = namedtuple('Parameters', [
@@ -54,6 +54,22 @@ def slot_initial_data(db):
     good_data = {
         'zone': reverse('zone-detail', args=[1]), 'mode': 'E',
         'start_time': '10:00', 'end_time': '14:00', 'mon': True
+    }
+    return good_data
+
+
+@pytest.fixture
+def derogation_initial_data(db):
+    G(Derogation, zones=[F(num=1)],
+      start_dt=datetime(2016, 9, 13, 22, 0),
+      end_dt=datetime(2016, 9, 23, 6, 0))
+    G(Derogation, zones=[F(num=1)],
+      start_dt=datetime(2016, 9, 13, 14, 0),
+      end_dt=datetime(2016, 9, 13, 22, 0))
+    good_data = {
+        'zones': [reverse('zone-detail', args=[1])], 'mode': 'E',
+        'start_dt': '2016-09-13T06:00', 'end_dt': '2016-09-13T14:00',
+        'start_initial': '2016-09-13T05:59'
     }
     return good_data
 
@@ -115,5 +131,16 @@ class TestSlotValidation(BaseValidationTest):
             {'start_time': '08:15', 'end_time': '09:45'},
             {'non_field_errors': ["Les horaires sont en conflit avec "
                                   "un créneau existant"]}
+        ],
+    )
+
+
+class TestDerogationValidation(BaseValidationTest):
+
+    initial_fixture = 'derogation_initial_data'
+    viewname = 'derogation-list'
+    test_data = (
+        [
+            "All fields OK", {}, None
         ],
     )
