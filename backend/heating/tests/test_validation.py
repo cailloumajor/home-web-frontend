@@ -149,4 +149,9 @@ class TestDerogationValidation(BaseValidationTest):
             "Seules les valeurs 00, 15, 30 et 45 "
             "sont autorisées pour les minutes"
         ],
+        [
+            "Start in the past", {'start_initial': '2016-09-13T06:01'},
+            {'start_dt': ["La prise d'effet ne doit pas se situer "
+                          "dans le passé"]}
+        ],
     )

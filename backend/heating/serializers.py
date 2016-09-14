@@ -132,3 +132,13 @@ class DerogationSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         del validated_data['start_initial']
         return super().create(validated_data)
+
+    def validate(self, data):
+        start_initial = data.get('start_initial')
+        if start_initial and data['start_dt'] < start_initial:
+            raise serializers.ValidationError({
+                'start_dt':
+                "La prise d'effet ne doit pas se situer dans le passé"
+            })
+
+        return data
