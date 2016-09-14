@@ -115,6 +115,8 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
 
 class DerogationSerializer(serializers.HyperlinkedModelSerializer):
 
+    start_dt = CustomDateTimeField()
+    end_dt = CustomDateTimeField(with_offset=True)
     start_initial = serializers.DateTimeField(write_only=True)
 
     class Meta:

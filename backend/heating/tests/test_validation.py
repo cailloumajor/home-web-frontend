@@ -143,4 +143,10 @@ class TestDerogationValidation(BaseValidationTest):
         [
             "All fields OK", {}, None
         ],
+        [
+            "No quarter hour",
+            {'start_dt': '2016-09-13T06:02', 'end_dt': '2016-09-13T13:58'},
+            "Seules les valeurs 00, 15, 30 et 45 "
+            "sont autorisées pour les minutes"
+        ],
     )

@@ -4,7 +4,7 @@
 
 import random
 from collections import namedtuple
-from datetime import time, timedelta
+from datetime import datetime, time, timedelta
 from itertools import chain
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -32,6 +32,8 @@ SLOT_CREATE_DATA = {
 }
 DEROGATION_CREATE_DATA = {
     'zones': [F(num=1), F(num=2)],
+    'start_dt': datetime(2016, 9, 14, 21, 30, tzinfo=timezone.utc),
+    'end_dt': datetime(2016, 9, 14, 21, 44, tzinfo=timezone.utc)
 }
 
 
