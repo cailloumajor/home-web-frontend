@@ -36,6 +36,27 @@ class OffsetTimeField(serializers.TimeField):
         return super().to_representation(obj)
 
 
+class CustomDateTimeField(serializers.DateTimeField):
+
+    def __init__(self, with_offset=False, *args, **kwargs):
+        self.with_offset = with_offset
+        super().__init__(*args, **kwargs)
+
+    def to_internal_value(self, data):
+        super_dt = super().to_internal_value(data)
+        super_dt.second = 0
+        super_dt.microsecond = 0
+        validate_quarter_hour(super_dt)
+        if self.with_offset:
+            super_dt = super_dt - timedelta(minutes=1)
+        return super_dt
+
+    def to_representation(self, obj):
+        if isinstance(obj, datetime) and self.with_offset:
+            obj = obj + timedelta(minutes=1)
+        return super().to_representation(obj)
+
+
 class ZoneSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
