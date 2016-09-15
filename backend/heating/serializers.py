@@ -135,17 +135,32 @@ class DerogationSerializer(serializers.HyperlinkedModelSerializer):
 
     def validate(self, data):
         start_initial = data.get('start_initial')
+        start_dt = data['start_dt']
+        end_dt = data['end_dt']
 
-        if start_initial and data['start_dt'] < start_initial:
+        if start_initial and start_dt < start_initial:
             raise serializers.ValidationError({
                 'start_dt':
                 "La prise d'effet ne doit pas se situer dans le passé"
             })
 
-        if not data['start_dt'] < data['end_dt']:
+        if not start_dt < end_dt:
             raise serializers.ValidationError({
                 'end_dt':
                 "La fin d'effet doit être ultérieure à la prise d'effet"
             })
+
+        instance_pk = getattr(self.instance, 'pk', None)
+        queryset = Derogation.objects.exclude(pk=instance_pk)
+        queryset = queryset.filter(zones__in=data['zones'])
+        queryset = queryset.filter(
+            (Q(start_dt__lte=start_dt) & Q(end_dt__gte=start_dt)) |
+            (Q(start_dt__lte=end_dt) & Q(end_dt__gte=end_dt)) |
+            (Q(start_dt__gte=start_dt) & Q(end_dt__lte=end_dt))
+        )
+        if queryset.exists():
+            raise serializers.ValidationError(
+                "Les horaires sont en conflit avec une dérogation existante"
+            )
 
         return data

@@ -61,11 +61,11 @@ def slot_initial_data(db):
 @pytest.fixture
 def derogation_initial_data(db):
     G(Derogation, zones=[F(num=1)],
-      start_dt=datetime(2016, 9, 13, 22, 0),
-      end_dt=datetime(2016, 9, 23, 6, 0))
+      start_dt=datetime(2016, 9, 12, 22, 0),
+      end_dt=datetime(2016, 9, 13, 5, 59))
     G(Derogation, zones=[F(num=1)],
       start_dt=datetime(2016, 9, 13, 14, 0),
-      end_dt=datetime(2016, 9, 13, 22, 0))
+      end_dt=datetime(2016, 9, 13, 21, 59))
     good_data = {
         'zones': [reverse('zone-detail', args=[1])], 'mode': 'E',
         'start_dt': '2016-09-13T06:00', 'end_dt': '2016-09-13T14:00',
@@ -159,5 +159,24 @@ class TestDerogationValidation(BaseValidationTest):
             {'start_dt': '2016-09-13T08:00', 'end_dt': '2016-09-13T07:00'},
             {'end_dt': ["La fin d'effet doit être ultérieure "
                         "à la prise d'effet"]}
+        ],
+        [
+            "Start in other derogation",
+            {'start_initial': '2016-09-13T05:45',
+             'start_dt': '2016-09-13T05:45'},
+            {'non_field_errors': ["Les horaires sont en conflit avec "
+                                  "une dérogation existante"]}
+        ],
+        [
+            "End in other derogation", {'end_dt': '2016-09-13T14:15'},
+            {'non_field_errors': ["Les horaires sont en conflit avec "
+                                  "une dérogation existante"]}
+        ],
+        [
+            "Start and end in other derogation",
+            {'start_initial': '2016-09-12T22:15',
+             'start_dt': '2016-09-12T22:15', 'end_dt': '2016-09-13T05:45'},
+            {'non_field_errors': ["Les horaires sont en conflit avec "
+                                  "une dérogation existante"]}
         ],
     )
