@@ -154,4 +154,10 @@ class TestDerogationValidation(BaseValidationTest):
             {'start_dt': ["La prise d'effet ne doit pas se situer "
                           "dans le passé"]}
         ],
+        [
+            "Start after end",
+            {'start_dt': '2016-09-13T08:00', 'end_dt': '2016-09-13T07:00'},
+            {'end_dt': ["La fin d'effet doit être ultérieure "
+                        "à la prise d'effet"]}
+        ],
     )
