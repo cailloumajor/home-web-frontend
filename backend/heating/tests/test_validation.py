@@ -117,6 +117,11 @@ class TestSlotValidation(BaseValidationTest):
                                   "à l'heure de début"]}
         ],
         [
+            "End time same as start time", {'end_time': '10:00'},
+            {'non_field_errors': ["L'heure de fin doit être supérieure "
+                                  "à l'heure de début"]}
+        ],
+        [
             "Start time in other slot", {'start_time': '09:45'},
             {'non_field_errors': ["Les horaires sont en conflit "
                                   "avec un créneau existant"]}
@@ -157,6 +162,11 @@ class TestDerogationValidation(BaseValidationTest):
         [
             "Start after end",
             {'start_dt': '2016-09-13T08:00', 'end_dt': '2016-09-13T07:00'},
+            {'end_dt': ["La fin d'effet doit être ultérieure "
+                        "à la prise d'effet"]}
+        ],
+        [
+            "End same as start", {'end_dt': '2016-09-13T06:00'},
             {'end_dt': ["La fin d'effet doit être ultérieure "
                         "à la prise d'effet"]}
         ],
