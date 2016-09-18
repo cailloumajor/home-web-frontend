@@ -7,7 +7,7 @@ from functools import reduce
 from django.db.models import Q
 from rest_framework import serializers
 
-from .models import Zone, Slot, Derogation
+from .models import Zone, Slot, Derogation, PilotwireLog
 
 
 TIME_FORMAT = '%H:%M'
@@ -164,3 +164,10 @@ class DerogationSerializer(serializers.HyperlinkedModelSerializer):
             )
 
         return data
+
+
+class PilotwireLogSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = PilotwireLog
+        fields = ('url', 'id', 'timestamp', 'level', 'message')

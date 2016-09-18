@@ -17,8 +17,9 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from ..models import Zone, Slot, Derogation
-from ..serializers import ZoneSerializer, SlotSerializer, DerogationSerializer
+from ..models import Zone, Slot, Derogation, PilotwireLog
+from ..serializers import ZoneSerializer, SlotSerializer, \
+    DerogationSerializer, PilotwireLogSerializer
 
 
 LIST_SUFFIX = '-list'
@@ -91,6 +92,8 @@ Parameters = namedtuple('Parameters', [
     Parameters('derogation', Derogation, DerogationSerializer,
                DEROGATION_CREATE_DATA, {'start_initial': "2016-09-12T23:01"},
                False),
+    Parameters('pilotwirelog', PilotwireLog, PilotwireLogSerializer,
+               {}, {}, True)
 ], ids=lambda p: p.model.__name__)
 class TestModelAPI:
 

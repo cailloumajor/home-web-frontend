@@ -2,8 +2,9 @@
 
 from rest_framework import viewsets
 
-from .models import Zone, Slot, Derogation
-from .serializers import ZoneSerializer, SlotSerializer, DerogationSerializer
+from .models import Zone, Slot, Derogation, PilotwireLog
+from .serializers import ZoneSerializer, SlotSerializer, \
+    DerogationSerializer, PilotwireLogSerializer
 
 
 class ZoneViewSet(viewsets.ReadOnlyModelViewSet):
@@ -22,3 +23,9 @@ class DerogationViewSet(viewsets.ModelViewSet):
 
     queryset = Derogation.objects.all()
     serializer_class = DerogationSerializer
+
+
+class PilotwireLogViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = PilotwireLog.objects.all()
+    serializer_class = PilotwireLogSerializer
