@@ -102,6 +102,7 @@ class Derogation(ModeBase):
 
 
 class PilotwireLog(models.Model):
+
     timestamp = models.DateTimeField(
         verbose_name="date/heure",
         auto_now_add=True,

@@ -9,7 +9,7 @@ from django.utils import timezone
 from django_dynamic_fixture import G, N, F
 import pytest
 
-from ..models import Zone, Slot, Derogation
+from ..models import Zone, Slot, Derogation, PilotwireLog
 
 
 WEEKDAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
@@ -148,3 +148,17 @@ class TestDerogationModel:
         assert derogation_fixture.past_derog.is_outdated()
         assert not derogation_fixture.active_derog.is_outdated()
         assert not derogation_fixture.future_derog.is_outdated()
+
+
+class TestPilotwireLogModel:
+
+    @pytest.mark.parametrize(['message', 'expected'], [
+        ('012345678901234567890123456789', '012345678901234567890123456789'),
+        ('0123456789012345678901234567890',
+         '012345678901234567890123456789...')
+    ], ids=["Less than 30 characters", "More than 30 characters"])
+    def test_string_representation(self, message, expected):
+        record = N(PilotwireLog, message=message)
+        assert str(record) == "{} - {} - {}".format(
+            timezone.localtime(record.timestamp).strftime("%Y.%m.%d %H:%M:%S"),
+            record.level, expected)
