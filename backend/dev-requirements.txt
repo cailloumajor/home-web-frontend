@@ -1,5 +1,4 @@
 # Development Python requirements
-# Must be compiled with pip-compile
 
 -r requirements.txt
 
