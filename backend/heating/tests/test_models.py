@@ -9,7 +9,7 @@ from django.utils import timezone
 from django_dynamic_fixture import G, N, F
 import pytest
 
-from ..models import Zone, Slot, Derogation
+from ..models import Zone, Slot, Derogation, PilotwireLog
 
 
 WEEKDAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
@@ -27,21 +27,28 @@ def today(now):
 
 
 @pytest.fixture
+def patch_now(monkeypatch):
+    fake_now = datetime.datetime(2016, 8, 27, 14, 9, 43, 0)
+    fake_now = timezone.make_aware(fake_now)
+    monkeypatch.setattr('django.utils.timezone.now', lambda: fake_now)
+
+
+@pytest.fixture
 def derogation_fixture(db):
     class Fixture:
         def __init__(self):
             self.past_derog = G(
-                Derogation, mode='E',
+                Derogation,
                 start_dt=timezone.now() - datetime.timedelta(days=1),
                 end_dt=timezone.now() - datetime.timedelta(minutes=2)
             )
             self.active_derog = G(
-                Derogation, mode='E',
+                Derogation,
                 start_dt=timezone.now(),
                 end_dt=timezone.now() + datetime.timedelta(minutes=2)
             )
             self.future_derog = G(
-                Derogation, mode='E',
+                Derogation,
                 start_dt=timezone.now() + datetime.timedelta(minutes=2),
                 end_dt=timezone.now() + datetime.timedelta(days=1)
             )
@@ -85,27 +92,25 @@ class TestSlotModel:
         assert str(slot) == expected
 
     @pytest.mark.django_db
-    def test_active_queryset_method(self, now, today):
+    def test_active_queryset_method(self, patch_now, now, today):
         all_but_today = {day: True for day in
                          [wd for wd in WEEKDAYS if wd != today]}
         zone = G(Zone, num=1)
-        if now.time().hour < 1:
-            raise Exception("This test cannot be run between 00:00 and 01:00")
         # Create a past slot
-        G(Slot, zone=zone, **{today: True}, mode='E',
+        G(Slot, zone=zone, **{today: True},
           start_time=(now - datetime.timedelta(hours=1)).time(),
           end_time=(now - datetime.timedelta(minutes=2)).time())
         # Create an active slot
         active_slot = G(
-            Slot, zone=zone, **{today: True}, mode='E',
-            start_time=now.time(),
+            Slot, zone=zone, **{today: True},
+            start_time=(now - datetime.timedelta(minutes=2)).time(),
             end_time=(now + datetime.timedelta(minutes=2)).time())
         # Create a future slot
-        G(Slot, zone=zone, **{today: True}, mode='E',
+        G(Slot, zone=zone, **{today: True},
           start_time=(now + datetime.timedelta(minutes=2)).time(),
-          end_time=(now - datetime.timedelta(hours=1)).time())
+          end_time=(now + datetime.timedelta(hours=1)).time())
         # Create a slot active `all but today` days of week at the same time
-        G(Slot, zone=zone, **all_but_today, mode='E',
+        G(Slot, zone=zone, **all_but_today,
           start_time=now.time(),
           end_time=(now + datetime.timedelta(minutes=2)).time())
         queryset = Slot.objects.active()
@@ -139,12 +144,21 @@ class TestDerogationModel:
         assert derogation_fixture.active_derog.is_active()
         assert not derogation_fixture.future_derog.is_active()
 
-    def test_outdated_queryset_method(self, derogation_fixture):
-        queryset = Derogation.objects.outdated()
-        assert queryset.count() == 1
-        assert queryset[0] == derogation_fixture.past_derog
-
     def test_is_outdated_model_method(self, derogation_fixture):
         assert derogation_fixture.past_derog.is_outdated()
         assert not derogation_fixture.active_derog.is_outdated()
         assert not derogation_fixture.future_derog.is_outdated()
+
+
+class TestPilotwireLogModel:
+
+    @pytest.mark.parametrize(['message', 'expected'], [
+        ('012345678901234567890123456789', '012345678901234567890123456789'),
+        ('0123456789012345678901234567890',
+         '012345678901234567890123456789...')
+    ], ids=["Less than 30 characters", "More than 30 characters"])
+    def test_string_representation(self, message, expected):
+        record = N(PilotwireLog, message=message)
+        assert str(record) == "{} - {} - {}".format(
+            timezone.localtime(record.timestamp).strftime("%Y.%m.%d %H:%M:%S"),
+            record.level, expected)

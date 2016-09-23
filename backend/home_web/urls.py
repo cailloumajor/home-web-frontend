@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """home_web URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -13,9 +14,22 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
+
+from rest_framework import routers
+
+from heating.views import ZoneViewSet, SlotViewSet, \
+    DerogationViewSet, PilotwireLogViewSet
+
+
+router = routers.DefaultRouter()
+router.register(r'zones', ZoneViewSet)
+router.register(r'slots', SlotViewSet)
+router.register(r'derogations', DerogationViewSet)
+router.register(r'pilotwirelog', PilotwireLogViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/', include(router.urls)),
 ]

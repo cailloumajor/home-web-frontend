@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 
@@ -8,11 +9,10 @@ from .managers import ZoneManager, SlotQuerySet, DerogationQuerySet
 
 class Zone(models.Model):
 
-    NUM_CHOICES = ((1, 1), (2, 2), (3, 3), (4, 4))
     num = models.PositiveSmallIntegerField(
         verbose_name="numéro de zone",
         primary_key=True,
-        choices=NUM_CHOICES)
+        validators=[MinValueValidator(1), MaxValueValidator(4)])
     desc = models.CharField(
         verbose_name="description",
         max_length=50,
@@ -37,7 +37,6 @@ class ModeBase(models.Model):
         max_length=1,
         verbose_name="mode de fonctionnement",
         choices=MODE_CHOICES,
-        default=None
     )
 
     class Meta:
@@ -103,6 +102,7 @@ class Derogation(ModeBase):
 
 
 class PilotwireLog(models.Model):
+
     timestamp = models.DateTimeField(
         verbose_name="date/heure",
         auto_now_add=True,
