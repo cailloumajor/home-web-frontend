@@ -4,3 +4,5 @@
 Django<1.11
 djangorestframework
 pytz
+
+-e git+https://github.com/cailloumajor/pilotwire-controller.git#egg=pilotwire_controller
