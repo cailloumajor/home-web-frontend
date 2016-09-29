@@ -1,6 +1,9 @@
 # Production Python requirements
 # Must be compiled by pip-compile
 
+django-configurations
+dj-database-url
+dj-email-url
 Django<1.11
 djangorestframework
 pytz
