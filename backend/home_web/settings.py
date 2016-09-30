@@ -105,6 +105,14 @@ class Dev(Common):
     pass
 
 
+class Test(Common):
+    """
+    The testing settings
+    """
+
+    pass
+
+
 class Prod(Common):
     """
     The in-production settings
