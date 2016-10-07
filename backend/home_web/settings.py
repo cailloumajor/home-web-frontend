@@ -20,7 +20,6 @@ class Common(Configuration):
     # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -110,7 +109,23 @@ class Test(Common):
     The testing settings
     """
 
-    pass
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'pilotwire_testing_handler': {
+                'level': 'INFO',
+                'class': 'heating.log.PilotwireHandler',
+                'logLength': 5,
+            },
+        },
+        'loggers': {
+            'pilotwire_testing_logger': {
+                'handlers': ['pilotwire_testing_handler'],
+                'level': 'INFO',
+            },
+        },
+    }
 
 
 class Prod(Common):
