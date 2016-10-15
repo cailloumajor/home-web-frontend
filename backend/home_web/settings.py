@@ -127,6 +127,10 @@ class Test(Common):
         },
     }
 
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
+    ADMINS = [('Test', 'test@example.com')]
+
 
 class Prod(Common):
     """
