@@ -12,111 +12,139 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from configurations import Configuration, values
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
+class Common(Configuration):
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5w$77!lmo&g)e5j6uhl4i2=nffnnj0y1y07(9@-f)@b7*g%+sd'
+    # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+    # Quick-start development settings - unsuitable for production
+    # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-ALLOWED_HOSTS = []
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = '5w$77!lmo&g)e5j6uhl4i2=nffnnj0y1y07(9@-f)@b7*g%+sd'
 
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = True
 
-# Application definition
+    ALLOWED_HOSTS = []
 
-INSTALLED_APPS = [
-    'heating.apps.HeatingConfig',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-]
+    # Application definition
+    INSTALLED_APPS = [
+        'heating.apps.HeatingConfig',
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'rest_framework',
+    ]
 
-MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+    MIDDLEWARE = [
+        'django.middleware.security.SecurityMiddleware',
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    ]
 
-ROOT_URLCONF = 'home_web.urls'
+    ROOT_URLCONF = 'home_web.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
+    TEMPLATES = [
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': [],
+            'APP_DIRS': True,
+            'OPTIONS': {
+                'context_processors': [
+                    'django.template.context_processors.debug',
+                    'django.template.context_processors.request',
+                    'django.contrib.auth.context_processors.auth',
+                    'django.contrib.messages.context_processors.messages',
+                ],
+            },
         },
-    },
-]
+    ]
 
-WSGI_APPLICATION = 'home_web.wsgi.application'
+    WSGI_APPLICATION = 'home_web.wsgi.application'
+
+    # Database
+    # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+    DATABASES = values.DatabaseURLValue(
+        'sqlite:///{}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+    )
+
+    # Internationalization
+    # https://docs.djangoproject.com/en/1.10/topics/i18n/
+    LANGUAGE_CODE = 'fr-FR'
+
+    TIME_ZONE = 'Europe/Paris'
+
+    USE_I18N = True
+
+    USE_L10N = True
+
+    USE_TZ = True
+
+    # Static files (CSS, JavaScript, Images)
+    # https://docs.djangoproject.com/en/1.10/howto/static-files/
+    STATIC_URL = '/static/'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.10/ref/settings/#databases
+class Dev(Common):
+    """
+    The in-development settings and the default configuration
+    """
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    pass
+
+
+class Test(Common):
+    """
+    The testing settings
+    """
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'pilotwire_testing_handler': {
+                'level': 'INFO',
+                'class': 'heating.log.PilotwireHandler',
+                'logLength': 5,
+            },
+        },
+        'loggers': {
+            'pilotwire_testing_logger': {
+                'handlers': ['pilotwire_testing_handler'],
+                'level': 'INFO',
+            },
+        },
     }
-}
+
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
+    ADMINS = [('Test', 'test@example.com')]
 
 
-# Password validation
-# https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
+class Prod(Common):
+    """
+    The in-production settings
+    """
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+    DEBUG = False
 
+    SECRET_KEY = values.SecretValue()
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.10/topics/i18n/
+    ADMINS = values.SingleNestedTupleValue()
 
-LANGUAGE_CODE = 'fr-FR'
+    ALLOWED_HOSTS = values.ListValue()
 
-TIME_ZONE = 'Europe/Paris'
+    DATABASES = values.DatabaseURLValue()
 
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
-
-STATIC_URL = '/static/'
+    EMAIL = values.EmailURLValue()
