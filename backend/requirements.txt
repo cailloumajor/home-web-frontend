@@ -12,9 +12,9 @@ django-configurations==2.0
 Django==1.10.2
 djangorestframework==3.4.7
 enum-compat==0.0.2        # via zeroconf
-netifaces==0.10.4         # via zeroconf
+netifaces==0.10.5         # via zeroconf
 pbr==1.10.0               # via stevedore
 pytz==2016.7
 six==1.10.0               # via stevedore, zeroconf
-stevedore==1.15.0
+stevedore==1.17.1
 zeroconf==0.17.6
