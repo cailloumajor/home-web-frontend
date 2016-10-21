@@ -6,6 +6,5 @@ dj-database-url
 dj-email-url
 Django<1.11
 djangorestframework
+pilotwire-controller
 pytz
-
--e git+https://github.com/cailloumajor/pilotwire-controller.git#egg=pilotwire_controller
