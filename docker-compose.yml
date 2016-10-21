@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  db:
+    build: ./db
+    env_file: ./db/docker.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
