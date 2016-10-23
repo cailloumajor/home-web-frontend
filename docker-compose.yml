@@ -5,7 +5,18 @@ services:
     build: ./db
     env_file: ./db/docker.env
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
+  backend:
+    build: ./backend
+    command: gunicorn --config gunicorn_config.py home_web.wsgi
+    environment:
+      - DJANGO_CONFIGURATION=Prod
+    env_file: ./backend/docker.env
+    links:
+      - db
+    volumes:
+      - staticfiles:/static
 
 volumes:
-  db_data:
+  dbdata:
+  staticfiles:
