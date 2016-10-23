@@ -157,3 +157,5 @@ class Prod(Common):
             'rest_framework.parsers.JSONParser',
         ),
     }
+
+    STATIC_ROOT = values.PathValue()
