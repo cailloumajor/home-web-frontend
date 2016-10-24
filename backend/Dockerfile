@@ -21,6 +21,7 @@ RUN set -ex \
     && apk del .build-deps
 
 COPY home_web ./home_web
+COPY core ./core
 COPY heating ./heating
 COPY manage.py .
 COPY gunicorn_config.py .

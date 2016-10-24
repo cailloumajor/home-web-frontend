@@ -12,6 +12,8 @@ if ./manage.py diffsettings --all | grep -q "DEBUG = False"; then
     ./manage.py collectstatic --noinput
 fi
 
+msg "start waiting for database"
+./manage.py waitdb
 msg "start migrating models"
 ./manage.py migrate
 
