@@ -33,6 +33,7 @@ class Common(Configuration):
 
     # Application definition
     INSTALLED_APPS = [
+        'core.apps.CoreConfig',
         'heating.apps.HeatingConfig',
         'django.contrib.admin',
         'django.contrib.auth',
