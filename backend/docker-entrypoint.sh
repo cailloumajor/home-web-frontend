@@ -7,15 +7,19 @@ msg(){
     echo "$myname: $1"
 }
 
+msg "start waiting for database"
+./manage.py waitdb
+
+msg "start migrating models"
+./manage.py migrate
+
 if ./manage.py diffsettings --all | grep -q "DEBUG = False"; then
     msg "start collecting static files"
     ./manage.py collectstatic --noinput
-fi
 
-msg "start waiting for database"
-./manage.py waitdb
-msg "start migrating models"
-./manage.py migrate
+    msg "start creating administrator"
+    ./manage.py initadmin "$DJANGO_ADMIN_PASSWORD"
+fi
 
 msg "launching command"
 exec "$@"
