@@ -17,3 +17,6 @@ db.sqlite3
 
 # Project unit tests
 heating/tests
+
+# Environment file
+docker.env
