@@ -1,5 +1,11 @@
 FROM cailloumajor/python-armhf:alpine
 
+ENV TZ Europe/Paris
+RUN set -ex \
+    && apk --no-cache add tzdata \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+
 RUN mkdir /static
 
 ENV PYTHONUNBUFFERED=1 \
