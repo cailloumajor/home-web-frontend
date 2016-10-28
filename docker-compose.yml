@@ -16,6 +16,15 @@ services:
       - db
     volumes:
       - staticfiles:/static
+  frontend:
+    build: ./frontend
+    env_file: ./frontend/docker.env
+    links:
+      - backend
+    ports:
+      - "80:80"
+    volumes:
+      - staticfiles:/var/www/static:ro
 
 volumes:
   dbdata:
