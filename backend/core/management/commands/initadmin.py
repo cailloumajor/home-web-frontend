@@ -22,7 +22,9 @@ class Command(BaseCommand):
         self.stdout.write("Creating administrator user")
 
         if User.objects.filter(username=USERNAME).exists():
-            raise CommandError("User '{}' already exists".format(USERNAME))
+            self.stdout.write(self.style.NOTICE(
+                "User '{}' already exists".format(USERNAME)))
+            return
 
         try:
             email = settings.ADMINS[0][1]
