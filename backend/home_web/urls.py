@@ -31,5 +31,5 @@ router.register(r'pilotwirelog', PilotwireLogViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
+    url(r'^api/', include(router.urls, namespace='heating')),
 ]

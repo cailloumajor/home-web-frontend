@@ -22,6 +22,7 @@ from ..serializers import ZoneSerializer, SlotSerializer, \
     DerogationSerializer, PilotwireLogSerializer
 
 
+PREFIX = 'heating:'
 LIST_SUFFIX = '-list'
 DETAIL_SUFFIX = '-detail'
 
@@ -98,7 +99,8 @@ Parameters = namedtuple('Parameters', [
 class TestModelAPI:
 
     def test_list_api(self, client, params):
-        url = reverse(params.base_name + LIST_SUFFIX)
+        view_name = PREFIX + params.base_name + LIST_SUFFIX
+        url = reverse(view_name)
         G(params.model, n=2)
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
@@ -106,7 +108,8 @@ class TestModelAPI:
 
     def test_detail_api(self, client, params, pk_fieldname):
         instance = G(params.model, data_fixture=CustomDataFixture())
-        url = reverse(params.base_name + DETAIL_SUFFIX, args=[instance.pk])
+        view_name = PREFIX + params.base_name + DETAIL_SUFFIX
+        url = reverse(view_name, args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
         expected_fields = model_to_dict(instance).keys()
@@ -114,7 +117,8 @@ class TestModelAPI:
         assert response.data[pk_fieldname] == getattr(instance, pk_fieldname)
 
     def test_create_api(self, client, params, pk_fieldname, serialize):
-        url = reverse(params.base_name + LIST_SUFFIX)
+        view_name = PREFIX + params.base_name + LIST_SUFFIX
+        url = reverse(view_name)
         new = G(params.model, data_fixture=CustomDataFixture(),
                 **params.create_data)
         new_dict = model_to_dict(new)
@@ -131,7 +135,8 @@ class TestModelAPI:
 
     def test_delete_api(self, client, params):
         instance = G(params.model, data_fixture=CustomDataFixture())
-        url = reverse(params.base_name + DETAIL_SUFFIX, args=[instance.pk])
+        view_name = PREFIX + params.base_name + DETAIL_SUFFIX
+        url = reverse(view_name, args=[instance.pk])
         response = client.delete(url)
         if params.read_only:
             assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
@@ -142,7 +147,8 @@ class TestModelAPI:
 
     def test_update_api(self, client, params, pk_fieldname, serialize):
         instance = G(params.model, data_fixture=CustomDataFixture())
-        url = reverse(params.base_name + DETAIL_SUFFIX, args=[instance.pk])
+        view_name = PREFIX + params.base_name + DETAIL_SUFFIX
+        url = reverse(view_name, args=[instance.pk])
         new = G(params.model, data_fixture=CustomDataFixture(),
                 **params.create_data)
         new_dict = model_to_dict(new)

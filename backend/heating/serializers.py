@@ -61,6 +61,9 @@ class ZoneSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Zone
         fields = ('url', 'num', 'desc')
+        extra_kwargs = {
+            'url': {'view_name': 'heating:zone-detail'},
+        }
 
 
 class SlotSerializer(serializers.HyperlinkedModelSerializer):
@@ -75,6 +78,8 @@ class SlotSerializer(serializers.HyperlinkedModelSerializer):
             'start_time': {
                 'format': TIME_FORMAT, 'input_formats': [TIME_FORMAT]
             },
+            'url': {'view_name': 'heating:slot-detail'},
+            'zone': {'view_name': 'heating:zone-detail'},
         }
 
     def __init__(self, *args, **kwargs):
@@ -123,6 +128,10 @@ class DerogationSerializer(serializers.HyperlinkedModelSerializer):
         model = Derogation
         fields = ('url', 'id', 'mode', 'creation_dt', 'start_dt', 'end_dt',
                   'zones', 'start_initial')
+        extra_kwargs = {
+            'url': {'view_name': 'heating:derogation-detail'},
+            'zones': {'view_name': 'heating:zone-detail'},
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -171,3 +180,6 @@ class PilotwireLogSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PilotwireLog
         fields = ('url', 'id', 'timestamp', 'level', 'message')
+        extra_kwargs = {
+            'url': {'view_name': 'heating:pilotwirelog-detail'},
+        }
