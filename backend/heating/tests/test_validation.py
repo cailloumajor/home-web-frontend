@@ -52,7 +52,7 @@ def slot_initial_data(db):
     G(Slot, zone=F(num=1), mon=True,
       start_time=time(14, 0), end_time=time(15, 59))
     good_data = {
-        'zone': reverse('zone-detail', args=[1]), 'mode': 'E',
+        'zone': reverse('heating:zone-detail', args=[1]), 'mode': 'E',
         'start_time': '10:00', 'end_time': '14:00', 'mon': True
     }
     return good_data
@@ -67,7 +67,7 @@ def derogation_initial_data(db):
       start_dt=datetime(2016, 9, 13, 14, 0),
       end_dt=datetime(2016, 9, 13, 21, 59))
     good_data = {
-        'zones': [reverse('zone-detail', args=[1])], 'mode': 'E',
+        'zones': [reverse('heating:zone-detail', args=[1])], 'mode': 'E',
         'start_dt': '2016-09-13T06:00', 'end_dt': '2016-09-13T14:00',
         'start_initial': '2016-09-13T05:59'
     }
@@ -90,7 +90,7 @@ class BaseValidationTest:
 class TestSlotValidation(BaseValidationTest):
 
     initial_fixture = 'slot_initial_data'
-    viewname = 'slot-list'
+    viewname = 'heating:slot-list'
     test_data = (
         [
             "All fields OK", {}, None
@@ -143,7 +143,7 @@ class TestSlotValidation(BaseValidationTest):
 class TestDerogationValidation(BaseValidationTest):
 
     initial_fixture = 'derogation_initial_data'
-    viewname = 'derogation-list'
+    viewname = 'heating:derogation-list'
     test_data = (
         [
             "All fields OK", {}, None

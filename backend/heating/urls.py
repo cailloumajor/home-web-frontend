@@ -1,0 +1,17 @@
+# -*- coding: utf-8 -*-
+
+from django.conf.urls import url
+
+from rest_framework import routers
+
+from .views import ZoneViewSet, SlotViewSet, \
+    DerogationViewSet, PilotwireLogViewSet
+
+
+router = routers.DefaultRouter()
+router.register(r'zones', ZoneViewSet)
+router.register(r'slots', SlotViewSet)
+router.register(r'derogations', DerogationViewSet)
+router.register(r'pilotwirelog', PilotwireLogViewSet)
+
+urlpatterns = router.urls

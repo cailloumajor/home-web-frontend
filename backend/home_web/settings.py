@@ -33,6 +33,7 @@ class Common(Configuration):
 
     # Application definition
     INSTALLED_APPS = [
+        'core.apps.CoreConfig',
         'heating.apps.HeatingConfig',
         'django.contrib.admin',
         'django.contrib.auth',
@@ -78,6 +79,31 @@ class Common(Configuration):
     DATABASES = values.DatabaseURLValue(
         'sqlite:///{}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
     )
+
+    # Password validation
+    # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
+    AUTH_PASSWORD_VALIDATORS = [
+        {
+            'NAME':
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator',
+        },
+        {
+            'NAME':
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator',
+        },
+        {
+            'NAME':
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator',
+        },
+        {
+            'NAME':
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator',
+        },
+    ]
 
     # Internationalization
     # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -148,3 +174,14 @@ class Prod(Common):
     DATABASES = values.DatabaseURLValue()
 
     EMAIL = values.EmailURLValue()
+
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer',
+        ),
+        'DEFAULT_PARSER_CLASSES': (
+            'rest_framework.parsers.JSONParser',
+        ),
+    }
+
+    STATIC_ROOT = values.PathValue()

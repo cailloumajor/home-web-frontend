@@ -17,19 +17,24 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
-from rest_framework import routers
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
-from heating.views import ZoneViewSet, SlotViewSet, \
-    DerogationViewSet, PilotwireLogViewSet
+
+@api_view(['GET'])
+def api_root(request, fmt=None):
+    return Response({
+        'heating': reverse('heating:api-root', request=request, format=fmt),
+    })
 
 
-router = routers.DefaultRouter()
-router.register(r'zones', ZoneViewSet)
-router.register(r'slots', SlotViewSet)
-router.register(r'derogations', DerogationViewSet)
-router.register(r'pilotwirelog', PilotwireLogViewSet)
+api_patterns = [
+    url(r'^$', api_root),
+    url(r'^heating/', include('heating.urls', namespace='heating')),
+]
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
+    url(r'^api/', include(api_patterns)),
 ]
