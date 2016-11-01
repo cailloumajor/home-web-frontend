@@ -26,6 +26,10 @@ RUN set -ex \
            libpq \
     && apk del .build-deps
 
+RUN apk add --no-cache 'su-exec>=0.2'
+
+RUN adduser -D -g '' python-user
+
 COPY run_webapp.sh manage.py gunicorn_config.py ./
 COPY home_web ./home_web
 COPY core ./core
