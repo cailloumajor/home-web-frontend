@@ -9,8 +9,6 @@ services:
   backend:
     build: ./backend
     command: ./run_webapp.sh
-    environment:
-      - DJANGO_CONFIGURATION=Prod
     env_file: ./backend/docker.env
     expose:
       - "8000"
