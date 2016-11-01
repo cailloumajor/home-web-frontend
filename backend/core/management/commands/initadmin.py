@@ -22,7 +22,7 @@ class Command(BaseCommand):
         self.stdout.write("Creating administrator user")
 
         if User.objects.filter(username=USERNAME).exists():
-            self.stdout.write(self.style.NOTICE(
+            self.stdout.write(self.style.WARNING(
                 "User '{}' already exists".format(USERNAME)))
             return
 
