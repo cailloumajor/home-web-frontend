@@ -12,6 +12,8 @@ services:
     environment:
       - DJANGO_CONFIGURATION=Prod
     env_file: ./backend/docker.env
+    expose:
+      - "8000"
     links:
       - db
     volumes:

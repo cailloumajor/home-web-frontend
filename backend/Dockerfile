@@ -30,5 +30,3 @@ COPY run_webapp.sh manage.py gunicorn_config.py ./
 COPY home_web ./home_web
 COPY core ./core
 COPY heating ./heating
-
-EXPOSE 8000
