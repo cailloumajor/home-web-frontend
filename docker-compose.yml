@@ -8,7 +8,7 @@ services:
       - dbdata:/var/lib/postgresql/data
   backend:
     build: ./backend
-    command: gunicorn --config gunicorn_config.py home_web.wsgi
+    command: ./run_webapp.sh
     environment:
       - DJANGO_CONFIGURATION=Prod
     env_file: ./backend/docker.env

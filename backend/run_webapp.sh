@@ -21,5 +21,5 @@ if ./manage.py diffsettings --all | grep -q "DEBUG = False"; then
     ./manage.py initadmin "$DJANGO_ADMIN_PASSWORD"
 fi
 
-msg "launching command"
-exec "$@"
+msg "launching gunicorn"
+exec gunicorn --config gunicorn_config.py "$WSGI_APPLICATION"
