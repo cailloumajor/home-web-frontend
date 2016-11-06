@@ -3,13 +3,13 @@ version: '2'
 services:
   db:
     build: ./db
-    env_file: ./db/docker.env
+    env_file: ./.dockerenv/db.env
     volumes:
       - dbdata:/var/lib/postgresql/data
   backend:
     build: ./backend
     command: ./run_webapp.sh
-    env_file: ./backend/docker.env
+    env_file: ./.dockerenv/backend.env
     expose:
       - "8000"
     links:
@@ -18,7 +18,7 @@ services:
       - staticfiles:/static
   frontend:
     build: ./frontend
-    env_file: ./frontend/docker.env
+    env_file: ./.dockerenv/frontend.env
     links:
       - backend
     ports:
