@@ -187,3 +187,21 @@ class Prod(Common):
     }
 
     STATIC_ROOT = values.PathValue()
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'pilotwire_handler': {
+                'level': 'INFO',
+                'class': 'heating.log.PilotwireHandler',
+                'logLength': 500,
+            },
+        },
+        'loggers': {
+            'heating.pilotwire': {
+                'handlers': ['pilotwire_handler'],
+                'level': 'INFO',
+            },
+        },
+    }
