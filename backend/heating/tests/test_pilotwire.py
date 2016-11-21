@@ -3,7 +3,6 @@
 from collections import namedtuple
 
 import pytest
-from django.core import mail
 from pilotwire_controller.client import PilotwireModesInconsistent
 
 from .. import tasks
@@ -72,7 +71,7 @@ Params = namedtuple('Params', [
     Params('undefined', 'status_undefined', None),
 ], ids=["None to active", "active to error", "undefined to undefined"])
 @pytest.mark.django_db
-def test_update_status(caplog, monkeypatch, patched_redis, params):
+def test_update_status(caplog, monkeypatch, patched_redis, params, mailoutbox):
     new_status = params.test_type[7:]
     FakeControllerProxy.TEST_TYPE = params.test_type
     monkeypatch.setattr(tasks.pilotwire, 'ControllerProxy',
@@ -89,8 +88,8 @@ def test_update_status(caplog, monkeypatch, patched_redis, params):
             'INFO' if params.test_type == 'status_active' else 'ERROR')
         assert log_filtered[0].message == expected
         if params.test_type != 'status_active':
-            assert mail.outbox[0].subject == (
+            assert mailoutbox[0].subject == (
                 "[Django] Pilotwire controller connection error")
-            assert expected in mail.outbox[0].body
+            assert expected in mailoutbox[0].body
     else:
         assert log_filtered == []
