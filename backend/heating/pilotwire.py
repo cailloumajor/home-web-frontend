@@ -59,4 +59,6 @@ def set_modes():
         logger.error(pwerr)
         return
 
-    logger.info("Modes set on pilotwire controller : %s", pformat(modes))
+    logger.info(
+        "Modes set on pilotwire controller : %s", pformat(client.modes)
+    )

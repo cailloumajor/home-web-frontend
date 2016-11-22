@@ -27,7 +27,10 @@ class FakeControllerProxy:
 
     @property
     def modes(self):
-        pass
+        return {
+            '2': 'A',
+            '1': 'Z',
+        }
 
     @modes.setter
     def modes(self, _):
@@ -38,7 +41,8 @@ class FakeControllerProxy:
 
 
 @pytest.mark.parametrize(['test_type', 'level', 'message'], [
-    ('all_ok', 'INFO', "Modes set on pilotwire controller : {}"),
+    ('all_ok', 'INFO',
+     "Modes set on pilotwire controller : {'1': 'Z', '2': 'A'}"),
     ('modes_inconsistent', 'ERROR', "Inconsistent test"),
 ])
 @pytest.mark.django_db
