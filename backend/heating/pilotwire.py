@@ -16,6 +16,9 @@ from .models import Zone
 logger = logging.getLogger(__name__)
 
 REDIS_KEY = 'pilotwire_controller:status'
+PILOTWIRE_IP_PORT = '{}:{}'.format(
+    settings.PILOTWIRE_IP, settings.PILOTWIRE_PORT
+)
 
 
 def is_active():
@@ -25,7 +28,7 @@ def is_active():
 
 def update_status():
     redis = StrictRedis.from_url(settings.REDIS_URL)
-    pwclient = ControllerProxy()
+    pwclient = ControllerProxy(PILOTWIRE_IP_PORT)
 
     old_status = redis.get(REDIS_KEY)
     if old_status is not None:
@@ -48,7 +51,7 @@ def update_status():
 
 def set_modes():
     modes = Zone.objects.get_modes()
-    client = ControllerProxy()
+    client = ControllerProxy(PILOTWIRE_IP_PORT)
 
     try:
         client.modes = modes

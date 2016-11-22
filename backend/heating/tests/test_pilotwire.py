@@ -19,7 +19,7 @@ class FakeControllerProxy:
 
     TEST_TYPE = 'undefined'
 
-    def __init__(self):
+    def __init__(self, _):
         self.count = 0
 
     def check_status(self):

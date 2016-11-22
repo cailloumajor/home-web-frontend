@@ -123,6 +123,9 @@ class Common(Configuration):
 
     REDIS_URL = values.Value()
 
+    PILOTWIRE_IP = values.IPValue()
+    PILOTWIRE_PORT = values.IntegerValue()
+
 
 class Dev(Common):
     """
