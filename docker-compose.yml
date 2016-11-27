@@ -6,6 +6,9 @@ services:
     env_file: ./.dockerenv/db.env
     volumes:
       - dbdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
   backend:
     build: ./backend
     command: ./run_webapp.sh
@@ -16,6 +19,10 @@ services:
       - db
     volumes:
       - staticfiles:/static
+    networks:
+      - backend
+      - frontend
+
   frontend:
     build: ./frontend
     env_file: ./.dockerenv/frontend.env
@@ -25,6 +32,12 @@ services:
       - "80:80"
     volumes:
       - staticfiles:/var/www/static:ro
+    networks:
+      - frontend
+
+networks:
+  backend:
+  frontend:
 
 volumes:
   dbdata:
