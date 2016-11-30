@@ -10,4 +10,5 @@ gunicorn
 pilotwire-controller
 psycopg2
 pytz
+redis
 setproctitle

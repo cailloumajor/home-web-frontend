@@ -11,3 +11,4 @@ pylint
 pytest
 pytest-catchlog
 pytest-django
+redislite
