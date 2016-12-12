@@ -11,8 +11,20 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import re
 
 from configurations import Configuration, values
+
+
+class CeleryBrokerURLValue(values.Value):
+    """
+    Value subclass that converts 'unix://' scheme to 'redis+socket://'.
+    """
+
+    def to_python(self, value):
+        return re.sub(
+            r'^unix://', 'redis+socket://', super().to_python(value)
+        )
 
 
 class Common(Configuration):
@@ -122,6 +134,11 @@ class Common(Configuration):
     STATIC_URL = '/static/'
 
     REDIS_URL = values.Value()
+
+    CELERY_BROKER_URL = CeleryBrokerURLValue(environ_name='REDIS_URL')
+    CELERY_TASK_ROUTES = {
+        'heating.tasks.*': {'queue': 'celery', 'delivery_mode': 'transient'},
+    }
 
     PILOTWIRE_IP = values.IPValue()
     PILOTWIRE_PORT = values.IntegerValue()
