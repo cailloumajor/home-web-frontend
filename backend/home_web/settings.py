@@ -43,6 +43,10 @@ class Common(Configuration):
 
     ALLOWED_HOSTS = []
 
+    INTERNAL_IPS = [
+        '127.0.0.1',
+    ]
+
     # Application definition
     INSTALLED_APPS = [
         'core.apps.CoreConfig',
@@ -149,7 +153,13 @@ class Dev(Common):
     The in-development settings and the default configuration
     """
 
-    pass
+    INSTALLED_APPS = Common.INSTALLED_APPS + [
+        'debug_toolbar',
+    ]
+
+    MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ] + Common.MIDDLEWARE
 
 
 class Test(Common):

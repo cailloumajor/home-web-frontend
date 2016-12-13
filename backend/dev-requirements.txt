@@ -2,6 +2,7 @@
 
 -r requirements.txt
 
+django-debug-toolbar
 django-dynamic-fixture
 flake8
 ipython
