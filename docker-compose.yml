@@ -35,6 +35,8 @@ services:
   frontend:
     build: ./frontend
     env_file: ./.dockerenv/frontend.env
+    environment:
+      - NGINX_BACKEND_ADDRESS=django:8000
     links:
       - django
     ports:
