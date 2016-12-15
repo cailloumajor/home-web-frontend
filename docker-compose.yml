@@ -9,6 +9,13 @@ services:
     networks:
       - django
 
+  redis:
+    image: cailloumajor/redis-armhf:alpine
+    volumes:
+      - redisdata:/data
+    networks:
+      - django
+
   django:
     extends:
       file: common.yml
@@ -18,6 +25,7 @@ services:
       - "8000"
     links:
       - db
+      - redis
     volumes:
       - staticfiles:/static
     networks:
@@ -42,4 +50,5 @@ networks:
 
 volumes:
   dbdata:
+  redisdata:
   staticfiles:
