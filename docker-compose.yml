@@ -7,12 +7,13 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
     networks:
-      - backend
+      - django
 
-  backend:
-    build: ./backend
+  django:
+    extends:
+      file: common.yml
+      service: backend
     command: ./run_webapp.sh
-    env_file: ./.dockerenv/backend.env
     expose:
       - "8000"
     links:
@@ -20,14 +21,14 @@ services:
     volumes:
       - staticfiles:/static
     networks:
-      - backend
+      - django
       - frontend
 
   frontend:
     build: ./frontend
     env_file: ./.dockerenv/frontend.env
     links:
-      - backend
+      - django
     ports:
       - "80:80"
     volumes:
@@ -36,7 +37,7 @@ services:
       - frontend
 
 networks:
-  backend:
+  django:
   frontend:
 
 volumes:
