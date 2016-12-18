@@ -8,6 +8,7 @@ services:
       - dbdata:/var/lib/postgresql/data
     networks:
       - django
+      - worker
 
   redis:
     image: cailloumajor/redis-armhf:alpine
@@ -15,6 +16,7 @@ services:
       - redisdata:/data
     networks:
       - django
+      - worker
 
   django:
     extends:
@@ -32,6 +34,20 @@ services:
       - django
       - frontend
 
+  # Celery worker
+  worker:
+    extends:
+      file: common.yml
+      service: backend
+    command: >
+      su-exec python-user celery worker --app home_web
+      --loglevel INFO --purge
+    links:
+      - db
+      - redis
+    networks:
+      - worker
+
   frontend:
     build: ./frontend
     env_file: ./.dockerenv/frontend.env
@@ -48,6 +64,7 @@ services:
 
 networks:
   django:
+  worker:
   frontend:
 
 volumes:
