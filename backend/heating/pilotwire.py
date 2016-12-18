@@ -6,6 +6,7 @@ from pprint import pformat
 from django.conf import settings
 from django.core.mail import mail_admins
 
+from celery import shared_task
 from pilotwire_controller.client import \
     ControllerProxy, PilotwireModesInconsistent
 from redis import StrictRedis
@@ -49,6 +50,7 @@ def update_status():
             mail_admins("Pilotwire controller connection error", log_message)
 
 
+@shared_task
 def set_modes():
     modes = Zone.objects.get_modes()
     client = ControllerProxy(PILOTWIRE_IP_PORT)
