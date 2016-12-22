@@ -40,20 +40,27 @@ class FakeControllerProxy:
             return
 
 
-@pytest.mark.parametrize(['test_type', 'level', 'message'], [
-    ('all_ok', 'INFO',
-     "Modes set on pilotwire controller : {'1': 'Z', '2': 'A'}"),
-    ('modes_inconsistent', 'ERROR', "Inconsistent test"),
+Params = namedtuple('Params', [
+    'test_type', 'level', 'message'
 ])
+
+
+@pytest.mark.parametrize('params', [
+    Params(
+        'all_ok', 'INFO',
+        "Modes set on pilotwire controller : {'1': 'Z', '2': 'A'}"
+    ),
+    Params('modes_inconsistent', 'ERROR', "Inconsistent test"),
+], ids=lambda p: p.test_type)
 @pytest.mark.django_db
-def test_set_modes(monkeypatch, caplog, test_type, level, message):
-    FakeControllerProxy.TEST_TYPE = test_type
+def test_set_modes(params, monkeypatch, caplog):
+    FakeControllerProxy.TEST_TYPE = params.test_type
     monkeypatch.setattr(tasks.pilotwire, 'ControllerProxy',
                         FakeControllerProxy)
     tasks.pilotwire.set_modes()
     record = caplog.records[0]
-    assert record.levelname == level
-    assert record.message == message
+    assert record.levelname == params.level
+    assert record.message == params.message
 
 
 def test_is_active(patched_redis):
@@ -73,7 +80,7 @@ Params = namedtuple('Params', [
     Params(None, 'status_active', STATUS_MSG[0] + STATUS_MSG[1]),
     Params('active', 'status_error', STATUS_MSG[0]),
     Params('undefined', 'status_undefined', None),
-], ids=["None to active", "active to error", "undefined to undefined"])
+], ids=lambda p: "{} -> {}".format(p.keyval, p.test_type[7:]))
 @pytest.mark.django_db
 def test_update_status(caplog, monkeypatch, patched_redis, params, mailoutbox):
     new_status = params.test_type[7:]
