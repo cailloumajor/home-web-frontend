@@ -50,7 +50,7 @@ def update_status():
             mail_admins("Pilotwire controller connection error", log_message)
 
 
-@shared_task
+@shared_task(ignore_result=True)
 def set_modes():
     modes = Zone.objects.get_modes()
     client = ControllerProxy(PILOTWIRE_IP_PORT)
