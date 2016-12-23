@@ -17,6 +17,7 @@ services:
     networks:
       - django
       - worker
+      - beat
 
   django:
     extends:
@@ -48,6 +49,19 @@ services:
     networks:
       - worker
 
+  # Celery beat
+  beat:
+    extends:
+      file: common.yml
+      service: backend
+    command: >
+      su-exec python-user celery beat --app home_web
+      --loglevel INFO --pidfile= --schedule /tmp/celerybeat-schedule
+    links:
+      - redis
+    networks:
+      - beat
+
   frontend:
     build: ./frontend
     env_file: ./.dockerenv/frontend.env
@@ -65,6 +79,7 @@ services:
 networks:
   django:
   worker:
+  beat:
   frontend:
 
 volumes:
