@@ -143,6 +143,12 @@ class Common(Configuration):
     CELERY_TASK_ROUTES = {
         'heating.tasks.*': {'queue': 'celery', 'delivery_mode': 'transient'},
     }
+    CELERY_BEAT_SCHEDULE = {
+        'update-pilotwire-status': {
+            'task': 'heating.pilotwire.update_status',
+            'schedule': 60,
+        },
+    }
 
     PILOTWIRE_IP = values.IPValue()
     PILOTWIRE_PORT = values.IntegerValue()

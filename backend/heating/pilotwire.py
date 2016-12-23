@@ -46,6 +46,7 @@ def is_active():
     return redis.get(REDIS_KEY) == b'active'
 
 
+@shared_task(ignore_result=True)
 @needs_settings(['REDIS_URL', 'PILOTWIRE_IP', 'PILOTWIRE_PORT'])
 def update_status():
     redis = StrictRedis.from_url(settings.REDIS_URL)
