@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from functools import wraps
 from pprint import pformat
 
 from django.conf import settings
 from django.core.mail import mail_admins
 
 from celery import shared_task
+from celery.exceptions import Ignore
 from pilotwire_controller.client import \
     ControllerProxy, PilotwireModesInconsistent
 from redis import StrictRedis
@@ -22,11 +24,29 @@ PILOTWIRE_IP_PORT = '{}:{}'.format(
 )
 
 
+def needs_settings(needed_settings):
+    def _decorator(func):
+        @wraps(func)
+        def _wrapper(*args, **kwargs):
+            missing = [s for s in needed_settings if not getattr(settings, s)]
+            if not missing:
+                return func(*args, **kwargs)
+            from celery import current_task
+            if current_task and current_task.request.id:
+                raise Ignore(
+                    "Missing {} setting(s)".format(", ".join(missing))
+                )
+        return _wrapper
+    return _decorator
+
+
+@needs_settings(['REDIS_URL'])
 def is_active():
     redis = StrictRedis.from_url(settings.REDIS_URL)
     return redis.get(REDIS_KEY) == b'active'
 
 
+@needs_settings(['REDIS_URL', 'PILOTWIRE_IP', 'PILOTWIRE_PORT'])
 def update_status():
     redis = StrictRedis.from_url(settings.REDIS_URL)
     pwclient = ControllerProxy(PILOTWIRE_IP_PORT)
@@ -51,6 +71,7 @@ def update_status():
 
 
 @shared_task(ignore_result=True)
+@needs_settings(['PILOTWIRE_IP', 'PILOTWIRE_PORT'])
 def set_modes():
     modes = Zone.objects.get_modes()
     client = ControllerProxy(PILOTWIRE_IP_PORT)

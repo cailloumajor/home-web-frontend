@@ -40,6 +40,21 @@ class FakeControllerProxy:
             return
 
 
+@pytest.fixture
+def pilotwire_settings(settings):
+    settings.PILOTWIRE_IP = '0.0.0.0'
+    settings.PILOTWIRE_PORT = 1
+
+
+pytestmark = pytest.mark.usefixtures('pilotwire_settings')
+
+
+def missing_settings_parametrize(missing_settings):
+    return pytest.mark.parametrize(
+        'setting', missing_settings, ids=lambda s: "missing " + s
+    )
+
+
 Params = namedtuple('Params', [
     'test_type', 'level', 'message'
 ])
@@ -104,3 +119,25 @@ def test_update_status(caplog, monkeypatch, patched_redis, params, mailoutbox):
             assert expected in mailoutbox[0].body
     else:
         assert log_filtered == []
+
+
+class TestMissingSettings:
+
+    @missing_settings_parametrize(['REDIS_URL'])
+    def test_is_active(self, setting, settings):
+        setattr(settings, setting, None)
+        assert tasks.pilotwire.is_active() is None
+
+    @missing_settings_parametrize(
+        ['REDIS_URL', 'PILOTWIRE_IP', 'PILOTWIRE_PORT']
+    )
+    def test_update_status(self, setting, settings, caplog):
+        setattr(settings, setting, None)
+        assert tasks.pilotwire.update_status() is None
+        assert not caplog.records
+
+    @missing_settings_parametrize(['PILOTWIRE_IP', 'PILOTWIRE_PORT'])
+    def test_set_modes(self, setting, settings, caplog):
+        setattr(settings, setting, None)
+        assert tasks.pilotwire.set_modes() is None
+        assert not caplog.records

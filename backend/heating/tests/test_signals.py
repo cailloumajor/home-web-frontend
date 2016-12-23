@@ -51,20 +51,6 @@ class TestActiveDerogationHandler:
           end_dt=timezone.now()+timedelta(minutes=5))
         assert not set_modes_mock.called
 
-    def test_no_pilotwire_ip_setting(self, settings, set_modes_mock):
-        settings.PILOTWIRE_IP = None
-        G(Derogation,
-          start_dt=timezone.now()-timedelta(minutes=5),
-          end_dt=timezone.now()+timedelta(minutes=5))
-        assert not set_modes_mock.called
-
-    def test_no_pilotwire_port_setting(self, settings, set_modes_mock):
-        settings.PILOTWIRE_PORT = None
-        G(Derogation,
-          start_dt=timezone.now()-timedelta(minutes=5),
-          end_dt=timezone.now()+timedelta(minutes=5))
-        assert not set_modes_mock.called
-
     def test_pilotwire_not_active(self, patched_redis, set_modes_mock):
         patched_redis.set(tasks.pilotwire.REDIS_KEY, 'not_active_for_testing')
         G(Derogation,

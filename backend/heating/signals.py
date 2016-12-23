@@ -14,8 +14,6 @@ from .models import Derogation
 def active_derogation_handler(sender, **kwargs):
     if (
             not settings.CELERY_BROKER_URL or
-            not settings.PILOTWIRE_IP or
-            not settings.PILOTWIRE_PORT or
             not tasks.pilotwire.is_active() or
             not kwargs['instance'].is_active()
     ):
