@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 import re
 
+from celery.schedules import crontab
 from configurations import Configuration, values
 
 
@@ -147,6 +148,11 @@ class Common(Configuration):
         'update-pilotwire-status': {
             'task': 'heating.pilotwire.update_status',
             'schedule': 60,
+        },
+        'weekly-clear-old-derogations': {
+            'task': 'heating.tasks.clearoldderogations',
+            'schedule': crontab(minute=0, hour=0, day_of_week='mon'),
+            'args': (7,),
         },
     }
 
