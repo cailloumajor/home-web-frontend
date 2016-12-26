@@ -155,6 +155,7 @@ class Common(Configuration):
             'args': (7,),
         },
     }
+    CELERY_TIME_ZONE = TIME_ZONE
 
     PILOTWIRE_IP = values.IPValue()
     PILOTWIRE_PORT = values.IntegerValue()
