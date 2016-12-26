@@ -7,17 +7,14 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
     networks:
-      - django
-      - worker
+      - db
 
   redis:
     image: cailloumajor/redis-armhf:alpine
     volumes:
       - redisdata:/data
     networks:
-      - django
-      - worker
-      - beat
+      - redis
 
   django:
     extends:
@@ -32,8 +29,9 @@ services:
     volumes:
       - staticfiles:/static
     networks:
+      - db
       - django
-      - frontend
+      - redis
 
   # Celery worker
   worker:
@@ -47,7 +45,8 @@ services:
       - db
       - redis
     networks:
-      - worker
+      - db
+      - redis
 
   # Celery beat
   beat:
@@ -60,7 +59,8 @@ services:
     links:
       - redis
     networks:
-      - beat
+      - db
+      - redis
 
   frontend:
     build: ./frontend
@@ -74,13 +74,12 @@ services:
     volumes:
       - staticfiles:/var/www/static:ro
     networks:
-      - frontend
+      - django
 
 networks:
+  db:
   django:
-  worker:
-  beat:
-  frontend:
+  redis:
 
 volumes:
   dbdata:
