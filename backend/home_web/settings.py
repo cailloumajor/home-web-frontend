@@ -149,6 +149,10 @@ class Common(Configuration):
             'task': 'heating.pilotwire.update_status',
             'schedule': 60,
         },
+        'set-pilotwire-modes': {
+            'task': 'heating.pilotwire.set_modes',
+            'schedule': crontab(minute='*/15'),
+        },
         'weekly-clear-old-derogations': {
             'task': 'heating.tasks.clearoldderogations',
             'schedule': crontab(minute=0, hour=0, day_of_week='mon'),

@@ -74,6 +74,9 @@ def update_status():
 @shared_task(ignore_result=True)
 @needs_settings(['PILOTWIRE_IP', 'PILOTWIRE_PORT'])
 def set_modes():
+    if not is_active():
+        return
+
     modes = Zone.objects.get_modes()
     client = ControllerProxy(PILOTWIRE_IP_PORT)
 

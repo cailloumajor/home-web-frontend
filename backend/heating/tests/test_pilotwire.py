@@ -49,6 +49,11 @@ def pilotwire_settings(settings):
 pytestmark = pytest.mark.usefixtures('pilotwire_settings')
 
 
+@pytest.fixture
+def set_is_active(monkeypatch):
+    monkeypatch.setattr(tasks.pilotwire, 'is_active', lambda: True)
+
+
 def missing_settings_parametrize(missing_settings):
     return pytest.mark.parametrize(
         'setting', missing_settings, ids=lambda s: "missing " + s
@@ -68,6 +73,7 @@ Params = namedtuple('Params', [
     Params('modes_inconsistent', 'ERROR', "Inconsistent test"),
 ], ids=lambda p: p.test_type)
 @pytest.mark.django_db
+@pytest.mark.usefixtures('set_is_active')
 def test_set_modes(params, monkeypatch, caplog):
     FakeControllerProxy.TEST_TYPE = params.test_type
     monkeypatch.setattr(tasks.pilotwire, 'ControllerProxy',
