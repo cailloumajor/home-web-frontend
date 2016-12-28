@@ -248,3 +248,10 @@ class Prod(Common):
             },
         },
     }
+
+    # Authentication
+    AUTHENTICATION_BACKENDS = [
+        'core.auth.backends.SettingsBackend',
+    ] + Common.AUTHENTICATION_BACKENDS
+    ADMIN_LOGIN = values.Value()
+    ADMIN_PASSWORD = values.SecretValue()
