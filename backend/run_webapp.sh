@@ -16,10 +16,7 @@ msg "start migrating models"
 if ./manage.py diffsettings --all | grep -q "DEBUG = False"; then
     msg "start collecting static files"
     ./manage.py collectstatic --noinput
-
-    msg "start creating administrator"
-    ./manage.py initadmin "$DJANGO_ADMIN_PASSWORD"
 fi
 
-msg "launching command"
-exec "$@"
+msg "launching gunicorn"
+exec su-exec python-user gunicorn --config gunicorn_config.py "$WSGI_APPLICATION"

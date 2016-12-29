@@ -90,4 +90,4 @@ ENV/
 .ropeproject
 
 # docker-compose environment file
-docker.env
+.dockerenv/

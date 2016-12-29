@@ -1,40 +1,22 @@
 # -*- coding: utf-8 -*-
 
-import logging
 from datetime import timedelta
-from pprint import pformat
 
 from django.core.mail import mail_admins
 from django.utils import timezone
 
-from pilotwire_controller.client import \
-    ControllerProxy, PilotwireModesInconsistent
+from celery import shared_task
 
-from .models import Zone, Derogation
-
-
-def setpilotwire():
-    logger = logging.getLogger('setpilotwire')
-    modes = Zone.objects.get_modes()
-    pwclient = ControllerProxy()
-
-    controller_status = pwclient.check_status()
-    if controller_status != 'active':
-        logger.error("Failed to connect to pilotwire controller : %s",
-                     controller_status)
-        return
-
-    try:
-        pwclient.modes = modes
-    except PilotwireModesInconsistent as pwerr:
-        logger.error(pwerr)
-        return
-
-    logger.info("Modes set on pilotwire controller : %s", pformat(modes))
+from . import pilotwire
+from .models import Derogation
 
 
+# Avoid 'unused import' linter warning
+__dummy__ = pilotwire
+
+
+@shared_task(ignore_result=True)
 def clearoldderogations(days):
-
     deadline = timezone.now() - timedelta(days=days)
     queryset = Derogation.objects.filter(end_dt__lte=deadline)
     count = queryset.count()

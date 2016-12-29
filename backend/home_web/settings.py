@@ -11,8 +11,21 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import re
 
+from celery.schedules import crontab
 from configurations import Configuration, values
+
+
+class CeleryBrokerURLValue(values.Value):
+    """
+    Value subclass that converts 'unix://' scheme to 'redis+socket://'.
+    """
+
+    def to_python(self, value):
+        return re.sub(
+            r'^unix://', 'redis+socket://', super().to_python(value)
+        )
 
 
 class Common(Configuration):
@@ -30,6 +43,10 @@ class Common(Configuration):
     DEBUG = True
 
     ALLOWED_HOSTS = []
+
+    INTERNAL_IPS = [
+        '127.0.0.1',
+    ]
 
     # Application definition
     INSTALLED_APPS = [
@@ -121,13 +138,45 @@ class Common(Configuration):
     # https://docs.djangoproject.com/en/1.10/howto/static-files/
     STATIC_URL = '/static/'
 
+    REDIS_URL = values.Value()
+
+    CELERY_BROKER_URL = CeleryBrokerURLValue(environ_name='REDIS_URL')
+    CELERY_TASK_ROUTES = {
+        'heating.tasks.*': {'queue': 'celery', 'delivery_mode': 'transient'},
+    }
+    CELERY_BEAT_SCHEDULE = {
+        'update-pilotwire-status': {
+            'task': 'heating.pilotwire.update_status',
+            'schedule': 60,
+        },
+        'set-pilotwire-modes': {
+            'task': 'heating.pilotwire.set_modes',
+            'schedule': crontab(minute='*/15'),
+        },
+        'weekly-clear-old-derogations': {
+            'task': 'heating.tasks.clearoldderogations',
+            'schedule': crontab(minute=0, hour=0, day_of_week='mon'),
+            'args': (7,),
+        },
+    }
+    CELERY_TIME_ZONE = TIME_ZONE
+
+    PILOTWIRE_IP = values.IPValue()
+    PILOTWIRE_PORT = values.IntegerValue()
+
 
 class Dev(Common):
     """
     The in-development settings and the default configuration
     """
 
-    pass
+    INSTALLED_APPS = Common.INSTALLED_APPS + [
+        'debug_toolbar',
+    ]
+
+    MIDDLEWARE = [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ] + Common.MIDDLEWARE
 
 
 class Test(Common):
@@ -185,3 +234,28 @@ class Prod(Common):
     }
 
     STATIC_ROOT = values.PathValue()
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'pilotwire_handler': {
+                'level': 'INFO',
+                'class': 'heating.log.PilotwireHandler',
+                'logLength': 500,
+            },
+        },
+        'loggers': {
+            'heating.pilotwire': {
+                'handlers': ['pilotwire_handler'],
+                'level': 'INFO',
+            },
+        },
+    }
+
+    # Authentication
+    AUTHENTICATION_BACKENDS = [
+        'core.auth.backends.SettingsBackend',
+    ] + Common.AUTHENTICATION_BACKENDS
+    ADMIN_LOGIN = values.Value()
+    ADMIN_PASSWORD = values.SecretValue()

@@ -1,6 +1,7 @@
 # Production Python requirements
 # Must be compiled by pip-compile
 
+celery[redis]
 django-configurations
 dj-database-url
 dj-email-url
@@ -10,4 +11,5 @@ gunicorn
 pilotwire-controller
 psycopg2
 pytz
+redis
 setproctitle

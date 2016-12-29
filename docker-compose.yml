@@ -3,29 +3,85 @@ version: '2'
 services:
   db:
     build: ./db
-    env_file: ./db/docker.env
+    env_file: ./.dockerenv/db.env
     volumes:
       - dbdata:/var/lib/postgresql/data
-  backend:
-    build: ./backend
-    command: gunicorn --config gunicorn_config.py home_web.wsgi
-    environment:
-      - DJANGO_CONFIGURATION=Prod
-    env_file: ./backend/docker.env
+    networks:
+      - db
+
+  redis:
+    image: cailloumajor/redis-armhf:alpine
+    volumes:
+      - redisdata:/data
+    networks:
+      - redis
+
+  django:
+    extends:
+      file: common.yml
+      service: backend
+    command: ./run_webapp.sh
+    expose:
+      - "8000"
     links:
       - db
+      - redis
     volumes:
       - staticfiles:/static
+    networks:
+      - db
+      - django
+      - redis
+
+  # Celery worker
+  worker:
+    extends:
+      file: common.yml
+      service: backend
+    command: >
+      su-exec python-user celery worker --app home_web
+      --loglevel INFO --purge
+    links:
+      - db
+      - redis
+    networks:
+      - db
+      - redis
+
+  # Celery beat
+  beat:
+    extends:
+      file: common.yml
+      service: backend
+    command: >
+      su-exec python-user celery beat --app home_web
+      --loglevel INFO --pidfile= --schedule /tmp/celerybeat-schedule
+    links:
+      - redis
+    networks:
+      - db
+      - redis
+
   frontend:
     build: ./frontend
-    env_file: ./frontend/docker.env
+    env_file: ./.dockerenv/frontend.env
+    environment:
+      - NGINX_BACKEND_ADDRESS=django:8000
     links:
-      - backend
+      - django
     ports:
       - "80:80"
     volumes:
       - staticfiles:/var/www/static:ro
+    networks:
+      - django
+
+networks:
+  db:
+  django:
+  redis:
 
 volumes:
   dbdata:
+  redisdata:
   staticfiles:

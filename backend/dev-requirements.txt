@@ -2,6 +2,7 @@
 
 -r requirements.txt
 
+django-debug-toolbar
 django-dynamic-fixture
 flake8
 ipython
@@ -11,3 +12,5 @@ pylint
 pytest
 pytest-catchlog
 pytest-django
+pytest-mock
+redislite
