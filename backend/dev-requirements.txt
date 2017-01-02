@@ -13,6 +13,7 @@ pylama-pylint
 pylint-django
 pytest
 pytest-catchlog
+pytest-cov
 pytest-django
 pytest-mock
 redislite
