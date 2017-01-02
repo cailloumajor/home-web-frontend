@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=no-self-use, redefined-outer-name, too-few-public-methods
-# pylint: disable=unused-argument
+# pylint: disable=unused-argument, no-member
 
 import datetime
 

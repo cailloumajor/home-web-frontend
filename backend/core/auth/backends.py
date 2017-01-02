@@ -8,6 +8,7 @@ from django.contrib.auth.hashers import check_password
 UserModel = get_user_model()
 
 
+# pylint: disable=no-self-use
 class SettingsBackend:
     """
     Authenticates against the settings ADMIN_LOGIN and ADMIN_PASSWORD
