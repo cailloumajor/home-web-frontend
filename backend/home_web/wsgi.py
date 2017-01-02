@@ -11,6 +11,6 @@ import os
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "home_web.settings")
 
-from configurations.wsgi import get_wsgi_application
+from configurations.wsgi import get_wsgi_application  # noqa
 
 application = get_wsgi_application()
