@@ -75,7 +75,7 @@ Params = namedtuple('Params', [
 ], ids=lambda p: p.test_type)
 @pytest.mark.django_db
 @pytest.mark.usefixtures('set_is_active')
-def test_set_modes(params, monkeypatch, caplog):
+def test_set_modes_with_is_active_true(params, monkeypatch, caplog):
     FakeControllerProxy.TEST_TYPE = params.test_type
     monkeypatch.setattr(tasks.pilotwire, 'ControllerProxy',
                         FakeControllerProxy)
@@ -83,6 +83,11 @@ def test_set_modes(params, monkeypatch, caplog):
     record = caplog.records[0]
     assert record.levelname == params.level
     assert record.message == params.message
+
+
+def test_set_modes_with_is_active_false(caplog):
+    tasks.pilotwire.set_modes()
+    assert not caplog.records
 
 
 def test_is_active(patched_redis):
@@ -128,13 +133,17 @@ def test_update_status(caplog, monkeypatch, patched_redis, params, mailoutbox):
         assert log_filtered == []
 
 
+@pytest.mark.celery(task_always_eager=True)
+@pytest.mark.usefixtures('celery_worker')
 class TestMissingSettings:
 
+    @pytest.mark.usefixtures('patched_redis')
     @missing_settings_parametrize(['REDIS_URL'])
     def test_is_active(self, setting, settings):
         setattr(settings, setting, None)
         assert tasks.pilotwire.is_active() is None
 
+    @pytest.mark.usefixtures('patched_redis')
     @missing_settings_parametrize(
         ['REDIS_URL', 'PILOTWIRE_IP', 'PILOTWIRE_PORT']
     )
@@ -142,9 +151,11 @@ class TestMissingSettings:
         setattr(settings, setting, None)
         assert tasks.pilotwire.update_status() is None
         assert not caplog.records
+        assert tasks.pilotwire.update_status.delay().state == 'IGNORED'
 
     @missing_settings_parametrize(['PILOTWIRE_IP', 'PILOTWIRE_PORT'])
     def test_set_modes(self, setting, settings, caplog):
         setattr(settings, setting, None)
         assert tasks.pilotwire.set_modes() is None
         assert not caplog.records
+        assert tasks.pilotwire.set_modes.delay().state == 'IGNORED'

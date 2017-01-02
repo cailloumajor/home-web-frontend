@@ -30,7 +30,7 @@ class OffsetTimeField(serializers.TimeField):
         return (dt - timedelta(minutes=1)).time()
 
     def to_representation(self, obj):
-        if isinstance(obj, time):
+        if isinstance(obj, time):  # pragma: no cover
             dt = datetime(1, 1, 1, obj.hour, obj.minute)
             obj = (dt + timedelta(minutes=1)).time()
         return super().to_representation(obj)

@@ -7,6 +7,7 @@ omit =
     gunicorn_config.py
     manage.py
     */wsgi.py
+    core/management/commands/waitdb.py
 
 [report]
 exclude_lines =
