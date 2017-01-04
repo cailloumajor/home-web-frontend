@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: disable=no-init
 """
 Django settings for home_web project.
 
@@ -256,6 +258,6 @@ class Prod(Common):
     # Authentication
     AUTHENTICATION_BACKENDS = [
         'core.auth.backends.SettingsBackend',
-    ] + Common.AUTHENTICATION_BACKENDS
+    ] + Common.AUTHENTICATION_BACKENDS  # pylint: disable=no-member
     ADMIN_LOGIN = values.Value()
     ADMIN_PASSWORD = values.SecretValue()

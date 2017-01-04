@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=too-many-ancestors
 
 from rest_framework import viewsets
 

@@ -8,6 +8,7 @@ from . import tasks
 from .models import Derogation
 
 
+# pylint: disable=unused-argument
 @receiver([post_save, post_delete],
           sender=Derogation,
           dispatch_uid='derog_pilotwire')

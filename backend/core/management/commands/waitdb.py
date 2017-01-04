@@ -27,6 +27,7 @@ class Command(BaseCommand):
                     raise CommandError("Timeout waiting for database")
             else:
                 time_reached = time.time() - start_time
+                # pylint: disable=no-member
                 self.stdout.write(self.style.SUCCESS(
                     "Database reached in {:.1f} seconds".format(time_reached)
                     ))

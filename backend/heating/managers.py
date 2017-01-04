@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 
 
+# pylint: disable=too-few-public-methods
 class ZoneManager(models.Manager):
 
     DEFAULT_MODE = 'C'
