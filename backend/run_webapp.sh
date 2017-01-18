@@ -7,9 +7,6 @@ msg(){
     echo "$myname: $1"
 }
 
-msg "start waiting for database"
-./manage.py waitdb
-
 msg "start migrating models"
 ./manage.py migrate
 
