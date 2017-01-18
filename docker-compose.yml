@@ -1,9 +1,14 @@
-version: '2'
+version: '2.1'
 
 services:
+
   db:
     build: ./db
     env_file: ./.dockerenv/db.env
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 6
     volumes:
       - dbdata:/var/lib/postgresql/data
     networks:
@@ -11,21 +16,28 @@ services:
 
   redis:
     image: cailloumajor/redis-armhf:alpine
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 2
     volumes:
       - redisdata:/data
     networks:
       - redis
 
   django:
-    extends:
-      file: common.yml
-      service: backend
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: ./.dockerenv/backend.env
+    environment:
+      - DJANGO_REDIS_URL=redis://redis:6379
     command: ./run_webapp.sh
     expose:
       - "8000"
-    links:
-      - db
-      - redis
     volumes:
       - staticfiles:/static
     networks:
@@ -35,31 +47,35 @@ services:
 
   # Celery worker
   worker:
-    extends:
-      file: common.yml
-      service: backend
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: ./.dockerenv/backend.env
+    environment:
+      - DJANGO_REDIS_URL=redis://redis:6379
     command: >
       su-exec python-user celery worker --app home_web
       --loglevel INFO --purge
-    links:
-      - db
-      - redis
     networks:
       - db
       - redis
 
   # Celery beat
   beat:
-    extends:
-      file: common.yml
-      service: backend
+    build: ./backend
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file: ./.dockerenv/backend.env
+    environment:
+      - DJANGO_REDIS_URL=redis://redis:6379
     command: >
       su-exec python-user celery beat --app home_web
       --loglevel INFO --pidfile= --schedule /tmp/celerybeat-schedule
-    links:
-      - redis
     networks:
-      - db
       - redis
 
   frontend:

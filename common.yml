@@ -1,8 +1,0 @@
-version: '2'
-
-services:
-  backend:
-    build: ./backend
-    env_file: ./.dockerenv/backend.env
-    environment:
-      - DJANGO_REDIS_URL=redis://redis:6379
