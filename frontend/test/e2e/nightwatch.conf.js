@@ -1,4 +1,5 @@
 require('babel-register')
+var ip = require('ip')
 var config = require('../../config')
 
 // http://nightwatchjs.org/guide#settings-file
@@ -7,23 +8,23 @@ module.exports = {
   output_folder: 'test/e2e/reports',
   custom_assertions_path: ['test/e2e/custom-assertions'],
 
-  selenium: {
-    start_process: true,
-    server_path: 'node_modules/selenium-server/lib/runner/selenium-server-standalone-2.53.1.jar',
-    host: '127.0.0.1',
-    port: 4444,
-    cli_args: {
-      'webdriver.chrome.driver': require('chromedriver').path
-    }
-  },
+  // selenium: {
+  //   start_process: true,
+  //   server_path: 'node_modules/selenium-server/lib/runner/selenium-server-standalone-2.53.1.jar',
+  //   host: '127.0.0.1',
+  //   port: 4444,
+  //   cli_args: {
+  //     'webdriver.chrome.driver': require('chromedriver').path
+  //   }
+  // },
 
   test_settings: {
     default: {
       selenium_port: 4444,
-      selenium_host: 'localhost',
+      selenium_host: 'selenium',
       silent: true,
       globals: {
-        devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port)
+        devServerURL: 'http://' + ip.address() + ':' + (process.env.PORT || config.dev.port)
       }
     },
 
