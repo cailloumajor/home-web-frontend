@@ -1,0 +1,34 @@
+version: '2'
+
+services:
+
+  django_dev:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    command: ./manage.py runserver 0.0.0.0:8000
+    expose:
+      - "8000"
+    volumes:
+      - ./backend:/usr/src/app
+
+  frontend_dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+    links:
+      - django_dev
+      - selenium
+    ports:
+      - "8080:8080"
+    # Set HOST_UID in .env file
+    user: $HOST_UID
+    volumes:
+      - ./frontend:/usr/src/app
+    working_dir: /usr/src/app
+
+  selenium:
+    image: selenium/standalone-chrome
