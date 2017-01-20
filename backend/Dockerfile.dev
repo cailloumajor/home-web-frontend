@@ -1,0 +1,28 @@
+FROM python:3.5-alpine
+
+ENV TZ Europe/Paris
+RUN set -ex \
+    && apk --no-cache add tzdata \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone
+
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /usr/src/app
+
+COPY requirements.txt dev-requirements.txt ./
+RUN set -ex \
+    && apk add --no-cache --virtual .build-deps \
+           gcc \
+           linux-headers \
+           make \
+           musl-dev \
+           postgresql-dev \
+           python3-dev \
+    && pip install -r dev-requirements.txt \
+    && apk add --no-cache \
+           libpq \
+    && apk del .build-deps
+
+RUN adduser -D -g '' djangodev
+USER djangodev
