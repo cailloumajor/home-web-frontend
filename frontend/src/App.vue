@@ -15,27 +15,28 @@
         <v-navbar-items :items="items" class="hidden-md-and-down"></v-navbar-items>
       </v-navbar>
     </header>
+    <v-content>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-content>
   </v-app>
 </template>
 
 <script>
-import Hello from './components/Hello'
-
 export default {
   name: 'app',
-  components: {
-    Hello
-  },
   data () {
     return {
       items: [
-        {text: 'Chauffage'},
-        {text: 'Admin', href: '/admin'}
+        { text: 'Chauffage', href: '/heating', router: true },
+        { text: 'Admin', href: '/admin' }
       ]
     }
   },
   mounted () {
     this.$vuetify.init()
+    this.$router.replace('/heating')
   }
 }
 </script>
