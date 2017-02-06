@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const Heating = resolve => require(['./pages/Heating'], resolve)
+const Heating = resolve => require(['../pages/Heating'], resolve)
 
 Vue.use(Router)
 
