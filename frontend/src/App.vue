@@ -1,7 +1,7 @@
 <template>
-  <v-app top-fixed-navbar>
+  <v-app top-navbar>
     <header>
-      <v-navbar fixed>
+      <v-navbar>
         <v-btn class="hidden-md-and-up mx-2 white--text transparent" icon v-dropdown:menu>
           <v-icon>menu</v-icon>
         </v-btn>
@@ -66,4 +66,7 @@ header .navbar
   img
     display: flex
     align-self: center
+
+.content
+  padding: 1rem 3rem 0
 </style>
