@@ -1,17 +1,17 @@
 <template>
-  <v-tabs ref="tabs">
-    <v-tabs-tabs>
-      <v-tab-item
-          v-for="zone in zones"
-          :item="{ text: 'Zone ' + zone.num, href: '#zone-tab-' + zone.num }">
-      </v-tab-item>
-    </v-tabs-tabs>
-    <v-tabs-items :style="{ height: tabsItemsHeight + 'px' }">
-      <v-tabs-item
-          v-for="zone in zones"
-          :id="'zone-tab-' + zone.num">
-      </v-tabs-item>
-    </v-tabs-items>
+  <v-tabs id="heating-tabs">
+    <v-tab-item
+      v-for="zone in zones"
+      :href="'#zone-tab-' + zone.num"
+      slot="activators">
+      {{ 'Zone ' + zone.num }}
+    </v-tab-item>
+    <v-tab-content
+      v-for="zone in zones"
+      :id="'zone-tab-' + zone.num"
+      :style="{ height: tabsItemsHeight + 'px' }"
+      slot="content">
+    </v-tab-content>
   </v-tabs>
 </template>
 
@@ -29,7 +29,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.tabs__tabs
+<style lang="stylus">
+#heating-tabs .tabs__tabs
   height: 2.8rem
 </style>
