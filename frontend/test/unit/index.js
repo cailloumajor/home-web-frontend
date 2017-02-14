@@ -1,3 +1,6 @@
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+
 // Polyfill fn.bind() for PhantomJS
 /* eslint-disable no-extend-native */
 Function.prototype.bind = require('function-bind')
@@ -11,3 +14,5 @@ testsContext.keys().forEach(testsContext)
 // you want coverage for.
 const srcContext = require.context('src', true, /^\.\/(?!main(\.js)?$)/)
 srcContext.keys().forEach(srcContext)
+
+Vue.use(Vuetify)
