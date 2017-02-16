@@ -5632,9 +5632,9 @@ vue@^2.1.10:
   version "2.1.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.1.10.tgz#c9235ca48c7925137be5807832ac4e3ac180427b"
 
-vuetify@^0.8.8:
-  version "0.8.8"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-0.8.8.tgz#719e9ea09abe5f595a3f763094e73ad152289cd5"
+vuetify@^0.8.10:
+  version "0.8.10"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-0.8.10.tgz#5672eeb6295939bd76ab71f9071731403fb21979"
   dependencies:
     vue "^2.1.10"
 
