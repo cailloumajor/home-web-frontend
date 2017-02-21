@@ -8,4 +8,6 @@ RUN set -ex \
            | tee /etc/apt/sources.list.d/yarn.list \
         && apt-get update \
         && apt-get install --no-install-recommends yarn \
-        && rm -rf /var/lib/apt/lists
+        && rm -rf /var/lib/apt/lists \
+        && mkdir -p /home/node/.cache \
+        && chown -R node:node /home/node

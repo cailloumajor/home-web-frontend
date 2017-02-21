@@ -28,11 +28,11 @@ services:
     user: $HOST_UID
     volumes:
       - ./frontend:/usr/src/app
-      - yarn_cache:/home/node/.cache/yarn
+      - dev_cache:/home/node/.cache
     working_dir: /usr/src/app
 
   selenium:
     image: selenium/standalone-chrome
 
 volumes:
-  yarn_cache:
+  dev_cache:
