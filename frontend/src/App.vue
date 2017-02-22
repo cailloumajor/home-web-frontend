@@ -50,6 +50,7 @@ export default {
   },
 
   mounted () {
+    /* istanbul ignore next */
     this.$router.replace('/heating')
   }
 }
