@@ -12,6 +12,10 @@ describe('Heating.vue page', function () {
     expect(defaultData.zonesReady).to.be.false
   })
 
+  it('should declare an `updated` hook', function () {
+    expect(Heating.updated).to.be.a('function')
+  })
+
   describe('`created` hook', function () {
     const url = '/api/heating/zones/'
 
