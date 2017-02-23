@@ -51,11 +51,11 @@ export default {
         console.error(error)
         this.zonesError = true
       })
+  },
+
+  updated () {
+    const tabBar = this.$el.querySelector('.tabs__tabs')
+    if (tabBar) tabBar.style.height = '2.8rem'
   }
 }
 </script>
-
-<style lang="stylus">
-#heating-tabs .tabs__tabs
-  height: 2.8rem
-</style>
