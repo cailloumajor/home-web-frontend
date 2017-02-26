@@ -12,3 +12,10 @@ RUN set -ex \
         && rm -rf /var/lib/apt/lists \
         && mkdir -p /home/node/.cache \
         && chown -R node:node /home/node
+
+# Install vue-cli
+ENV VUE_CLI_VERSION 2.8.0
+RUN set -ex \
+        && chown root:staff /usr/local/* \
+        && adduser node staff \
+        && su - node -c "yarn global add vue-cli@${VUE_CLI_VERSION}"
