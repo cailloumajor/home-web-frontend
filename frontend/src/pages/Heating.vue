@@ -33,8 +33,8 @@
 
 <script>
 import axios from 'axios'
-import Error from 'components/Error'
-import PilotwireLog from 'components/PilotwireLog'
+import Error from '../components/Error'
+import PilotwireLog from '../components/PilotwireLog'
 
 export default {
 
