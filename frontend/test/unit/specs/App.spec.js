@@ -1,4 +1,4 @@
-import App from 'src/App.vue'
+import App from '../../../src/App'
 
 describe('App.vue entrypoint', function () {
   it('should set the correct default data', function () {
