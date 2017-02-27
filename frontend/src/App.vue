@@ -7,7 +7,7 @@
             <v-icon>menu</v-icon>
           </v-btn>
           <v-list>
-            <v-list-item v-for="link in links">
+            <v-list-item v-for="link in links" :key="link.text">
               <v-list-tile :href="link.href" :router="link.router">
                 <v-list-tile-title>{{ link.text }}</v-list-tile-title>
               </v-list-tile>
@@ -16,11 +16,17 @@
         </v-menu>
         <v-toolbar-logo class="pl-3">
           <div class="mr-2" id="logo-back">
-            <a href="/"><img src="./assets/home_logo.png" alt="Home Web logo"></a>
+            <a href="/">
+              <img src="./assets/home_logo.png" alt="Home Web logo">
+            </a>
           </div>
           Home Web
         </v-toolbar-logo>
-        <v-toolbar-items class="hidden-md-and-down" v-for="link in links">
+        <v-toolbar-items
+          class="hidden-md-and-down"
+          v-for="link in links"
+          :key="link.text"
+        >
           <v-toolbar-item :href="link.href" :router="link.router">
             {{ link.text }}
           </v-toolbar-item>
