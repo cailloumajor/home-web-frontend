@@ -3,6 +3,7 @@
     <v-tab-item
       v-for="zone in zones"
       :href="'#zone-tab-' + zone.num"
+      :key="zone.num"
       slot="activators"
     >
       {{ 'Zone ' + zone.num }}
@@ -13,6 +14,7 @@
     <v-tab-content
       v-for="zone in zones"
       :id="'zone-tab-' + zone.num"
+      :key="zone.num"
       :style="{ height: tabsItemsHeight + 'px' }"
       slot="content"
     >
