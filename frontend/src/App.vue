@@ -16,7 +16,7 @@
         </v-menu>
         <v-toolbar-logo class="pl-3">
           <div class="mr-2" id="logo-back">
-            <a href="/"><img  src="~assets/home_logo.png" alt="Home Web logo"></a>
+            <a href="/"><img src="./assets/home_logo.png" alt="Home Web logo"></a>
           </div>
           Home Web
         </v-toolbar-logo>
