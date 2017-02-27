@@ -1,6 +1,6 @@
 import moxios from 'moxios'
 import Vue from 'vue'
-import PilotwireLog from '../../../src/components/PilotwireLog'
+import PilotwireLog from '@/components/PilotwireLog'
 
 window.chai.use(require('chai-things'))
 

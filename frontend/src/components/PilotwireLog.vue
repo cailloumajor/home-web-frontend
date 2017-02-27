@@ -36,7 +36,7 @@
 <script>
 import _ from 'lodash'
 import axios from 'axios'
-import Error from './Error'
+import Error from '@/components/Error'
 
 export default {
 

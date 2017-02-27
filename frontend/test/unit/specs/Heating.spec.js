@@ -1,6 +1,6 @@
 import moxios from 'moxios'
 import Vue from 'vue'
-import Heating from '../../../src/pages/Heating'
+import Heating from '@/pages/Heating'
 
 describe('Heating.vue page', function () {
   it('should set the correct default data', function () {
