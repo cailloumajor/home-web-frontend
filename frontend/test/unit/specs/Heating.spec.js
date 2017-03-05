@@ -7,10 +7,9 @@ describe('Heating.vue page', function () {
     expect(Heating.data).to.be.a('function')
     const defaultData = Heating.data()
     expect(defaultData.activeTab).to.be.null
+    expect(defaultData.status).to.equal('undefined')
     expect(defaultData.tabsItemsHeight).to.be.above(0)
     expect(defaultData.zones).to.be.instanceof(Array).that.is.empty
-    expect(defaultData.zonesError).to.be.false
-    expect(defaultData.zonesReady).to.be.false
   })
 
   it('should declare an `updated` hook', function () {
@@ -43,8 +42,7 @@ describe('Heating.vue page', function () {
       const vm = new Vue(Heating).$mount()
       moxios.wait(() => {
         expect(vm.zones).to.equal(zones)
-        expect(vm.zonesError).to.be.false
-        expect(vm.zonesReady).to.be.true
+        expect(vm.status).to.equal('loaded')
         expect(console.error).to.not.have.been.called
         done()
       })
@@ -55,8 +53,7 @@ describe('Heating.vue page', function () {
       const vm = new Vue(Heating).$mount()
       moxios.wait(() => {
         expect(vm.zones).to.be.empty
-        expect(vm.zonesError).to.be.true
-        expect(vm.zonesReady).to.be.false
+        expect(vm.status).to.equal('error')
         expect(console.error).to.have.been.called
         done()
       })
