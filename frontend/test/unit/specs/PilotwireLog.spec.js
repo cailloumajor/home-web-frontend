@@ -23,7 +23,6 @@ describe('PilotwireLog component', function () {
     expect(defaultData.logColors).to.have.keys('INFO', 'WARNING', 'ERROR')
     expect(defaultData.logData).to.be.instanceof(Array).that.is.empty
     expect(defaultData.messageColWidth).to.be.null
-    expect(defaultData.progressSize).to.be.above(0)
     expect(defaultData.status).to.equal('undefined')
     expect(defaultData.tbodyHeight).to.be.null
   })

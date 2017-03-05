@@ -1,42 +1,37 @@
 <template>
-  <div v-if="status === 'loading'" class="centering">
-    <v-progress-circular :size="progressSize" :width="6" indeterminate>
-    </v-progress-circular>
-  </div>
-  <table v-else-if="status === 'loaded'">
-    <thead><tr>
-      <th
-        v-for="header in headers"
-        :style="{ width: header.width + 'px' }"
-        class="centered-cell"
-      >
-        {{ header.text }}
-      </th>
-    </tr></thead>
-    <tbody :style="{ height: tbodyHeight + 'px' }">
-      <template v-for="entry in logData">
-        <tr :class="logColors[entry.level] + '--text'">
-          <td v-text="new Date(entry.timestamp).toLocaleString()"></td>
-          <td class="centered-cell">{{ entry.level }}</td>
-          <td :style="{ width: messageColWidth + 'px' }">
-            {{ entry.message }}
-          </td>
-        </tr>
-      </template>
-    </tbody>
-  </table>
-  <error v-else-if="status === 'error'">
-    Erreur de récupération du journal.
-  </error>
-  <div v-else class="centering">
-    <v-icon x-large>help_outline</v-icon>
-  </div>
+  <loading-layout
+    :status="status"
+    error-text="Erreur de récupération du journal."
+  >
+    <table>
+      <thead><tr>
+        <th
+          v-for="header in headers"
+          :style="{ width: header.width + 'px' }"
+          class="centered-cell"
+        >
+          {{ header.text }}
+        </th>
+      </tr></thead>
+      <tbody :style="{ height: tbodyHeight + 'px' }">
+        <template v-for="entry in logData">
+          <tr :class="logColors[entry.level] + '--text'">
+            <td v-text="new Date(entry.timestamp).toLocaleString()"></td>
+            <td class="centered-cell">{{ entry.level }}</td>
+            <td :style="{ width: messageColWidth + 'px' }">
+              {{ entry.message }}
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </loading-layout>
 </template>
 
 <script>
 import _ from 'lodash'
 import axios from 'axios'
-import Error from '@/components/Error'
+import LoadingLayout from '@/components/LoadingLayout'
 
 export default {
 
@@ -56,14 +51,13 @@ export default {
       },
       logData: [],
       messageColWidth: null,
-      progressSize: 50,
       status: 'undefined',
       tbodyHeight: null
     }
   },
 
   components: {
-    Error
+    LoadingLayout
   },
 
   methods: {
@@ -137,12 +131,6 @@ table
     td
       padding-top: 4px
       padding-bottom: 4px
-
-.centering
-  display: flex
-  height: 100%
-  align-items: center
-  justify-content: center
 
 .centered-cell
   text-align: center

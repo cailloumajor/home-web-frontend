@@ -1,41 +1,43 @@
 <template>
-  <v-tabs v-if="zonesReady" v-model="activeTab" id="heating-tabs">
-    <v-tab-item
-      v-for="zone in zones"
-      :href="'#zone-tab-' + zone.num"
-      :key="zone.num"
-      slot="activators"
-    >
-      {{ 'Zone ' + zone.num }}
-    </v-tab-item>
-    <v-tab-item class="right-tab" href="#pilotwire-log-tab" slot="activators">
-      Journal
-    </v-tab-item>
-    <v-tab-content
-      v-for="zone in zones"
-      :id="'zone-tab-' + zone.num"
-      :key="zone.num"
-      :style="{ height: tabsItemsHeight + 'px' }"
-      slot="content"
-    >
-    </v-tab-content>
-    <v-tab-content
-      id="pilotwire-log-tab"
-      slot="content"
-      :style="{ height: tabsItemsHeight + 'px' }"
-    >
-      <pilotwire-log :is-active="activeTab === 'pilotwire-log-tab'">
-      </pilotwire-log>
-    </v-tab-content>
-  </v-tabs>
-  <error v-else-if="zonesError">
-    Erreur de récupération des zones.
-  </error>
+  <loading-layout
+    :status="status"
+    error-text="Erreur de récupération des zones"
+  >
+    <v-tabs v-model="activeTab" id="heating-tabs">
+      <v-tab-item
+        v-for="zone in zones"
+        :href="'#zone-tab-' + zone.num"
+        :key="zone.num"
+        slot="activators"
+      >
+        {{ 'Zone ' + zone.num }}
+      </v-tab-item>
+      <v-tab-item class="right-tab" href="#pilotwire-log-tab" slot="activators">
+        Journal
+      </v-tab-item>
+      <v-tab-content
+        v-for="zone in zones"
+        :id="'zone-tab-' + zone.num"
+        :key="zone.num"
+        :style="{ height: tabsItemsHeight + 'px' }"
+        slot="content"
+      >
+      </v-tab-content>
+      <v-tab-content
+        id="pilotwire-log-tab"
+        slot="content"
+        :style="{ height: tabsItemsHeight + 'px' }"
+      >
+        <pilotwire-log :is-active="activeTab === 'pilotwire-log-tab'">
+        </pilotwire-log>
+      </v-tab-content>
+    </v-tabs>
+  </loading-layout>
 </template>
 
 <script>
 import axios from 'axios'
-import Error from '@/components/Error'
+import LoadingLayout from '@/components/LoadingLayout'
 import PilotwireLog from '@/components/PilotwireLog'
 
 export default {
@@ -43,29 +45,29 @@ export default {
   name: 'heating',
 
   components: {
-    Error,
+    LoadingLayout,
     PilotwireLog
   },
 
   data () {
     return {
       activeTab: null,
+      status: 'undefined',
       tabsItemsHeight: 300,
-      zones: [],
-      zonesError: false,
-      zonesReady: false
+      zones: []
     }
   },
 
   created () {
+    this.status = 'loading'
     axios.get('/api/heating/zones/')
       .then(response => {
         this.zones = response.data
-        this.zonesReady = true
+        this.status = 'loaded'
       })
       .catch(error => {
         console.error(error)
-        this.zonesError = true
+        this.status = 'error'
       })
   },
 
