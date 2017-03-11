@@ -17,3 +17,5 @@ const srcContext = require.context('../../src', true, /^\.\/(?!main(\.js)?$)/)
 srcContext.keys().forEach(srcContext)
 
 Vue.use(Vuetify)
+
+chai.use(require('chai-things'))

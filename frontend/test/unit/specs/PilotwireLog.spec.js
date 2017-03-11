@@ -2,8 +2,6 @@ import moxios from 'moxios'
 import Vue from 'vue'
 import PilotwireLog from '@/components/PilotwireLog'
 
-window.chai.use(require('chai-things'))
-
 describe('PilotwireLog component', function () {
   const log = [0, 1, 2].map(el => {
     const dt = new Date()
