@@ -8,6 +8,6 @@ describe('LoadingLayout component', function () {
   })
 
   it('should accept properties', function () {
-    expect(LoadingLayout.props).to.have.keys('errorText', 'status')
+    expect(LoadingLayout.props).to.have.members(['errorText', 'status'])
   })
 })
