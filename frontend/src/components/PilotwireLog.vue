@@ -1,6 +1,6 @@
 <template>
   <loading-layout
-    :status="status"
+    :status="fetchStatus"
     error-text="Erreur de récupération du journal."
   >
     <table>
@@ -14,7 +14,7 @@
         </th>
       </tr></thead>
       <tbody :style="{ height: tbodyHeight + 'px' }">
-        <template v-for="entry in logData">
+        <template v-for="entry in fetchData">
           <tr :class="logColors[entry.level] + '--text'">
             <td v-text="new Date(entry.timestamp).toLocaleString()"></td>
             <td class="centered-cell">{{ entry.level }}</td>
@@ -30,12 +30,18 @@
 
 <script>
 import _ from 'lodash'
-import axios from 'axios'
+import Fetching from '@/mixins/Fetching'
 import LoadingLayout from '@/components/LoadingLayout'
 
 export default {
 
   name: 'pilotwire-log',
+
+  components: {
+    LoadingLayout
+  },
+
+  mixins: [Fetching],
 
   data () {
     return {
@@ -49,31 +55,18 @@ export default {
         WARNING: 'orange',
         ERROR: 'red'
       },
-      logData: [],
       messageColWidth: null,
-      status: 'undefined',
       tbodyHeight: null
     }
   },
 
-  components: {
-    LoadingLayout
+  computed: {
+    fetchURL () {
+      return '/api/heating/pilotwirelog/'
+    }
   },
 
   methods: {
-    fetchLog () {
-      this.status = 'loading'
-      axios.get('/api/heating/pilotwirelog/')
-        .then(response => {
-          this.logData = response.data
-          this.status = 'loaded'
-        })
-        .catch(error => {
-          console.error(error)
-          this.status = 'error'
-        })
-    },
-
     resize () {
       const thead = this.$el.querySelector('thead')
       const tbody = this.$el.querySelector('tbody')
@@ -105,11 +98,11 @@ export default {
 
   watch: {
     isActive () {
-      if (this.isActive) this.fetchLog()
+      if (this.isActive) this.fetch()
     },
 
-    status () {
-      if (this.status === 'loaded') {
+    fetchStatus () {
+      if (this.fetchStatus === 'loaded') {
         this.$nextTick(() => {
           setTimeout(this.resize, 0)
         })

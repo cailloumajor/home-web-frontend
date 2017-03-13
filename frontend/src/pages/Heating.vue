@@ -1,11 +1,11 @@
 <template>
   <loading-layout
-    :status="status"
+    :status="fetchStatus"
     error-text="Erreur de récupération des zones"
   >
     <v-tabs v-model="activeTab" id="heating-tabs">
       <v-tab-item
-        v-for="zone in zones"
+        v-for="zone in fetchData"
         :href="'#zone-tab-' + zone.num"
         :key="zone.num"
         slot="activators"
@@ -16,7 +16,7 @@
         Journal
       </v-tab-item>
       <v-tab-content
-        v-for="zone in zones"
+        v-for="zone in fetchData"
         :id="'zone-tab-' + zone.num"
         :key="zone.num"
         :style="{ height: tabsItemsHeight + 'px' }"
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import Fetching from '@/mixins/Fetching'
 import LoadingLayout from '@/components/LoadingLayout'
 import PilotwireLog from '@/components/PilotwireLog'
 
@@ -49,26 +49,23 @@ export default {
     PilotwireLog
   },
 
+  mixins: [Fetching],
+
   data () {
     return {
       activeTab: null,
-      status: 'undefined',
-      tabsItemsHeight: 300,
-      zones: []
+      tabsItemsHeight: 300
+    }
+  },
+
+  computed: {
+    fetchURL () {
+      return '/api/heating/zones/'
     }
   },
 
   created () {
-    this.status = 'loading'
-    axios.get('/api/heating/zones/')
-      .then(response => {
-        this.zones = response.data
-        this.status = 'loaded'
-      })
-      .catch(error => {
-        console.error(error)
-        this.status = 'error'
-      })
+    this.fetch()
   },
 
   updated () {
