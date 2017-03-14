@@ -22,6 +22,11 @@ describe('PilotwireLog component', function () {
     expect(defaultData.tbodyHeight).to.be.null
   })
 
+  it('should have `fetchURL` computed property', function () {
+    expect(PilotwireLog.computed.fetchURL).to.be.a('function')
+    expect(PilotwireLog.computed.fetchURL()).to.be.a('string')
+  })
+
   describe('`isActive` prop', function () {
     it('should be declared', function () {
       expect(PilotwireLog.props).to.have.members(['isActive'])
@@ -57,12 +62,23 @@ describe('PilotwireLog component', function () {
       const vm = new Vue(PilotwireLog).$mount()
       sinon.stub(vm, 'resize')
       expect(vm.resize).to.not.have.been.called
-      vm.fetchStatus = 'not loaded'
-      expect(vm.resize).to.not.have.been.called
       vm.fetchStatus = 'loaded'
       Vue.nextTick(() => {
         setTimeout(() => {
           expect(vm.resize).to.have.been.called.once
+          done()
+        }, 50)
+      })
+    })
+
+    it('should not call `resize` method when not loaded', function (done) {
+      const vm = new Vue(PilotwireLog).$mount()
+      sinon.stub(vm, 'resize')
+      expect(vm.resize).to.not.have.been.called
+      vm.fetchStatus = 'not loaded'
+      Vue.nextTick(() => {
+        setTimeout(() => {
+          expect(vm.resize).to.not.have.been.called.once
           done()
         }, 50)
       })
