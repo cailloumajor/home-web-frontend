@@ -68,7 +68,7 @@ export default {
     this.fetch()
   },
 
-  updated () {
+  updated () /* istanbul ignore next */ {
     const tabBar = this.$el.querySelector('.tabs__tabs')
     if (tabBar) tabBar.style.height = '2.8rem'
   }
