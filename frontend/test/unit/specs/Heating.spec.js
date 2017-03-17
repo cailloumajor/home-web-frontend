@@ -18,23 +18,11 @@ describe('Heating.vue page', function () {
     expect(Heating.updated).to.be.a('function')
   })
 
-  describe('`created` hook', function () {
-    it('should be declared', function () {
-      expect(Heating.created).to.be.a('function')
-    })
-
-    it('should call the `fetch` method', function () {
-      const Component = Object.assign({}, Heating)
-      Component.mixins = [{
-        data () {
-          return { fetchCalled: false }
-        },
-        methods: {
-          fetch () { this.fetchCalled = true }
-        }
-      }]
-      const vm = new Vue(Component)
-      expect(vm.fetchCalled).to.be.true
-    })
+  it('should have a `mounted` hook', function () {
+    expect(Heating.mounted).to.be.a('function')
+    const vm = new Vue(Heating)
+    sinon.stub(vm, 'fetch')
+    vm.$mount()
+    expect(vm.fetch).to.have.been.called
   })
 })
