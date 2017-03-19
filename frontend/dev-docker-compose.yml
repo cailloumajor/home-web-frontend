@@ -2,6 +2,15 @@ version: '2'
 
 services:
 
+  coverage:
+    image: python:3.5-alpine
+    command: python -m http.server 8888
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./test/unit/coverage/lcov-report:/usr/src/http:ro
+    working_dir: /usr/src/http
+
   django:
     build:
       context: ../backend
@@ -10,7 +19,7 @@ services:
     expose:
       - "8000"
     volumes:
-      - ../backend:/usr/src/app
+      - ../backend:/usr/src/app:ro
 
   frontend:
     build:
