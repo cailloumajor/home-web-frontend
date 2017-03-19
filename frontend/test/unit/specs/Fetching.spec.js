@@ -3,15 +3,6 @@ import MockAdapter from 'axios-mock-adapter'
 import Vue from 'vue'
 import Fetching from '@/mixins/Fetching'
 
-const Component = Vue.extend({
-  data () {
-    return {
-      fetchURL: 'test'
-    }
-  },
-  mixins: [Fetching]
-})
-
 describe('Fetching mixin', function () {
   it('should set correct default data', function () {
     expect(Fetching.data).to.be.a('function')
@@ -28,7 +19,7 @@ describe('Fetching mixin', function () {
     beforeEach(function () {
       mock = new MockAdapter(axios)
       sandbox = sinon.sandbox.create()
-      vm = new Component()
+      vm = new Vue(Fetching)
     })
 
     afterEach(function () {
@@ -44,7 +35,7 @@ describe('Fetching mixin', function () {
       const noop = new Promise((resolve, reject) => null)
       sandbox.stub(axios, 'get').returns(noop)
       expect(vm.fetchStatus).to.equal('undefined')
-      vm.fetch()
+      vm.fetch('')
       expect(vm.fetchStatus).to.equal('loading')
       axios.get.restore()
     })
@@ -52,7 +43,7 @@ describe('Fetching mixin', function () {
     it('should react to successful fetching', function (done) {
       sandbox.stub(console, 'log')
       mock.onGet(url).reply(200, responseData)
-      vm.fetch()
+      vm.fetch(url)
       setTimeout(() => {
         expect(vm.fetchData).to.equal(responseData)
         expect(vm.fetchStatus).to.equal('loaded')
@@ -64,7 +55,7 @@ describe('Fetching mixin', function () {
     it('should react to server error', function (done) {
       sandbox.stub(console, 'log')
       mock.onGet(url).reply(500)
-      vm.fetch()
+      vm.fetch(url)
       setTimeout(() => {
         expect(vm.fetchData).to.be.null
         expect(vm.fetchStatus).to.equal('error')
@@ -84,7 +75,7 @@ describe('Fetching mixin', function () {
           reject({ message: 'test_error' })
         })
       })
-      vm.fetch()
+      vm.fetch(url)
       setTimeout(() => {
         expect(vm.fetchData).to.be.null
         expect(vm.fetchStatus).to.equal('error')

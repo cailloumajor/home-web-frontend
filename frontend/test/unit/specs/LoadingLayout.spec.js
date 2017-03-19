@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import LoadingLayout from '@/components/LoadingLayout'
 
 describe('LoadingLayout component', function () {
@@ -7,7 +8,14 @@ describe('LoadingLayout component', function () {
     expect(defaultData.progressSize).to.be.above(0)
   })
 
-  it('should accept properties', function () {
-    expect(LoadingLayout.props).to.have.members(['errorText', 'status'])
+  it('should render error text', function () {
+    const Ctor = Vue.extend(LoadingLayout)
+    const errorText = 'Testing error text'
+    const propsData = {
+      errorText: errorText,
+      status: 'error'
+    }
+    const vm = new Ctor({ propsData }).$mount()
+    expect(vm.$el.textContent).to.contain(errorText)
   })
 })

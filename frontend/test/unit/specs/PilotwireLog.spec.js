@@ -22,18 +22,11 @@ describe('PilotwireLog component', function () {
     expect(defaultData.tbodyHeight).to.be.null
   })
 
-  it('should have `fetchURL` computed property', function () {
-    expect(PilotwireLog.computed.fetchURL).to.be.a('function')
-    expect(PilotwireLog.computed.fetchURL()).to.be.a('string')
-  })
-
-  describe('`isActive` prop', function () {
-    it('should be declared', function () {
-      expect(PilotwireLog.props).to.have.members(['isActive'])
-    })
-
-    it('should not fetch log when going false', function (done) {
-      const vm = new Vue(PilotwireLog).$mount()
+  describe('`isActive` property watcher', function () {
+    it('should not fetch log when property becomes false', function (done) {
+      const Ctor = Vue.extend(PilotwireLog)
+      const propsData = { isActive: true }
+      const vm = new Ctor({ propsData })
       sinon.stub(vm, 'fetch')
       vm.isActive = false
       Vue.nextTick(() => {
@@ -42,8 +35,10 @@ describe('PilotwireLog component', function () {
       })
     })
 
-    it('should fetch log when going true', function (done) {
-      const vm = new Vue(PilotwireLog).$mount()
+    it('should fetch log when property becomes true', function (done) {
+      const Ctor = Vue.extend(PilotwireLog)
+      const propsData = { isActive: false }
+      const vm = new Ctor({ propsData })
       sinon.stub(vm, 'fetch')
       vm.isActive = true
       Vue.nextTick(() => {
