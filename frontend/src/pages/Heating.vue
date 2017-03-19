@@ -58,14 +58,8 @@ export default {
     }
   },
 
-  computed: {
-    fetchURL () {
-      return '/api/heating/zones/'
-    }
-  },
-
   mounted () {
-    this.fetch()
+    this.fetch('/api/heating/zones/')
   },
 
   updated () /* istanbul ignore next */ {

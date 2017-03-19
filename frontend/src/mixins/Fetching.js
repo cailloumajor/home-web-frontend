@@ -9,9 +9,9 @@ export default {
   },
 
   methods: {
-    fetch () {
+    fetch (url) {
       this.fetchStatus = 'loading'
-      axios.get(this.fetchURL)
+      axios.get(url)
         .then(response => {
           this.fetchData = response.data
           this.fetchStatus = 'loaded'

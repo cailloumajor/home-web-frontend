@@ -60,12 +60,6 @@ export default {
     }
   },
 
-  computed: {
-    fetchURL () {
-      return '/api/heating/pilotwirelog/'
-    }
-  },
-
   methods: {
     resize () {
       const thead = this.$el.querySelector('thead')
@@ -98,7 +92,9 @@ export default {
 
   watch: {
     isActive () {
-      if (this.isActive) this.fetch()
+      if (this.isActive) {
+        this.fetch('/api/heating/pilotwirelog/')
+      }
     },
 
     fetchStatus () {

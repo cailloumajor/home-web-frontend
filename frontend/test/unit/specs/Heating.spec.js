@@ -9,11 +9,6 @@ describe('Heating.vue page', function () {
     expect(defaultData.tabsItemsHeight).to.be.above(0)
   })
 
-  it('should have `fetchURL` computed property', function () {
-    expect(Heating.computed.fetchURL).to.be.a('function')
-    expect(Heating.computed.fetchURL()).to.be.a('string')
-  })
-
   it('should have an `updated` hook', function () {
     expect(Heating.updated).to.be.a('function')
   })
