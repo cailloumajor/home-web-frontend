@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       django: {
-        target: 'http://django_dev:8000',
+        target: 'http://django:8000',
         filter: [
           '/admin',
           '/api',

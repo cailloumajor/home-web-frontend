@@ -1,6 +1,7 @@
 # Cancel all rules inherited from parent dir
 !*
 
+.env
 .DS_Store
 node_modules/
 dist/
