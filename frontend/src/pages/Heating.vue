@@ -22,6 +22,8 @@
         :style="{ height: tabsItemsHeight + 'px' }"
         slot="content"
       >
+        <h6 class="zone-desc">{{ zone.desc }}</h6>
+        <slots-table :zone-num="zone.num"></slots-table>
       </v-tab-content>
       <v-tab-content
         id="pilotwire-log-tab"
@@ -39,6 +41,7 @@
 import Fetching from '@/mixins/Fetching'
 import LoadingLayout from '@/components/LoadingLayout'
 import PilotwireLog from '@/components/PilotwireLog'
+import SlotsTable from '@/components/SlotsTable'
 
 export default {
 
@@ -46,7 +49,8 @@ export default {
 
   components: {
     LoadingLayout,
-    PilotwireLog
+    PilotwireLog,
+    SlotsTable
   },
 
   mixins: [Fetching],
@@ -72,4 +76,10 @@ export default {
 <style lang="stylus" scoped>
 .right-tab
   margin-left: auto
+
+.zone-desc
+  font-size: 1rem
+  margin-bottom: 0.5rem
+  margin-top: 0.3rem
+  text-align: center
 </style>
