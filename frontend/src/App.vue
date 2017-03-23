@@ -34,7 +34,7 @@
       </v-toolbar>
     </header>
     <v-content>
-      <v-container>
+      <v-container fluid class="mx-3 mt-3">
         <router-view></router-view>
       </v-container>
     </v-content>
@@ -87,7 +87,4 @@ header .toolbar
   img
     display: flex
     align-self: center
-
-.content
-  padding-top: 1rem
 </style>
