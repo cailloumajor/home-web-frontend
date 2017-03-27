@@ -35,6 +35,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    environment:
+      WSGI_APPLICATION: home_web.wsgi
+      GUNICORN_CMD_ARGS: >
+        --bind 0.0.0.0:8000
+        --name home_web
+        --access-logfile -
+        --error-logfile -
     expose:
       - "8000"
     volumes:
