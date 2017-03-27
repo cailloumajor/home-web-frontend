@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=too-many-ancestors
 
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 
 from .models import Zone, Slot, Derogation, PilotwireLog
@@ -18,6 +19,8 @@ class SlotViewSet(viewsets.ModelViewSet):
 
     queryset = Slot.objects.all()
     serializer_class = SlotSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('zone',)
 
 
 class DerogationViewSet(viewsets.ModelViewSet):

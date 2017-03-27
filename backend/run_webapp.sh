@@ -16,4 +16,4 @@ if ./manage.py diffsettings --all | grep -q "DEBUG = False"; then
 fi
 
 msg "launching gunicorn"
-exec su-exec python-user gunicorn --config gunicorn_config.py "$WSGI_APPLICATION"
+exec su-exec python-user gunicorn "$WSGI_APPLICATION"
