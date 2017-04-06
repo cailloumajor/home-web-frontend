@@ -1,21 +1,19 @@
 FROM node:boron
 
 # Install yarn
-ENV YARN_VERSION 0.21.3
 RUN set -ex \
         && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg \
            | apt-key add - \
         && echo "deb http://dl.yarnpkg.com/debian/ stable main" \
            | tee /etc/apt/sources.list.d/yarn.list \
         && apt-get update \
-        && apt-get install --no-install-recommends "yarn=${YARN_VERSION}-*" \
+        && apt-get install --no-install-recommends yarn \
         && rm -rf /var/lib/apt/lists \
         && mkdir -p /home/node/.cache \
         && chown -R node:node /home/node
 
 # Install vue-cli
-ENV VUE_CLI_VERSION 2.8.0
 RUN set -ex \
         && chown root:staff /usr/local/* \
         && adduser node staff \
-        && su - node -c "yarn global add vue-cli@${VUE_CLI_VERSION}"
+        && su - node -c "yarn global add vue-cli"
