@@ -72,7 +72,7 @@ describe('Fetching mixin', function () {
       sandbox.stub(console, 'log')
       mock.onGet(url).reply(config => {
         return new Promise((resolve, reject) => {
-          reject({ message: 'test_error' })
+          reject(new Error('test_error'))
         })
       })
       vm.fetch(url)
