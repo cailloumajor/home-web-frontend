@@ -5,7 +5,7 @@ describe('Heating.vue page', function () {
   it('should set the correct default data', function () {
     expect(Heating.data).to.be.a('function')
     const defaultData = Heating.data()
-    expect(defaultData.activeTab).to.be.null
+    expect(defaultData.activeTab).to.be.null()
     expect(defaultData.tabsItemsHeight).to.be.above(0)
   })
 
@@ -18,6 +18,6 @@ describe('Heating.vue page', function () {
     const vm = new Vue(Heating)
     sinon.stub(vm, 'fetch')
     vm.$mount()
-    expect(vm.fetch).to.have.been.called
+    expect(vm.fetch).to.have.been.called()
   })
 })
