@@ -18,8 +18,8 @@ describe('PilotwireLog component', function () {
     expect(defaultData.headers).to.have.lengthOf(3)
       .and.to.all.have.keys('text', 'width')
     expect(defaultData.logColors).to.have.keys('INFO', 'WARNING', 'ERROR')
-    expect(defaultData.messageColWidth).to.be.null
-    expect(defaultData.tbodyHeight).to.be.null
+    expect(defaultData.messageColWidth).to.be.null()
+    expect(defaultData.tbodyHeight).to.be.null()
   })
 
   describe('`isActive` property watcher', function () {
@@ -30,7 +30,7 @@ describe('PilotwireLog component', function () {
       sinon.stub(vm, 'fetch')
       vm.isActive = false
       Vue.nextTick(() => {
-        expect(vm.fetch).to.not.have.been.called
+        expect(vm.fetch).to.not.have.been.called()
         done()
       })
     })
@@ -42,7 +42,7 @@ describe('PilotwireLog component', function () {
       sinon.stub(vm, 'fetch')
       vm.isActive = true
       Vue.nextTick(() => {
-        expect(vm.fetch).to.have.been.called.once
+        expect(vm.fetch).to.have.been.calledOnce()
         done()
       })
     })
@@ -56,11 +56,11 @@ describe('PilotwireLog component', function () {
     it('should call `resize` method when loaded', function (done) {
       const vm = new Vue(PilotwireLog).$mount()
       sinon.stub(vm, 'resize')
-      expect(vm.resize).to.not.have.been.called
+      expect(vm.resize).to.not.have.been.called()
       vm.fetchStatus = 'loaded'
       Vue.nextTick(() => {
         setTimeout(() => {
-          expect(vm.resize).to.have.been.called.once
+          expect(vm.resize).to.have.been.calledOnce()
           done()
         }, 50)
       })
@@ -69,11 +69,11 @@ describe('PilotwireLog component', function () {
     it('should not call `resize` method when not loaded', function (done) {
       const vm = new Vue(PilotwireLog).$mount()
       sinon.stub(vm, 'resize')
-      expect(vm.resize).to.not.have.been.called
+      expect(vm.resize).to.not.have.been.called()
       vm.fetchStatus = 'not loaded'
       Vue.nextTick(() => {
         setTimeout(() => {
-          expect(vm.resize).to.not.have.been.called.once
+          expect(vm.resize).to.not.have.been.calledOnce()
           done()
         }, 50)
       })

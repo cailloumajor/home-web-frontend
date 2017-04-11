@@ -7,7 +7,7 @@ describe('Fetching mixin', function () {
   it('should set correct default data', function () {
     expect(Fetching.data).to.be.a('function')
     const defaultData = Fetching.data()
-    expect(defaultData.fetchData).to.be.null
+    expect(defaultData.fetchData).to.be.null()
     expect(defaultData.fetchStatus).to.equal('undefined')
   })
 
@@ -47,7 +47,7 @@ describe('Fetching mixin', function () {
       setTimeout(() => {
         expect(vm.fetchData).to.equal(responseData)
         expect(vm.fetchStatus).to.equal('loaded')
-        expect(console.log).to.not.have.been.called
+        expect(console.log).to.not.have.been.called()
         done()
       }, 100)
     })
@@ -57,9 +57,9 @@ describe('Fetching mixin', function () {
       mock.onGet(url).reply(500)
       vm.fetch(url)
       setTimeout(() => {
-        expect(vm.fetchData).to.be.null
+        expect(vm.fetchData).to.be.null()
         expect(vm.fetchStatus).to.equal('error')
-        expect(console.log).to.have.been.called.twice
+        expect(console.log).to.have.been.calledTwice()
         expect(console.log).to.have.been.calledWith(
           sinon.match.string, 500, sinon.match.any,
           sinon.match.any, sinon.match.any
@@ -77,9 +77,9 @@ describe('Fetching mixin', function () {
       })
       vm.fetch(url)
       setTimeout(() => {
-        expect(vm.fetchData).to.be.null
+        expect(vm.fetchData).to.be.null()
         expect(vm.fetchStatus).to.equal('error')
-        expect(console.log).to.have.been.called.twice
+        expect(console.log).to.have.been.calledTwice()
         expect(console.log).to.have.been.calledWith(
           sinon.match.string, 'test_error'
         )
