@@ -6,7 +6,7 @@ django-configurations
 dj-database-url
 dj-email-url
 django-filter
-Django<1.11
+Django<2.0
 djangorestframework
 gunicorn
 pilotwire-controller
