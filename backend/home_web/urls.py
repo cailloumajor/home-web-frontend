@@ -32,7 +32,7 @@ def api_root(request, fmt=None):
 
 api_patterns = [
     url(r'^$', api_root),
-    url(r'^heating/', include('heating.urls', namespace='heating')),
+    url(r'^heating/', include('heating.urls')),
 ]
 
 urlpatterns = [

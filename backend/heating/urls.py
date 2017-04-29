@@ -12,4 +12,5 @@ router.register(r'slots', SlotViewSet)
 router.register(r'derogations', DerogationViewSet)
 router.register(r'pilotwirelog', PilotwireLogViewSet)
 
+app_name = 'heating'
 urlpatterns = router.urls

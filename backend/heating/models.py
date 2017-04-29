@@ -45,7 +45,7 @@ class ModeBase(models.Model):
 
 class Slot(ModeBase):
 
-    zone = models.ForeignKey(Zone)
+    zone = models.ForeignKey(Zone, models.CASCADE)
     mon = models.BooleanField(verbose_name="lundi", default=False)
     tue = models.BooleanField(verbose_name="mardi", default=False)
     wed = models.BooleanField(verbose_name="mercredi", default=False)
