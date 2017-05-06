@@ -82,8 +82,14 @@ export default {
   props: ['zone'],
 
   computed: {
+    slotListURL () {
+      return `/api/heating/slots/?zone=${this.zone.num}`
+    },
+
     slotSpecs () {
-      return initialSlots.concat(this.fetchData || [])
+      let slots = initialSlots.concat(this.fetchData || [])
+      slots[0].url = this.slotListURL
+      return slots
     }
   },
 
@@ -136,7 +142,7 @@ export default {
   },
 
   mounted () {
-    this.fetch(`/api/heating/slots/?zone=${this.zone.num}`)
+    this.fetch(this.slotListURL)
   }
 }
 </script>
