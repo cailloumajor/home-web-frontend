@@ -23,7 +23,7 @@
         slot="content"
       >
         <h6 class="zone-desc">{{ zone.desc }}</h6>
-        <slots-table :zone-num="zone.num"></slots-table>
+        <slots-table :zone="zone"></slots-table>
       </v-tab-content>
       <v-tab-content
         id="pilotwire-log-tab"

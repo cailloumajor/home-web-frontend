@@ -79,7 +79,7 @@ export default {
 
   mixins: [Fetching],
 
-  props: ['zoneNum'],
+  props: ['zone'],
 
   computed: {
     slotSpecs () {
@@ -136,7 +136,7 @@ export default {
   },
 
   mounted () {
-    this.fetch(`/api/heating/slots/?zone=${this.zoneNum}`)
+    this.fetch(`/api/heating/slots/?zone=${this.zone.num}`)
   }
 }
 </script>
