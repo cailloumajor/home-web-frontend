@@ -68,7 +68,10 @@ class ZoneSerializer(serializers.HyperlinkedModelSerializer):
 
 class SlotSerializer(serializers.HyperlinkedModelSerializer):
 
-    end_time = OffsetTimeField(format=TIME_FORMAT, input_formats=[TIME_FORMAT])
+    end_time = OffsetTimeField(
+        format=TIME_FORMAT,
+        input_formats=[TIME_FORMAT],
+        label=Slot._meta.get_field('end_time').verbose_name.capitalize())
 
     class Meta:
         model = Slot
