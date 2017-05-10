@@ -25,11 +25,25 @@
         :stroke="vertBarColor(index)"
       ></line>
       <g
-        v-for="s in slotSpecs"
         class="slot-group"
-        :class="{ 'hover-stroke': s.mode !== 'C' }"
+        stroke="yellow"
+        fill="yellow"
+        @click.stop="slotClick(baseSlot)"
+      >
+        <rect
+          v-for="(d, index) in days"
+          :x="slotStartX(baseSlot)"
+          :y="refY + gapY * index"
+          :height="slotHeight"
+          :width="slotWidth(baseSlot)"
+        ></rect>
+      </g>
+      <g
+        v-for="s in fetchData"
+        class="slot-group hover-stroke"
         :stroke="slotColor(s)"
         :fill="slotColor(s)"
+        @click.stop="slotClick(s)"
       >
         <rect
           v-for="(d, index) in days"
@@ -38,7 +52,7 @@
           :y="refY + gapY * index"
           :height="slotHeight"
           :width="slotWidth(s)"
-        >{{ index }}</rect>
+        ></rect>
       </g>
     </svg>
   </loading-layout>
@@ -49,18 +63,7 @@ import _ from 'lodash'
 import Fetching from '@/mixins/Fetching'
 import LoadingLayout from '@/components/LoadingLayout'
 
-const initialSlots = [{
-  mode: 'C',
-  start_time: '00:00',
-  end_time: '24:00',
-  mon: true,
-  tue: true,
-  wed: true,
-  thu: true,
-  fri: true,
-  sat: true,
-  sun: true
-}]
+const slotsURL = '/api/heating/slots/'
 
 function timeScale (timeString) {
   const timeArray = timeString.split(':')
@@ -81,18 +84,6 @@ export default {
 
   props: ['zone'],
 
-  computed: {
-    slotListURL () {
-      return `/api/heating/slots/?zone=${this.zone.num}`
-    },
-
-    slotSpecs () {
-      let slots = initialSlots.concat(this.fetchData || [])
-      slots[0].url = this.slotListURL
-      return slots
-    }
-  },
-
   data () {
     return {
       days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
@@ -105,13 +96,28 @@ export default {
     }
   },
 
+  computed: {
+    baseSlot () {
+      let slot = {
+        start_time: '00:00',
+        end_time: '24:00',
+        url: slotsURL,
+        zone: this.zone.url
+      }
+      this.days.map(day => {
+        slot[day] = false
+      })
+      return slot
+    }
+  },
+
   methods: {
     hourText (hour) {
       return _.padStart(hour, 2, '0') + ':00'
     },
 
     slotColor (slot) {
-      return { C: 'yellow', E: 'lime', H: 'blue', A: 'red' }[slot.mode]
+      return { E: 'lime', H: 'blue', A: 'red' }[slot.mode]
     },
 
     slotStartX (slot) {
@@ -142,7 +148,7 @@ export default {
   },
 
   mounted () {
-    this.fetch(this.slotListURL)
+    this.fetch(`${slotsURL}?zone=${this.zone.num}`)
   }
 }
 </script>
