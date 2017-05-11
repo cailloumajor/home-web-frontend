@@ -60,6 +60,7 @@
 
 <script>
 import _ from 'lodash'
+import Days from '@/mixins/Days'
 import Fetching from '@/mixins/Fetching'
 import LoadingLayout from '@/components/LoadingLayout'
 
@@ -80,13 +81,12 @@ export default {
     LoadingLayout
   },
 
-  mixins: [Fetching],
+  mixins: [Days, Fetching],
 
   props: ['zone'],
 
   data () {
     return {
-      days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
       hours: _.range(25),
       refX: 38.5,
       refY: 24.5,
