@@ -2,7 +2,7 @@
   <v-app top-toolbar>
     <header>
       <v-toolbar>
-        <v-menu class="hidden-md-and-up">
+        <v-menu class="hidden-sm-and-up">
           <v-btn dark icon slot="activator">
             <v-icon>menu</v-icon>
           </v-btn>
@@ -22,12 +22,13 @@
           </div>
           Home Web
         </v-toolbar-logo>
-        <v-toolbar-items
-          class="hidden-md-and-down"
-          v-for="link in links"
-          :key="link.text"
-        >
-          <v-toolbar-item :href="link.href" :router="link.router">
+        <v-toolbar-items class="hidden-sm-and-down">
+          <v-toolbar-item
+            v-for="link in links"
+            :href="link.href"
+            :key="link.text"
+            :router="link.router"
+          >
             {{ link.text }}
           </v-toolbar-item>
         </v-toolbar-items>
