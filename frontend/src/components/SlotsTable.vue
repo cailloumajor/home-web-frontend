@@ -3,7 +3,7 @@
     :status="fetchStatus"
     error-text="Erreur de récupération des créneaux"
   >
-    <svg height="230" width="1020">
+    <svg height="260" width="1020">
       <text
         v-for="h in hours"
         :x="refX + gapX * 4 * h"
@@ -24,10 +24,34 @@
         :y2="refY + gapY * 6 + slotHeight + 5"
         :stroke="vertBarColor(index)"
       ></line>
+      <template v-for="s in legend">
+        <rect
+          :x="slotStartX(s)"
+          :y="refY + gapY * 7"
+          :height="slotHeight"
+          :width="gapX * 4"
+          :fill="slotColor({ mode: 'C' })"
+          class="legend"
+        ></rect>
+        <rect
+          v-if="s.mode"
+          :x="slotStartX(s)"
+          :y="refY + gapY * 7"
+          :height="slotHeight"
+          :width="gapX * 4"
+          :fill="slotColor(s)"
+          class="legend"
+        ></rect>
+        <text
+          :x="slotStartX(s) + gapX * 4 + 4"
+          :y="refY + gapY * 7 + slotHeight - 3"
+          text-anchor="start"
+        >{{ s.text }}</text>
+      </template>
       <g
         class="slot-group"
-        stroke="yellow"
-        fill="yellow"
+        :stroke="slotColor({ mode: 'C' })"
+        :fill="slotColor({ mode: 'C' })"
         @click.stop="slotClick(baseSlot)"
       >
         <rect
@@ -88,6 +112,12 @@ export default {
   data () {
     return {
       hours: _.range(25),
+      legend: [
+        {start_time: '06:30', text: 'Confort'},
+        {start_time: '09:30', text: 'Eco.', mode: 'E'},
+        {start_time: '12:30', text: 'Hors-gel', mode: 'H'},
+        {start_time: '15:30', text: 'Arrêt', mode: 'A'}
+      ],
       refX: 38.5,
       refY: 24.5,
       gapX: 10,
@@ -117,7 +147,7 @@ export default {
     },
 
     slotColor (slot) {
-      return { E: 'lime', H: 'blue', A: 'red' }[slot.mode]
+      return { C: 'yellow', E: 'lime', H: 'blue', A: 'red' }[slot.mode]
     },
 
     slotStartX (slot) {
@@ -154,6 +184,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+$opacity = 0.3
+
 svg
   border: 1px solid black
   display: block
@@ -161,8 +193,11 @@ svg
   font-weight: 500
   margin: auto
 
+rect.legend
+  fill-opacity: $opacity
+
 g.slot-group
-  fill-opacity: 0.3
+  fill-opacity: $opacity
   stroke-width: 0
 
   &:hover
