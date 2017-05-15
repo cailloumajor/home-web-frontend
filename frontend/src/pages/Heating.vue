@@ -19,17 +19,12 @@
         v-for="zone in fetchData"
         :id="'zone-tab-' + zone.num"
         :key="zone.num"
-        :style="{ height: tabsItemsHeight + 'px' }"
         slot="content"
       >
         <h6 class="zone-desc">{{ zone.desc }}</h6>
         <slots-table :zone="zone"></slots-table>
       </v-tab-content>
-      <v-tab-content
-        id="pilotwire-log-tab"
-        slot="content"
-        :style="{ height: tabsItemsHeight + 'px' }"
-      >
+      <v-tab-content id="pilotwire-log-tab" slot="content">
         <pilotwire-log :is-active="activeTab === 'pilotwire-log-tab'">
         </pilotwire-log>
       </v-tab-content>
@@ -57,8 +52,7 @@ export default {
 
   data () {
     return {
-      activeTab: null,
-      tabsItemsHeight: 300
+      activeTab: null
     }
   },
 

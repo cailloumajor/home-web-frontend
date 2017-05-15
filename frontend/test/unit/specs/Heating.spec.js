@@ -6,7 +6,6 @@ describe('Heating.vue page', function () {
     expect(Heating.data).to.be.a('function')
     const defaultData = Heating.data()
     expect(defaultData.activeTab).to.be.null()
-    expect(defaultData.tabsItemsHeight).to.be.above(0)
   })
 
   it('should have an `updated` hook', function () {
