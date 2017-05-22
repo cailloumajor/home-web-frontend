@@ -34,11 +34,11 @@
         </v-toolbar-items>
       </v-toolbar>
     </header>
-    <v-content>
-      <v-container fluid class="mx-3 mt-3">
+    <main>
+      <v-container fluid>
         <router-view></router-view>
       </v-container>
-    </v-content>
+    </main>
   </v-app>
 </template>
 
