@@ -8,10 +8,6 @@ describe('Heating.vue page', function () {
     expect(defaultData.activeTab).to.be.null()
   })
 
-  it('should have an `updated` hook', function () {
-    expect(Heating.updated).to.be.a('function')
-  })
-
   it('should have a `mounted` hook', function () {
     expect(Heating.mounted).to.be.a('function')
     const vm = new Vue(Heating)
