@@ -16,4 +16,3 @@ srcContext.keys().forEach(srcContext)
 Vue.use(Vuetify)
 
 chai.use(require('dirty-chai'))
-chai.use(require('chai-things'))
