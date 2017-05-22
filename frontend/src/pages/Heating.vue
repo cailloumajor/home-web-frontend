@@ -3,31 +3,32 @@
     :status="fetchStatus"
     error-text="Erreur de récupération des zones"
   >
-    <v-tabs v-model="activeTab" id="heating-tabs">
-      <v-tab-item
-        v-for="zone in fetchData"
-        :href="'#zone-tab-' + zone.num"
-        :key="zone.num"
-        slot="activators"
-      >
-        {{ 'Zone ' + zone.num }}
-      </v-tab-item>
-      <v-tab-item class="right-tab" href="#pilotwire-log-tab" slot="activators">
-        Journal
-      </v-tab-item>
-      <v-tab-content
+    <v-tabs v-model="activeTab" id="heating-tabs" light>
+      <v-tabs-bar slot="activators">
+        <v-tabs-slider></v-tabs-slider>
+        <v-tabs-item
+          v-for="zone in fetchData"
+          :href="'#zone-tab-' + zone.num"
+          :key="zone.num"
+        >
+          {{ 'Zone ' + zone.num }}
+        </v-tabs-item>
+        <v-tabs-item class="right-tab" href="#pilotwire-log-tab">
+          Journal
+        </v-tabs-item>
+      </v-tabs-bar>
+      <v-tabs-content
         v-for="zone in fetchData"
         :id="'zone-tab-' + zone.num"
         :key="zone.num"
-        slot="content"
       >
         <h6 class="zone-desc">{{ zone.desc }}</h6>
         <slots-table :zone="zone"></slots-table>
-      </v-tab-content>
-      <v-tab-content id="pilotwire-log-tab" slot="content">
+      </v-tabs-content>
+      <v-tabs-content id="pilotwire-log-tab">
         <pilotwire-log :is-active="activeTab === 'pilotwire-log-tab'">
         </pilotwire-log>
-      </v-tab-content>
+      </v-tabs-content>
     </v-tabs>
   </loading-layout>
 </template>
@@ -58,16 +59,14 @@ export default {
 
   mounted () {
     this.fetch('/api/heating/zones/')
-  },
-
-  updated () /* istanbul ignore next */ {
-    const tabBar = this.$el.querySelector('.tabs__tabs')
-    if (tabBar) tabBar.style.height = '2.8rem'
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+.tabs__bar
+  height: 2.8rem
+
 .right-tab
   margin-left: auto
 
