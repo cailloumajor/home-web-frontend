@@ -146,6 +146,11 @@ export default {
       return _.padStart(hour, 2, '0') + ':00'
     },
 
+    slotClick (slot) {
+      let create = slot === this.baseSlot
+      this.$localBus.$emit('slot-change', create, this.zone, slot)
+    },
+
     slotColor (slot) {
       return { C: 'yellow', E: 'lime', H: 'blue', A: 'red' }[slot.mode]
     },
@@ -178,7 +183,11 @@ export default {
   },
 
   mounted () {
-    this.fetch(`${slotsURL}?zone=${this.zone.num}`)
+    const fetchURL = `${slotsURL}?zone=${this.zone.num}`
+    this.fetch(fetchURL)
+    this.$localBus.$on('slot-form-success', zoneNum => {
+      if (zoneNum === this.zone.num) this.fetch(fetchURL)
+    })
   }
 }
 </script>
@@ -191,7 +200,7 @@ svg
   display: block
   font-size: 12px
   font-weight: 500
-  margin: auto
+  margin: 0 auto 1rem
 
 rect.legend
   fill-opacity: $opacity
