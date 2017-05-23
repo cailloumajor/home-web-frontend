@@ -126,11 +126,13 @@ class DerogationSerializer(serializers.HyperlinkedModelSerializer):
     start_dt = CustomDateTimeField()
     end_dt = CustomDateTimeField(with_offset=True)
     start_initial = serializers.DateTimeField(write_only=True)
+    active = serializers.BooleanField(read_only=True, source='is_active')
+    outdated = serializers.BooleanField(read_only=True, source='is_outdated')
 
     class Meta:
         model = Derogation
         fields = ('url', 'id', 'mode', 'creation_dt', 'start_dt', 'end_dt',
-                  'zones', 'start_initial')
+                  'zones', 'start_initial', 'active', 'outdated')
         extra_kwargs = {
             'url': {'view_name': 'heating:derogation-detail'},
             'zones': {'view_name': 'heating:zone-detail'},
