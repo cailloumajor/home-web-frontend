@@ -10,7 +10,7 @@
     >
       <template slot="items" scope="props">
         <td
-          v-for="field in ['timestamp', 'level', 'message']"
+          v-for="field in headers.map(el => el.value)"
           v-text="props.item[field]"
           :class="`${logColors[props.item.level]}--text`"
         ></td>
