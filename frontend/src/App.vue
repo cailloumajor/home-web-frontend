@@ -39,20 +39,13 @@
         <router-view></router-view>
       </v-container>
     </main>
-    <slot-form></slot-form>
   </v-app>
 </template>
 
 <script>
-import SlotForm from '@/components/SlotForm'
-
 export default {
 
   name: 'app',
-
-  components: {
-    SlotForm
-  },
 
   data () {
     return {

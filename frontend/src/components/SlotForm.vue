@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-if="schema" v-model="dialog" width="650">
+  <v-dialog v-if="schema" v-model="isActive" width="650">
     <v-card v-show="!errorOther">
       <v-card-title>
         {{ operation }} un créneau
@@ -11,7 +11,7 @@
             class="zone-info"
           ></div>
           <v-select
-            v-model="slot.mode"
+            v-model="instance.mode"
             :items="schema.mode.choices"
             :label="schema.mode.label"
             :required="schema.mode.required"
@@ -21,7 +21,7 @@
           <v-layout row wrap>
             <v-flex md6 xs12>
               <v-select
-                v-model="slot.start_time"
+                v-model="instance.start_time"
                 :items="startTimeItems"
                 :label="schema.start_time.label"
                 :max-height="240"
@@ -31,7 +31,7 @@
             </v-flex>
             <v-flex md6 xs12>
               <v-select
-                v-model="slot.end_time"
+                v-model="instance.end_time"
                 :items="endTimeItems"
                 :label="schema.end_time.label"
                 :max-height="240"
@@ -43,7 +43,7 @@
           <v-layout row>
             <v-flex v-for="day in days" :key="day" xs2>
               <v-checkbox
-                v-model="slot[day]"
+                v-model="instance[day]"
                 :label="schema[day].label.substring(0, 3) + '.'"
                 :required="schema[day].required"
                 primary
@@ -60,7 +60,7 @@
         </v-card-text>
       </v-card-row>
       <v-card-row actions>
-        <v-btn @click.native="dialog = false" class="primary--text" flat light>
+        <v-btn @click.native="isActive = false" class="primary--text" flat light>
           Annuler
         </v-btn>
         <v-btn @click.native="validate" class="primary--text" flat light>
@@ -79,28 +79,33 @@
 <script>
 import _ from 'lodash'
 import axios from 'axios'
+import Toggleable from 'vuetify/src/mixins/toggleable'
 import Days from '@/mixins/Days'
 
 export default {
 
   name: 'slot-form',
 
-  mixins: [Days],
+  mixins: [Days, Toggleable],
+
+  props: ['create', 'formData', 'schemaURL', 'zone'],
 
   data () {
     return {
       action: null,
-      dialog: false,
       errorOther: false,
       errors: {},
-      originalSlot: null,
+      originalData: null,
       schema: null,
-      slot: {},
-      zone: {}
+      instance: {}
     }
   },
 
   computed: {
+    dataIsOriginal () {
+      return _.isEqual(this.instance, this.originalData)
+    },
+
     operation () {
       return {
         'create': 'Créer',
@@ -109,14 +114,10 @@ export default {
       }[this.action]
     },
 
-    slotIsOriginal () {
-      return _.isEqual(this.slot, this.originalSlot)
-    },
-
     startTimeItems () {
       const items = this.timeItems()
-      if (this.slot.end_time) {
-        return items.slice(0, items.indexOf(this.slot.end_time))
+      if (this.instance.end_time) {
+        return items.slice(0, items.indexOf(this.instance.end_time))
       } else {
         return items
       }
@@ -124,8 +125,8 @@ export default {
 
     endTimeItems () {
       const items = this.timeItems()
-      const sliceStart = this.slot.start_time
-        ? items.indexOf(this.slot.start_time)
+      const sliceStart = this.instance.start_time
+        ? items.indexOf(this.instance.start_time)
         : 0
       return items.slice(sliceStart + 1).concat('00:00')
     }
@@ -162,11 +163,11 @@ export default {
           'change': 'put',
           'remove': 'delete'
         }[this.action],
-        url: this.slot.url,
-        data: this.action !== 'remove' ? this.slot : undefined
+        url: this.instance.url,
+        data: this.action !== 'remove' ? this.instance : undefined
       }).then(response => {
-        this.$localBus.$emit('slot-form-success', this.zone.num)
-        this.dialog = false
+        this.isActive = false
+        this.$nextTick(() => { this.$emit('success') })
       }).catch(error => {
         if (error.response) {
           if (error.response.status === 400) {
@@ -188,36 +189,33 @@ export default {
 
   watch: {
     errorOther (newVal) {
-      if (newVal === false) this.dialog = false
+      if (newVal === false) this.isActive = false
     },
 
-    slotIsOriginal (newVal) {
+    isActive (newVal) {
+      if (newVal) {
+        this.action = this.create ? 'create' : 'remove'
+        this.originalData = Object.assign({}, this.formData)
+        this.instance = Object.assign({}, this.formData)
+        if (this.create) {
+          this.instance.mode = null
+          this.instance.start_time = null
+          this.instance.end_time = null
+        }
+        this.resetErrors()
+      }
+    },
+
+    dataIsOriginal (newVal) {
       if (this.action === 'remove' && !newVal) this.action = 'change'
     }
   },
 
   created () {
-    axios.options('/api/heating/slots/')
+    axios.options(this.schemaURL)
       .then(response => {
         this.schema = response.data.actions.POST
       })
-  },
-
-  mounted () {
-    this.$localBus.$on('slot-change', (create, zone, slot) => {
-      console.log(slot)
-      this.action = create ? 'create' : 'remove'
-      this.zone = Object.assign({}, zone)
-      this.originalSlot = Object.assign({}, slot)
-      this.slot = Object.assign({}, slot)
-      if (create) {
-        this.slot.mode = null
-        this.slot.start_time = null
-        this.slot.end_time = null
-      }
-      this.resetErrors()
-      this.dialog = true
-    })
   }
 }
 </script>
