@@ -22,7 +22,7 @@
             <v-flex md6 xs12>
               <v-select
                 v-model="slot.start_time"
-                :items="timeItems()"
+                :items="startTimeItems"
                 :label="schema.start_time.label"
                 :max-height="240"
                 :required="schema.start_time.required"
@@ -32,7 +32,7 @@
             <v-flex md6 xs12>
               <v-select
                 v-model="slot.end_time"
-                :items="timeItems()"
+                :items="endTimeItems"
                 :label="schema.end_time.label"
                 :max-height="240"
                 :required="schema.end_time.required"
@@ -111,6 +111,23 @@ export default {
 
     slotIsOriginal () {
       return _.isEqual(this.slot, this.originalSlot)
+    },
+
+    startTimeItems () {
+      const items = this.timeItems()
+      if (this.slot.end_time) {
+        return items.slice(0, items.indexOf(this.slot.end_time))
+      } else {
+        return items
+      }
+    },
+
+    endTimeItems () {
+      const items = this.timeItems()
+      const sliceStart = this.slot.start_time
+        ? items.indexOf(this.slot.start_time)
+        : 0
+      return items.slice(sliceStart + 1).concat('00:00')
     }
   },
 
