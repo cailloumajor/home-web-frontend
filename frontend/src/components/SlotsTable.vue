@@ -79,6 +79,14 @@
         ></rect>
       </g>
     </svg>
+    <slot-form
+      v-model="formActive"
+      :create="formCreate"
+      :formData="formSlot"
+      :schemaURL="slotsURL"
+      :zone="zone"
+      @success="fetch(fetchURL)"
+    ></slot-form>
   </loading-layout>
 </template>
 
@@ -87,8 +95,7 @@ import _ from 'lodash'
 import Days from '@/mixins/Days'
 import Fetching from '@/mixins/Fetching'
 import LoadingLayout from '@/components/LoadingLayout'
-
-const slotsURL = '/api/heating/slots/'
+import SlotForm from '@/components/SlotForm'
 
 function timeScale (timeString) {
   const timeArray = timeString.split(':')
@@ -102,7 +109,8 @@ export default {
   name: 'slots-table',
 
   components: {
-    LoadingLayout
+    LoadingLayout,
+    SlotForm
   },
 
   mixins: [Days, Fetching],
@@ -111,18 +119,22 @@ export default {
 
   data () {
     return {
+      formActive: false,
+      formCreate: false,
+      formSlot: null,
       hours: _.range(25),
       legend: [
-        {start_time: '06:30', text: 'Confort'},
-        {start_time: '09:30', text: 'Eco.', mode: 'E'},
-        {start_time: '12:30', text: 'Hors-gel', mode: 'H'},
-        {start_time: '15:30', text: 'Arrêt', mode: 'A'}
+        { start_time: '06:30', text: 'Confort' },
+        { start_time: '09:30', text: 'Eco.', mode: 'E' },
+        { start_time: '12:30', text: 'Hors-gel', mode: 'H' },
+        { start_time: '15:30', text: 'Arrêt', mode: 'A' }
       ],
       refX: 38.5,
       refY: 24.5,
       gapX: 10,
       gapY: 30,
-      slotHeight: 15
+      slotHeight: 15,
+      slotsURL: '/api/heating/slots/'
     }
   },
 
@@ -131,13 +143,17 @@ export default {
       let slot = {
         start_time: '00:00',
         end_time: '24:00',
-        url: slotsURL,
+        url: this.slotsURL,
         zone: this.zone.url
       }
       this.days.map(day => {
         slot[day] = false
       })
       return slot
+    },
+
+    fetchURL () {
+      return `${this.slotsURL}?zone=${this.zone.num}`
     }
   },
 
@@ -147,8 +163,9 @@ export default {
     },
 
     slotClick (slot) {
-      let create = slot === this.baseSlot
-      this.$localBus.$emit('slot-change', create, this.zone, slot)
+      this.formCreate = slot === this.baseSlot
+      this.formSlot = slot
+      this.formActive = true
     },
 
     slotColor (slot) {
@@ -183,11 +200,7 @@ export default {
   },
 
   mounted () {
-    const fetchURL = `${slotsURL}?zone=${this.zone.num}`
-    this.fetch(fetchURL)
-    this.$localBus.$on('slot-form-success', zoneNum => {
-      if (zoneNum === this.zone.num) this.fetch(fetchURL)
-    })
+    this.fetch(this.fetchURL)
   }
 }
 </script>

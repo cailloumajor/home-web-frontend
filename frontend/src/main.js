@@ -9,10 +9,6 @@ Vue.config.productionTip = false
 
 Vue.use(Vuetify)
 
-Vue.use(Vue => {
-  Vue.prototype.$localBus = new Vue()
-})
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
