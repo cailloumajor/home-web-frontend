@@ -13,6 +13,9 @@
         >
           {{ 'Zone ' + zone.num }}
         </v-tabs-item>
+        <v-tabs-item href="#derogations-tab">
+          Dérogations
+        </v-tabs-item>
         <v-tabs-item class="right-tab" href="#pilotwire-log-tab">
           Journal
         </v-tabs-item>
@@ -25,6 +28,9 @@
         <h6 class="zone-desc">{{ zone.desc }}</h6>
         <slots-table :zone="zone"></slots-table>
       </v-tabs-content>
+      <v-tabs-content id="derogations-tab">
+        <derogation-list :zones="fetchData"></derogation-list>
+      </v-tabs-content>
       <v-tabs-content id="pilotwire-log-tab">
         <pilotwire-log :is-active="activeTab === 'pilotwire-log-tab'">
         </pilotwire-log>
@@ -35,6 +41,7 @@
 
 <script>
 import Fetching from '@/mixins/Fetching'
+import DerogationList from '@/components/DerogationList'
 import LoadingLayout from '@/components/LoadingLayout'
 import PilotwireLog from '@/components/PilotwireLog'
 import SlotsTable from '@/components/SlotsTable'
@@ -44,6 +51,7 @@ export default {
   name: 'heating',
 
   components: {
+    DerogationList,
     LoadingLayout,
     PilotwireLog,
     SlotsTable
