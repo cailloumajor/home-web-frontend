@@ -79,7 +79,7 @@
 <script>
 import _ from 'lodash'
 import axios from 'axios'
-import Toggleable from 'vuetify/src/mixins/toggleable'
+import Toggleable from '@/mixins/toggleable'
 import Days from '@/mixins/Days'
 
 export default {
