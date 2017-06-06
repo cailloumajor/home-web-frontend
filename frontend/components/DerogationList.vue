@@ -14,7 +14,7 @@
         <tr
           v-for="derog in fetchData"
           :class="{ outdated: derog.outdated }"
-          @click.stop="derogationClick"
+          @click.stop="derogationClick(derog)"
         >
           <template v-for="col in staticColumns">
             <td v-if="typeof derog[col.value] === 'boolean'">
@@ -34,6 +34,13 @@
         </tr>
       </tbody>
     </table>
+    <derogation-form
+      v-model="formActive"
+      :create="formCreate"
+      :formData="formDerogation"
+      :schemaURL="fetchURL"
+      @success="fetch(fetchURL)"
+    ></derogation-form>
   </loading-layout>
 </template>
 
@@ -46,6 +53,7 @@ export default {
   name: 'derogation-list',
 
   components: {
+    'derogation-form': () => import('~components/DerogationForm'),
     LoadingLayout
   },
 
@@ -53,6 +61,10 @@ export default {
 
   data () {
     return {
+      fetchURL: '/heating/derogations/',
+      formActive: false,
+      formCreate: false,
+      formDerogation: null,
       modes: {
         E: { text: 'Eco.', color: '#B3FF7E' },
         H: { text: 'Hors-gel', color: '#B3B3CA' },
@@ -81,8 +93,10 @@ export default {
       }
     },
 
-    derogationClick () {
-      alert('clicked')
+    derogationClick (derogation) {
+      this.formCreate = false
+      this.formDerogation = derogation
+      this.formActive = true
     },
 
     parseField (str) {
@@ -104,7 +118,7 @@ export default {
   },
 
   mounted () {
-    this.fetch('/heating/derogations/')
+    this.fetch(this.fetchURL)
   }
 }
 </script>
