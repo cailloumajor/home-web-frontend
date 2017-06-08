@@ -3,7 +3,7 @@ version: '2'
 services:
 
   coverage:
-    image: python:3.5-alpine
+    image: python:3.6-alpine3.6
     command: python -m http.server 8888
     ports:
       - "8888:8888"
@@ -14,18 +14,25 @@ services:
   django:
     build:
       context: ../backend
-      dockerfile: Dockerfile.dev
+      args:
+        - development=true
     command: ./manage.py runserver 0.0.0.0:8000
+    entrypoint: ""
+    environment:
+      - DJANGO_CONFIGURATION=Dev
     expose:
       - "8000"
+    user: $HOST_UID
     volumes:
-      - ../backend:/usr/src/app
+      - ../backend:/app
 
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    command: npm run dev
+      args:
+        - node_base=node
+        - node_env=development
+    command: yarn dev
     environment:
       - NODE_ENV=development
     links:
@@ -33,12 +40,10 @@ services:
       - selenium
     ports:
       - "8080:8080"
-    # Set HOST_UID in .env file
-    user: $HOST_UID
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
       - dev_cache:/home/node/.cache
-    working_dir: /usr/src/app
 
   selenium:
     image: selenium/standalone-chrome
