@@ -24,8 +24,10 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    command: npm run dev
+      args:
+        - node_base=node
+        - node_env=development
+    command: yarn dev
     environment:
       - NODE_ENV=development
     links:
@@ -33,12 +35,10 @@ services:
       - selenium
     ports:
       - "8080:8080"
-    # Set HOST_UID in .env file
-    user: $HOST_UID
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
       - dev_cache:/home/node/.cache
-    working_dir: /usr/src/app
 
   selenium:
     image: selenium/standalone-chrome
