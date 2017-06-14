@@ -12,7 +12,7 @@ dj-database-url = "*"
 dj-email-url = "*"
 django-configurations = "*"
 django-filter = "*"
-Django = ">=1.11,<1.12"
+django = ">=1.11,<1.12"
 djangorestframework = "*"
 gunicorn = "*"
 pilotwire-controller = "*"
@@ -20,6 +20,7 @@ pilotwire-controller = "*"
 pytz = "*"
 redis = "*"
 setproctitle = "*"
+whitenoise = "*"
 
 
 [dev-packages]
