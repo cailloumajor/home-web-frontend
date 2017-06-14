@@ -33,8 +33,7 @@ module.exports = {
         filter: [
           '/admin',
           '/api',
-          '/static/admin',
-          '/static/rest_framework'
+          '/django-static'
         ]
       }
     },

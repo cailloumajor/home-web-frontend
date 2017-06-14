@@ -25,4 +25,5 @@ redis==2.10.5
 setproctitle==1.1.10
 six==1.10.0               # via pilotwire-controller, zeroconf
 vine==1.1.3               # via amqp
+whitenoise==3.3.0
 zeroconf==0.18.0          # via pilotwire-controller
