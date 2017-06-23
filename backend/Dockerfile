@@ -1,4 +1,5 @@
-FROM cailloumajor/python-armhf:alpine
+ARG python_base
+FROM ${python_base}:3-alpine
 
 ENV TZ Europe/Paris
 RUN set -ex \
@@ -6,32 +7,41 @@ RUN set -ex \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-RUN mkdir /static
+ENV PYTHONUNBUFFERED 1
 
-ENV PYTHONUNBUFFERED=1 \
-    DJANGO_STATIC_ROOT=/static/
+RUN addgroup -S django \
+    && adduser -S -g '' -G django django \
+    && apk add --no-cache 'su-exec>=0.2'
 
 WORKDIR /app
 
-COPY requirements.txt .
+ARG development
+COPY requirements.txt dev-requirements.txt ./
 RUN set -ex \
     && apk add --no-cache --virtual .build-deps \
            gcc \
            linux-headers \
+           ${development:+make} \
            musl-dev \
            postgresql-dev \
            python3-dev \
-    && pip install -r requirements.txt \
+    && pip install --no-cache-dir \
+           -r "${development:+dev-}requirements.txt" \
     && apk add --no-cache \
            libpq \
     && apk del .build-deps
 
-RUN apk add --no-cache 'su-exec>=0.2'
+COPY . ./
 
-RUN adduser -D -g '' python-user
-
-COPY run_webapp.sh manage.py ./
-COPY home_web ./home_web
-COPY core ./core
-COPY heating ./heating
 RUN python -m compileall .
+
+ENV PORT 8000
+EXPOSE $PORT
+
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
+
+CMD [ "gunicorn", "home_web.wsgi", \
+      "--bind", "0.0.0.0:$PORT", \
+      "--name", "home_web", \
+      "--access-logfile", "-", \
+      "--error-logfile", "-" ]

@@ -3,7 +3,7 @@ version: '2'
 services:
 
   coverage:
-    image: python:3.5-alpine
+    image: python:3-alpine
     command: python -m http.server 8888
     ports:
       - "8888:8888"
@@ -14,12 +14,18 @@ services:
   django:
     build:
       context: ../backend
-      dockerfile: Dockerfile.dev
+      args:
+        - development=true
+        - python_base=python
     command: ./manage.py runserver 0.0.0.0:8000
+    entrypoint: ""
+    environment:
+      - DJANGO_CONFIGURATION=Dev
     expose:
       - "8000"
+    user: $HOST_UID
     volumes:
-      - ../backend:/usr/src/app
+      - ../backend:/app
 
   frontend:
     build:
