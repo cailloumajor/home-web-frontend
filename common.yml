@@ -6,4 +6,5 @@ services:
     build: ./backend
     env_file: ./.dockerenv/backend.env
     environment:
+      - DJANGO_CONFIGURATION=Prod
       - DJANGO_REDIS_URL=redis://redis:6379
