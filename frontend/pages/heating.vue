@@ -85,6 +85,6 @@ export default {
 .zone-desc
   font-size: 1rem
   margin-bottom: 0.5rem
-  margin-top: 0.3rem
+  padding-top: 0.3rem
   text-align: center
 </style>
