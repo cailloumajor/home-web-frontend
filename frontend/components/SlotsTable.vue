@@ -134,7 +134,7 @@ export default {
       gapX: 10,
       gapY: 30,
       slotHeight: 15,
-      slotsURL: '/api/heating/slots/'
+      slotsURL: '/heating/slots/'
     }
   },
 

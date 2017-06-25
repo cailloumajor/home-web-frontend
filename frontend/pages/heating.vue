@@ -70,7 +70,7 @@ export default {
   },
 
   mounted () {
-    this.fetch('/api/heating/zones/')
+    this.fetch('/heating/zones/')
   }
 }
 </script>

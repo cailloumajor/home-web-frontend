@@ -48,6 +48,7 @@ module.exports = {
   ],
 
   modules: [
+    '@nuxtjs/axios',
     '@nuxtjs/proxy'
   ],
 

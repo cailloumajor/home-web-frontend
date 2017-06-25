@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import axios from 'axios'
 import Toggleable from './toggleable'
 
 export default {
@@ -52,7 +51,7 @@ export default {
 
     validate () {
       this.resetErrors()
-      axios({
+      this.$request({
         method: {
           'create': 'post',
           'change': 'put',
@@ -63,21 +62,6 @@ export default {
       }).then(response => {
         this.isActive = false
         this.$nextTick(() => { this.$emit('success') })
-      }).catch(error => {
-        if (error.response) {
-          if (error.response.status === 400) {
-            this.errors = error.response.data
-          } else {
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-            this.errorOther = true
-          }
-        } else if (error.request) {
-          console.log(error.request)
-        } else {
-          console.log('Error', error.message)
-        }
       })
     }
   },
@@ -107,7 +91,7 @@ export default {
   },
 
   created () {
-    axios.options(this.schemaURL)
+    this.$request({ url: this.schemaURL, method: 'options' })
       .then(response => {
         this.schema = response.data.actions.POST
       })

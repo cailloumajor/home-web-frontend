@@ -53,7 +53,7 @@ export default {
   watch: {
     isActive (newVal) {
       if (newVal) {
-        this.fetch('/api/heating/pilotwirelog/')
+        this.fetch('/heating/pilotwirelog/')
       }
     }
   }
