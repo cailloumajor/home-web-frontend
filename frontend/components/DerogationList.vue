@@ -102,7 +102,7 @@ export default {
   },
 
   mounted () {
-    this.fetch('/api/heating/derogations/')
+    this.fetch('/heating/derogations/')
   }
 }
 </script>
