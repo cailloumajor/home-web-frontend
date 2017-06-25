@@ -22,13 +22,12 @@ RUN if [ "$node_env" = "production" ]; then : \
     ; fi
 
 ARG PORT=8080
-ENV PORT $PORT
+ENV HOST=0.0.0.0 \
+    PORT=$PORT
 EXPOSE $PORT
 
 ENTRYPOINT [ "/sbin/su-exec", "node" ]
 
-CMD [ "./node_modules/.bin/http-server", "./dist", \
-      "-a", "0.0.0.0", \
-      "-d", "false" ]
+CMD [ "./node_modules/.bin/nuxt", "start" ]
 
 HEALTHCHECK CMD curl -fIs http://localhost:$PORT || exit 1
