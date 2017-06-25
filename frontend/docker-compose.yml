@@ -2,15 +2,6 @@ version: '2'
 
 services:
 
-  coverage:
-    image: python:3.6-alpine3.6
-    command: python -m http.server 8888
-    ports:
-      - "8888:8888"
-    volumes:
-      - ./test/unit/coverage/lcov-report:/usr/src/http:ro
-    working_dir: /usr/src/http
-
   django:
     build:
       context: ../backend
@@ -37,16 +28,11 @@ services:
       - NODE_ENV=development
     links:
       - django
-      - selenium
     ports:
       - "8080:8080"
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/node_modules
       - dev_cache:/home/node/.cache
-
-  selenium:
-    image: selenium/standalone-chrome
 
 volumes:
   dev_cache:
