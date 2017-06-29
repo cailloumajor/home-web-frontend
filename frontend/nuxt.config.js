@@ -36,7 +36,14 @@ module.exports = {
         })
       }
     },
-    vendor: ['lodash', 'vuetify']
+
+    vendor: ['lodash', 'vuetify'],
+
+    extractCSS: true,
+
+    analyze: process.env.NODE_ENV === 'development' && {
+      analyzerHost: '0.0.0.0'
+    }
   },
 
   css: [
