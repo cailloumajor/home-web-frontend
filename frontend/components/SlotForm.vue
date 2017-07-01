@@ -78,8 +78,8 @@
 
 <script>
 import _ from 'lodash'
-import Days from '../mixins/Days'
-import HeatingForm from '../mixins/heating-form'
+import Days from '~/mixins/Days'
+import HeatingForm from '~/mixins/heating-form'
 
 export default {
 
