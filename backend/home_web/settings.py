@@ -179,8 +179,6 @@ class Dev(Common):
     The in-development settings and the default configuration
     """
 
-    ALLOWED_HOSTS = values.ListValue()
-
     INSTALLED_APPS = Common.INSTALLED_APPS + [
         'debug_toolbar',
     ]
