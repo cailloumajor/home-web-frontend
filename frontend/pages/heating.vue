@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Fetching from '../mixins/Fetching'
+import Fetching from '~/mixins/Fetching'
 import DerogationList from '~components/DerogationList'
 import LoadingLayout from '~components/LoadingLayout'
 import PilotwireLog from '~components/PilotwireLog'

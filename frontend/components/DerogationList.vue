@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import Fetching from '../mixins/Fetching'
+import Fetching from '~/mixins/Fetching'
 import LoadingLayout from '~components/LoadingLayout'
 
 export default {

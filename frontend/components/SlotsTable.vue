@@ -93,8 +93,8 @@
 
 <script>
 import _ from 'lodash'
-import Days from '../mixins/Days'
-import Fetching from '../mixins/Fetching'
+import Days from '~/mixins/Days'
+import Fetching from '~/mixins/Fetching'
 import LoadingLayout from '~components/LoadingLayout'
 import SlotForm from '~components/SlotForm'
 
