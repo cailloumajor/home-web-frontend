@@ -4,6 +4,9 @@ FROM ${node_base}:8-alpine
 RUN apk --no-cache add curl su-exec
 
 WORKDIR /usr/src/app
+RUN chown -R node:node .
+
+USER node
 
 ENV NODE_ENV development
 
@@ -25,8 +28,6 @@ ARG PORT=8080
 ENV HOST=0.0.0.0 \
     PORT=$PORT
 EXPOSE $PORT
-
-ENTRYPOINT [ "/sbin/su-exec", "node" ]
 
 CMD [ "./node_modules/.bin/nuxt", "start" ]
 
