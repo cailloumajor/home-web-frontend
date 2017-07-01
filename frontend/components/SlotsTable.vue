@@ -23,6 +23,7 @@
         :x2="vertBarPosX(index)"
         :y2="refY + gapY * 6 + slotHeight + 5"
         :stroke="vertBarColor(index)"
+        shape-rendering="crispEdges"
       ></line>
       <template v-for="s in legend">
         <rect
