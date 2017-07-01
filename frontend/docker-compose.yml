@@ -33,6 +33,7 @@ services:
     volumes:
       - .:/usr/src/app
       - dev_cache:/home/node/.cache
+      - /usr/src/app/node_modules
 
 volumes:
   dev_cache:
