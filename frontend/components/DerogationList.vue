@@ -51,8 +51,6 @@ export default {
 
   mixins: [Fetching],
 
-  props: ['zones'],
-
   data () {
     return {
       modes: {
@@ -69,6 +67,10 @@ export default {
         { text: 'Mode', value: 'mode' }
       ]
     }
+  },
+
+  computed: {
+    zones () { return this.$store.state.heating.zones }
   },
 
   methods: {
