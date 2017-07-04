@@ -112,7 +112,7 @@ export default {
 <style lang="stylus" scoped>
 table
   border-collapse: collapse
-  margin: 5px auto
+  margin: 0 auto 5px
   text-align: center
 
   thead
