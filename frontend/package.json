@@ -29,6 +29,6 @@
     "eslint-plugin-standard": "^3.0.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "vuetify": "^0.12.7"
+    "vuetify": "^0.13.0"
   }
 }
