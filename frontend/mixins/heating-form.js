@@ -80,11 +80,6 @@ export default {
         this.action = this.create ? 'create' : 'remove'
         this.originalData = Object.assign({}, this.formData)
         this.instance = Object.assign({}, this.formData)
-        if (this.create) {
-          this.instance.mode = null
-          this.instance.start_time = null
-          this.instance.end_time = null
-        }
         this.resetErrors()
       }
     }
