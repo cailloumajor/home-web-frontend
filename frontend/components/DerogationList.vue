@@ -73,6 +73,10 @@ export default {
     zones () { return this.$store.state.heating.zones }
   },
 
+  mounted () {
+    this.fetch('/heating/derogations/')
+  },
+
   methods: {
     cellStyle (derogation, column) {
       return {
@@ -101,10 +105,6 @@ export default {
       if (this.modes[str]) return this.modes[str].text
       return str
     }
-  },
-
-  mounted () {
-    this.fetch('/heating/derogations/')
   }
 }
 </script>

@@ -108,6 +108,16 @@ export default {
     }
   },
 
+  watch: {
+    isActive (newVal) {
+      if (newVal && this.create) {
+        this.instance.mode = null
+        this.instance.start_time = null
+        this.instance.end_time = null
+      }
+    }
+  },
+
   methods: {
     timeItems () {
       const hours = _.range(0, 24)
@@ -120,16 +130,6 @@ export default {
         })
       })
       return items
-    }
-  },
-
-  watch: {
-    isActive (newVal) {
-      if (newVal && this.create) {
-        this.instance.mode = null
-        this.instance.start_time = null
-        this.instance.end_time = null
-      }
     }
   }
 }

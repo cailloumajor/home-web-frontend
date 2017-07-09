@@ -25,7 +25,7 @@
         :stroke="vertBarColor(index)"
         shape-rendering="crispEdges"
       ></line>
-      <template v-for="s in legend">
+      <g v-for="s in legend">
         <rect
           :x="slotStartX(s)"
           :y="refY + gapY * 7"
@@ -48,7 +48,7 @@
           :y="refY + gapY * 7 + slotHeight - 3"
           text-anchor="start"
         >{{ s.text }}</text>
-      </template>
+      </g>
       <g
         class="slot-group"
         :stroke="slotColor({ mode: 'C' })"
@@ -157,6 +157,10 @@ export default {
     }
   },
 
+  mounted () {
+    this.fetch(this.fetchURL)
+  },
+
   methods: {
     hourText (hour) {
       return _.padStart(hour, 2, '0') + ':00'
@@ -197,10 +201,6 @@ export default {
       else if ((index - 1) % 2 === 0) return this.refY - 4
       else return this.refY - 2
     }
-  },
-
-  mounted () {
-    this.fetch(this.fetchURL)
   }
 }
 </script>

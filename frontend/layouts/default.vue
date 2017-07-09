@@ -36,7 +36,7 @@
     </header>
     <main>
       <v-container fluid>
-        <nuxt/>
+        <nuxt></nuxt>
       </v-container>
     </main>
   </v-app>

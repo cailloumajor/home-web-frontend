@@ -33,6 +33,8 @@ export default {
 
   mixins: [Fetching],
 
+  props: ['isActive'],
+
   data () {
     return {
       headers: [
@@ -47,8 +49,6 @@ export default {
       }
     }
   },
-
-  props: ['isActive'],
 
   watch: {
     isActive (newVal) {
