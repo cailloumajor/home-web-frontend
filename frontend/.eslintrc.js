@@ -11,6 +11,8 @@ module.exports = {
     'html'
   ],
   // add your custom rules here
-  rules: {},
+  rules: {
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+  },
   globals: {}
 }
