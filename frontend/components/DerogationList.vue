@@ -109,36 +109,44 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-table
-  border-collapse: collapse
-  margin: 0 auto 5px
-  text-align: center
+<style lang="scss" scoped>
+table {
+  border-collapse: collapse;
+  margin: 0 auto 5px;
+  text-align: center;
 
-  thead
-    color: rgba(0, 0, 0, 0.54)
-    font-size: 12px
-    font-weight: 500
+  thead {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 12px;
+    font-weight: 500;
+  }
 
-  tbody
-    color: rgba(0, 0, 0, 0.87)
-    font-size: 13px
-    font-weight: 400
+  tbody {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 13px;
+    font-weight: 400;
 
-    tr
-      cursor: pointer
+    tr {
+      cursor: pointer;
 
-      &.outdated
-        color: rgba(0, 0, 0, 0.2)
+      &.outdated {
+        color: rgba(0, 0, 0, 0.2);
+      }
 
-      &:hover
-        background-color: #EF9A9A
+      &:hover {
+        background-color: #ef9a9a;
+      }
+    }
+  }
 
-  th
-  td
-    border-bottom: 1px solid grey
-    padding: 10px 20px
+  th,
+  td {
+    border-bottom: 1px solid grey;
+    padding: 10px 20px;
+  }
+}
 
-.icon
-  font-size: 16px
+.icon {
+  font-size: 16px;
+}
 </style>

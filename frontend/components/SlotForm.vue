@@ -135,11 +135,13 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.card__title
-  font-size: 1.3rem
-  padding: 15px 24px 20px 24px !important
+<style lang="scss" scoped>
+.card__title {
+  font-size: 1.3rem;
+  padding: 15px 24px 20px !important;
+}
 
-.zone-info
-  margin-bottom: 2rem
+.zone-info {
+  margin-bottom: 2rem;
+}
 </style>

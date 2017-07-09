@@ -31,10 +31,11 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-.centering
-  display: flex
-  height: 100%
-  align-items: center
-  justify-content: center
+<style lang="scss" scoped>
+.centering {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
 </style>

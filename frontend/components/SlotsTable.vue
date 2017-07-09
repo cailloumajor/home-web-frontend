@@ -205,26 +205,31 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-$opacity = 0.3
+<style lang="scss" scoped>
+$opacity: 0.3;
 
-svg
-  border: 1px solid black
-  display: block
-  font-size: 12px
-  font-weight: 500
-  margin: 0 auto 1rem
+svg {
+  border: 1px solid black;
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0 auto 1rem;
+}
 
-rect.legend
-  fill-opacity: $opacity
+rect.legend {
+  fill-opacity: $opacity;
+}
 
-g.slot-group
-  fill-opacity: $opacity
-  stroke-width: 0
+g.slot-group {
+  fill-opacity: $opacity;
+  stroke-width: 0;
 
-  &:hover
-    cursor: pointer
+  &:hover {
+    cursor: pointer;
 
-    &.hover-stroke
-      stroke-width: 2
+    &.hover-stroke {
+      stroke-width: 2;
+    }
+  }
+}
 </style>

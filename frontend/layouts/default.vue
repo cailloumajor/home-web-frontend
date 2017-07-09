@@ -58,27 +58,34 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-header .toolbar
-  align-items: center
-  height: 3.5rem
+<style lang="scss">
+header .toolbar {
+  align-items: center;
+  height: 3.5rem;
 
-  img
-    max-height: 1.75rem
+  img {
+    max-height: 1.75rem;
+  }
+}
 
-.toolbar__logo
-  font-size: 1.25rem
+.toolbar__logo {
+  font-size: 1.25rem;
+}
 
-#logo-back
-  background-color: #FFF
-  height: 2.5rem
-  width: @height
-  border-radius: 50%
-  display: flex
-  align-items: center
-  justify-content: center
+#logo-back {
+  $width: 2.5rem;
 
-  img
-    display: flex
-    align-self: center
+  background-color: #fff;
+  height: $width;
+  width: $width;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    display: flex;
+    align-self: center;
+  }
+}
 </style>
