@@ -35,6 +35,10 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+      if (ctx.dev) {
+        const StyleLintPlugin = require('stylelint-webpack-plugin')
+        config.plugins.push(new StyleLintPlugin({ files: ['**/*.vue'] }))
+      }
     },
 
     vendor: ['lodash', 'vuetify'],
