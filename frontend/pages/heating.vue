@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tabs__bar {
+.tabs__bar { /* stylelint-disable selector-class-pattern */
   height: 2.8rem;
 }
 

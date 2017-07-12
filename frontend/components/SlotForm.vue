@@ -133,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card__title {
+.card__title { /* stylelint-disable selector-class-pattern */
   font-size: 1.3rem;
   padding: 15px 24px 20px !important;
 }

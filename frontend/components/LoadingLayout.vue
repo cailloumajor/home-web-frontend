@@ -33,9 +33,9 @@ export default {
 
 <style lang="scss" scoped>
 .centering {
+  align-items: center;
   display: flex;
   height: 100%;
-  align-items: center;
   justify-content: center;
 }
 </style>

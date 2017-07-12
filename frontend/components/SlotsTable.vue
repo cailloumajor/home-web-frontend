@@ -209,27 +209,27 @@ export default {
 $opacity: 0.3;
 
 svg {
-  border: 1px solid black;
+  border: 1px solid hsl(0, 0%, 0%);
   display: block;
   font-size: 12px;
   font-weight: 500;
   margin: 0 auto 1rem;
 }
 
-rect.legend {
+.legend {
   fill-opacity: $opacity;
 }
 
-g.slot-group {
+.slot-group {
   fill-opacity: $opacity;
   stroke-width: 0;
 
   &:hover {
     cursor: pointer;
-
-    &.hover-stroke {
-      stroke-width: 2;
-    }
   }
+}
+
+.hover-stroke:hover {
+  stroke-width: 2;
 }
 </style>

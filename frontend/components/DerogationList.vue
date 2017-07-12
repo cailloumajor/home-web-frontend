@@ -114,36 +114,36 @@ table {
   border-collapse: collapse;
   margin: 0 auto 5px;
   text-align: center;
+}
 
-  thead {
-    color: rgba(0, 0, 0, 0.54);
-    font-size: 12px;
-    font-weight: 500;
+thead {
+  color: hsla(0, 0%, 0%, 0.54);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+tbody {
+  color: hsla(0, 0%, 0%, 0.87);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+tbody tr {
+  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(0, 73%, 77%);
   }
+}
 
-  tbody {
-    color: rgba(0, 0, 0, 0.87);
-    font-size: 13px;
-    font-weight: 400;
+th,
+td {
+  border-bottom: 1px solid hsl(0, 0%, 50%);
+  padding: 10px 20px;
+}
 
-    tr {
-      cursor: pointer;
-
-      &.outdated {
-        color: rgba(0, 0, 0, 0.2);
-      }
-
-      &:hover {
-        background-color: #ef9a9a;
-      }
-    }
-  }
-
-  th,
-  td {
-    border-bottom: 1px solid grey;
-    padding: 10px 20px;
-  }
+.outdated {
+  color: hsla(0, 0%, 0%, 0.2);
 }
 
 .icon {

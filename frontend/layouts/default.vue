@@ -15,13 +15,13 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar id="main-toolbar" class="primary" dark>
+    <v-toolbar class="main-toolbar primary" dark>
       <v-toolbar-side-icon
         @click.native.stop="drawer = !drawer"
         class="hidden-sm-and-up"
       ></v-toolbar-side-icon>
       <v-toolbar-title class="pl-3">
-        <div id="logo-back">
+        <div class="logo-back">
           <a href="/">
             <img src="~assets/home_logo.png" alt="Home Web logo">
           </a>
@@ -70,40 +70,36 @@ export default {
 </script>
 
 <style lang="scss">
-#main-toolbar {
-  img {
-    max-height: 1.75rem;
-  }
-
-  .toolbar__title {
-    font-size: 1.25rem;
-  }
-
-  .links {
-    .btn {
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .btn--active {
-      color: #fff;
-    }
-  }
+.main-toolbar img {
+  max-height: 1.75rem;
 }
 
-#logo-back {
+.main-toolbar .toolbar__title { /* stylelint-disable selector-class-pattern */
+  font-size: 1.25rem;
+}
+
+.main-toolbar .links .btn {
+  color: hsla(0, 0%, 100%, 0.7);
+}
+
+.main-toolbar .links .btn--active {
+  color: hsl(0, 0%, 100%);
+}
+
+.logo-back {
   $width: 2.5rem;
 
-  background-color: #fff;
-  height: $width;
-  width: $width;
+  align-items: center;
+  background-color: hsl(0, 0%, 100%);
   border-radius: 50%;
   display: flex;
-  align-items: center;
+  height: $width;
   justify-content: center;
+  width: $width;
+}
 
-  img {
-    display: flex;
-    align-self: center;
-  }
+.logo-back img {
+  align-self: center;
+  display: flex;
 }
 </style>
