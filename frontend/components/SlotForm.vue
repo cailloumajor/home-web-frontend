@@ -4,69 +4,66 @@
       <v-card-title>
         {{ operation }} un créneau
       </v-card-title>
-      <v-card-row>
-        <v-card-text>
-          <div
-            v-text="`Zone ${zone.num} - ${zone.desc}`"
-            class="zone-info"
-          ></div>
-          <v-select
-            v-model="instance.mode"
-            :items="schema.mode.choices"
-            :label="schema.mode.label"
-            :required="schema.mode.required"
-            :rules="[isValid('mode')]"
-            item-text="display_name"
-          ></v-select>
-          <v-layout row wrap>
-            <v-flex md6 xs12>
-              <v-select
-                v-model="instance.start_time"
-                :items="startTimeItems"
-                :label="schema.start_time.label"
-                :max-height="240"
-                :required="schema.start_time.required"
-                :rules="[isValid('start_time')]"
-              ></v-select>
-            </v-flex>
-            <v-flex md6 xs12>
-              <v-select
-                v-model="instance.end_time"
-                :items="endTimeItems"
-                :label="schema.end_time.label"
-                :max-height="240"
-                :required="schema.end_time.required"
-                :rules="[isValid('end_time')]"
-              ></v-select>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex v-for="day in days" :key="day" xs2>
-              <v-checkbox
-                v-model="instance[day]"
-                :label="schema[day].label.substring(0, 3) + '.'"
-                :required="schema[day].required"
-                primary
-              ></v-checkbox>
-            </v-flex>
-          </v-layout>
-          <div
-            v-for="error in errors.non_field_errors"
-            class="error--text"
-          >
-            {{ error }}
-          </div>
-          <small>* Champs obligatoires</small>
-        </v-card-text>
-      </v-card-row>
-      <v-card-row actions>
-        <v-btn @click.native="isActive = false" class="primary--text" flat light>
+      <v-card-text>
+        <div
+          v-text="`Zone ${zone.num} - ${zone.desc}`"
+          class="zone-info"
+        ></div>
+        <v-select
+          v-model="instance.mode"
+          :error-messages="errors.mode"
+          :items="schema.mode.choices"
+          :label="schema.mode.label"
+          :required="schema.mode.required"
+          item-text="display_name"
+        ></v-select>
+        <v-layout row wrap>
+          <v-flex md6 xs12>
+            <v-select
+              v-model="instance.start_time"
+              :error-messages="errors.start_time"
+              :items="startTimeItems"
+              :label="schema.start_time.label"
+              :required="schema.start_time.required"
+            ></v-select>
+          </v-flex>
+          <v-flex md6 xs12>
+            <v-select
+              v-model="instance.end_time"
+              :error-messages="errors.end_time"
+              :items="endTimeItems"
+              :label="schema.end_time.label"
+              :required="schema.end_time.required"
+            ></v-select>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+          <v-flex v-for="day in days" :key="day" xs2>
+            <v-checkbox
+              v-model="instance[day]"
+              :label="schema[day].label.substring(0, 3) + '.'"
+              :required="schema[day].required"
+              color="primary"
+            ></v-checkbox>
+          </v-flex>
+        </v-layout>
+        <div
+          v-for="error in errors.non_field_errors"
+          class="error--text"
+        >
+          {{ error }}
+        </div>
+        <small>* Champs obligatoires</small>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn @click.native="isActive = false" class="primary--text" flat dark>
           Annuler
         </v-btn>
-        <v-btn @click.native="validate" class="primary--text" flat light>
+        <v-btn @click.native="validate" class="primary--text" flat dark>
           {{ operation }}
         </v-btn>
-      </v-card-row>
+      </v-card-actions>
     </v-card>
     <v-alert v-model="errorOther" error dismissible>
       Une erreur s'est produite.

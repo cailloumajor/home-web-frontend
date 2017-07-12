@@ -1,44 +1,54 @@
 <template>
-  <v-app top-toolbar>
-    <header>
-      <v-toolbar light>
-        <v-menu class="hidden-sm-and-up">
-          <v-btn dark icon slot="activator">
-            <v-icon>menu</v-icon>
-          </v-btn>
-          <v-list>
-            <v-list-item v-for="link in links" :key="link.text">
-              <v-list-tile :href="link.href" :router="link.router">
-                <v-list-tile-title>{{ link.text }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-toolbar-logo class="pl-3">
-          <div class="mr-2" id="logo-back">
-            <a href="/">
-              <img src="~assets/home_logo.png" alt="Home Web logo">
-            </a>
-          </div>
-          Home Web
-        </v-toolbar-logo>
-        <v-toolbar-items class="hidden-sm-and-down">
-          <v-toolbar-item
-            v-for="link in links"
-            :href="link.href"
-            :key="link.text"
-            :router="link.router"
-          >
-            {{ link.text }}
-          </v-toolbar-item>
-        </v-toolbar-items>
-      </v-toolbar>
-    </header>
+  <v-app footer light toolbar>
+    <v-navigation-drawer v-model="drawer" temporary light>
+      <v-list>
+        <v-list-tile
+          v-for="link in links"
+          :href="link.href"
+          :key="link.text"
+          :nuxt="link.nuxt"
+          :to="link.to"
+        >
+          <v-list-tile-content >
+            <v-list-tile-title>{{ link.text }}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar id="main-toolbar" class="primary" dark>
+      <v-toolbar-side-icon
+        @click.native.stop="drawer = !drawer"
+        class="hidden-sm-and-up"
+      ></v-toolbar-side-icon>
+      <v-toolbar-title class="pl-3">
+        <div id="logo-back">
+          <a href="/">
+            <img src="~assets/home_logo.png" alt="Home Web logo">
+          </a>
+        </div>
+      </v-toolbar-title>
+      <v-toolbar-title>Home Web</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-sm-and-down links">
+        <v-btn
+          v-for="link in links"
+          :href="link.href"
+          :key="link.text"
+          :nuxt="link.nuxt"
+          :to="link.to"
+          tag="a"
+          flat
+        >
+          {{ link.text }}
+        </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
     <main>
       <v-container fluid>
         <nuxt></nuxt>
       </v-container>
     </main>
+    <v-footer></v-footer>
   </v-app>
 </template>
 
@@ -47,8 +57,9 @@ export default {
 
   data () {
     return {
+      drawer: false,
       links: [
-        { text: 'Chauffage', href: '/heating', router: true },
+        { text: 'Chauffage', to: '/heating', nuxt: true },
         { text: 'Admin', href: '/admin' }
       ]
     }
@@ -59,17 +70,24 @@ export default {
 </script>
 
 <style lang="scss">
-header .toolbar {
-  align-items: center;
-  height: 3.5rem;
-
+#main-toolbar {
   img {
     max-height: 1.75rem;
   }
-}
 
-.toolbar__logo {
-  font-size: 1.25rem;
+  .toolbar__title {
+    font-size: 1.25rem;
+  }
+
+  .links {
+    .btn {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn--active {
+      color: #fff;
+    }
+  }
 }
 
 #logo-back {

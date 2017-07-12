@@ -40,10 +40,6 @@ export default {
   },
 
   methods: {
-    isValid (fieldName) {
-      return this.errors[fieldName] || true
-    },
-
     resetErrors () {
       this.errors = {}
       this.errorOther = false
