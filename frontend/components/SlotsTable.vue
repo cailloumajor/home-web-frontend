@@ -173,7 +173,12 @@ export default {
     },
 
     slotColor (slot) {
-      return { C: 'yellow', E: 'lime', H: 'blue', A: 'red' }[slot.mode]
+      return {
+        C: 'hsl(60, 100%, 50%)',
+        E: 'hsl(120, 100%, 50%)',
+        H: 'hsl(240, 100%, 50%)',
+        A: 'hsl(0, 100%, 50%)'
+      }[slot.mode]
     },
 
     slotStartX (slot) {
