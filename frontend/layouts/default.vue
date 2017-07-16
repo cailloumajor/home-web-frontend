@@ -15,7 +15,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar class="main-toolbar primary" dark>
+    <v-toolbar class="primary" dark>
       <v-toolbar-side-icon
         @click.native.stop="drawer = !drawer"
         class="hidden-sm-and-up"
@@ -70,36 +70,18 @@ export default {
 </script>
 
 <style lang="scss">
-.main-toolbar img {
-  max-height: 1.75rem;
-}
-
-.main-toolbar .toolbar__title { /* stylelint-disable selector-class-pattern */
-  font-size: 1.25rem;
-}
-
-.main-toolbar .links .btn {
-  color: hsla(0, 0%, 100%, 0.7);
-}
-
-.main-toolbar .links .btn--active {
-  color: hsl(0, 0%, 100%);
-}
-
 .logo-back {
-  $width: 2.5rem;
-
   align-items: center;
   background-color: hsl(0, 0%, 100%);
   border-radius: 50%;
   display: flex;
-  height: $width;
+  height: 2.5rem;
   justify-content: center;
-  width: $width;
-}
+  width: 2.5rem;
 
-.logo-back img {
-  align-self: center;
-  display: flex;
+  img {
+    display: flex;
+    max-height: 1.75rem;
+  }
 }
 </style>
