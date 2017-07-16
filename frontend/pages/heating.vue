@@ -1,7 +1,7 @@
 <template>
   <v-tabs v-model="activeTab" :scrollable="false" dark>
     <v-tabs-bar slot="activators">
-      <v-tabs-slider class="blue lighten-3"></v-tabs-slider>
+      <v-tabs-slider></v-tabs-slider>
       <v-tabs-item
         v-for="zone in zones"
         :href="'#zone-tab-' + zone.num"
