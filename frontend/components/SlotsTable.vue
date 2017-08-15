@@ -95,7 +95,7 @@
 import _ from 'lodash'
 import Days from '~/mixins/Days'
 import Fetching from '~/mixins/Fetching'
-import LoadingLayout from '~components/LoadingLayout'
+import LoadingLayout from '~/components/LoadingLayout'
 
 function timeScale (timeString) {
   const timeArray = timeString.split(':')
@@ -110,7 +110,7 @@ export default {
 
   components: {
     LoadingLayout,
-    'slot-form': () => import('~components/SlotForm')
+    'slot-form': () => import('~/components/SlotForm')
   },
 
   mixins: [Days, Fetching],

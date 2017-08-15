@@ -35,10 +35,10 @@
 </template>
 
 <script>
-import DerogationList from '~components/DerogationList'
-import LoadingLayout from '~components/LoadingLayout'
-import PilotwireLog from '~components/PilotwireLog'
-import SlotsTable from '~components/SlotsTable'
+import DerogationList from '~/components/DerogationList'
+import LoadingLayout from '~/components/LoadingLayout'
+import PilotwireLog from '~/components/PilotwireLog'
+import SlotsTable from '~/components/SlotsTable'
 
 export default {
 
