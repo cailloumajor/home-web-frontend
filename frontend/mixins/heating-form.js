@@ -47,7 +47,7 @@ export default {
 
     validate () {
       this.resetErrors()
-      this.$request({
+      this.$axios.request({
         method: {
           'create': 'post',
           'change': 'put',
@@ -88,7 +88,7 @@ export default {
   },
 
   created () {
-    this.$request({ url: this.schemaURL, method: 'options' })
+    this.$axios.options(this.schemaURL)
       .then(response => {
         this.schema = response.data.actions.POST
       })

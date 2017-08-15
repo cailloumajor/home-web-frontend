@@ -56,7 +56,7 @@ export default {
 
     getData () {
       this.loading = true
-      this.$get('/heating/pilotwirelog/')
+      this.$axios.get('/heating/pilotwirelog/')
         .then(response => {
           this.items = response.data
           this.pagination.sortBy = 'timestamp'

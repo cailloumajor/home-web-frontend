@@ -9,7 +9,7 @@ export default {
   methods: {
     fetch (url) {
       this.fetchStatus = 'loading'
-      this.$get(url)
+      this.$axios.get(url)
         .then(response => {
           this.fetchData = response.data
           this.fetchStatus = 'loaded'
