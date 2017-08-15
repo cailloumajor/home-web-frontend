@@ -1,8 +1,5 @@
 <template>
-  <loading-layout
-    :status="fetchStatus"
-    error-text="Erreur de récupération des créneaux"
-  >
+  <div>
     <svg height="260" width="1020">
       <text
         v-for="h in hours"
@@ -64,7 +61,7 @@
         ></rect>
       </g>
       <g
-        v-for="s in fetchData"
+        v-for="s in slots"
         class="slot-group hover-stroke"
         :stroke="slotColor(s)"
         :fill="slotColor(s)"
@@ -86,16 +83,14 @@
       :formData="formSlot"
       :schemaURL="slotsURL"
       :zone="zone"
-      @success="fetch(fetchURL)"
+      @success="fetch()"
     ></slot-form>
-  </loading-layout>
+  </div>
 </template>
 
 <script>
 import _ from 'lodash'
 import Days from '~/mixins/Days'
-import Fetching from '~/mixins/Fetching'
-import LoadingLayout from '~/components/LoadingLayout'
 
 function timeScale (timeString) {
   const timeArray = timeString.split(':')
@@ -109,11 +104,10 @@ export default {
   name: 'slots-table',
 
   components: {
-    LoadingLayout,
     'slot-form': () => import('~/components/SlotForm')
   },
 
-  mixins: [Days, Fetching],
+  mixins: [Days],
 
   props: ['zone'],
 
@@ -134,6 +128,7 @@ export default {
       gapX: 10,
       gapY: 30,
       slotHeight: 15,
+      slots: null,
       slotsURL: '/heating/slots/'
     }
   },
@@ -158,10 +153,14 @@ export default {
   },
 
   mounted () {
-    this.fetch(this.fetchURL)
+    this.fetch()
   },
 
   methods: {
+    async fetch () {
+      this.slots = await this.$axios.$get(this.fetchURL)
+    },
+
     hourText (hour) {
       return _.padStart(hour, 2, '0') + ':00'
     },

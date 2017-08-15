@@ -87,7 +87,7 @@ export default {
     }
   },
 
-  created () {
+  mounted () {
     this.$axios.options(this.schemaURL)
       .then(response => {
         this.schema = response.data.actions.POST

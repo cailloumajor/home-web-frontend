@@ -1,64 +1,50 @@
 <template>
-  <loading-layout
-    :status="fetchStatus"
-    error-text="Erreur de récupération des dérogations"
-  >
-    <table>
-      <thead>
-        <tr>
-          <th v-for="col in staticColumns">{{ col.text }}</th>
-          <th v-for="zone in zones">{{ `Z${zone.num}` }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="derog in fetchData"
-          :class="{ outdated: derog.outdated }"
-          @click.stop="derogationClick"
-        >
-          <template v-for="col in staticColumns">
-            <td v-if="typeof derog[col.value] === 'boolean'">
-              <v-icon v-if="derog[col.value]" class="primary--text">
-                check
-              </v-icon>
-            </td>
-            <td v-else :style="cellStyle(derog, col)">
-              {{ parseField(derog[col.value]) }}
-            </td>
-          </template>
-          <td v-for="zone in zones">
-            <v-icon v-if="derog.zones.includes(zone.url)" class="primary--text">
+  <table>
+    <thead>
+      <tr>
+        <th v-for="col in staticColumns">{{ col.text }}</th>
+        <th v-for="zone in zones">{{ `Z${zone.num}` }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        v-for="derog in derogations"
+        :class="{ outdated: derog.outdated }"
+        @click.stop="derogationClick"
+      >
+        <template v-for="col in staticColumns">
+          <td v-if="typeof derog[col.value] === 'boolean'">
+            <v-icon v-if="derog[col.value]" class="primary--text">
               check
             </v-icon>
           </td>
-        </tr>
-      </tbody>
-    </table>
-  </loading-layout>
+          <td v-else :style="cellStyle(derog, col)">
+            {{ parseField(derog[col.value]) }}
+          </td>
+        </template>
+        <td v-for="zone in zones">
+          <v-icon v-if="derog.zones.includes(zone.url)" class="primary--text">
+            check
+          </v-icon>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
-import Fetching from '~/mixins/Fetching'
-import LoadingLayout from '~/components/LoadingLayout'
-
 export default {
 
   name: 'derogation-list',
 
-  components: {
-    LoadingLayout
-  },
-
-  mixins: [Fetching],
-
   data () {
     return {
+      derogations: null,
       modes: {
         E: { text: 'Eco.', color: '#B3FF7E' },
         H: { text: 'Hors-gel', color: '#B3B3CA' },
         A: { text: 'Arrêt', color: '#FFB37E' }
       },
-
       staticColumns: [
         { text: 'Active', value: 'active' },
         { text: 'Création', value: 'creation_dt' },
@@ -74,7 +60,7 @@ export default {
   },
 
   mounted () {
-    this.fetch('/heating/derogations/')
+    this.fetch()
   },
 
   methods: {
@@ -87,6 +73,10 @@ export default {
 
     derogationClick () {
       alert('clicked')
+    },
+
+    async fetch () {
+      this.derogations = await this.$axios.$get('/heating/derogations')
     },
 
     parseField (str) {
