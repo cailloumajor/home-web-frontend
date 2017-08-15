@@ -57,10 +57,10 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click.native="isActive = false" class="primary--text" flat dark>
+        <v-btn @click="isActive = false" class="primary--text" flat dark>
           Annuler
         </v-btn>
-        <v-btn @click.native="validate" class="primary--text" flat dark>
+        <v-btn @click="validate" class="primary--text" flat dark>
           {{ operation }}
         </v-btn>
       </v-card-actions>

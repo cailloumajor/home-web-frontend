@@ -17,7 +17,7 @@
     </v-navigation-drawer>
     <v-toolbar class="primary" dark>
       <v-toolbar-side-icon
-        @click.native.stop="drawer = !drawer"
+        @click.stop="drawer = !drawer"
         class="hidden-sm-and-up"
       ></v-toolbar-side-icon>
       <v-toolbar-title class="pl-3">
