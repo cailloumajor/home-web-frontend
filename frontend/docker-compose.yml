@@ -20,12 +20,11 @@ services:
   frontend:
     build:
       context: .
-      args:
-        - node_base=node
-        - node_env=development
-    command: yarn dev
+      dockerfile: Dockerfile.dev
     environment:
-      - NODE_ENV=development
+      - API_URL=http://localhost:8080/api
+      - HOST=0.0.0.0
+      - PORT=8080
     links:
       - django
     ports:
