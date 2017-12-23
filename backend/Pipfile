@@ -1,0 +1,45 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+celery = {extras = ["redis"], version = "*"}
+dj-database-url = "*"
+dj-email-url = "*"
+django-configurations = "*"
+django-filter = "*"
+Django = ">=1.11,<1.12"
+djangorestframework = "*"
+gunicorn = "*"
+pilotwire-controller = "*"
+"psycopg2" = "*"
+pytz = "*"
+redis = "*"
+setproctitle = "*"
+
+
+[dev-packages]
+
+django-debug-toolbar = "*"
+django-dynamic-fixture = "*"
+"flake8" = "*"
+ipython = "*"
+pyinotify = "*"
+pylama = "*"
+pylama-pylint = "*"
+pylint-django = "*"
+pytest = "*"
+pytest-catchlog = "*"
+pytest-cov = "*"
+pytest-django = "*"
+pytest-mock = "*"
+redislite = "*"
+
+
+[requires]
+
+python_version = "3.6"
